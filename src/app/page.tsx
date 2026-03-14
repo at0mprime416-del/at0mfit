@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { supabase } from '@/lib/supabase'
 
 const FEATURES = [
   {
@@ -107,16 +108,46 @@ const PERSONAS = [
 
 export default function Home() {
   const [email, setEmail] = useState('')
-  const [submitted, setSubmitted] = useState(false)
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'duplicate' | 'error'>('idle')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!email) return
-    setSubmitted(true)
-    setTimeout(() => {
-      setSubmitted(false)
-      setEmail('')
-    }, 5000)
+    if (!email || status === 'loading' || status === 'success') return
+    setStatus('loading')
+    try {
+      const { error } = await supabase.from('waitlist').insert({ email })
+      if (!error) {
+        setStatus('success')
+      } else if (error.code === '23505') {
+        // Unique violation — duplicate email
+        setStatus('duplicate')
+      } else {
+        console.error('Waitlist error:', error)
+        setStatus('error')
+      }
+    } catch (err) {
+      console.error('Waitlist exception:', err)
+      setStatus('error')
+    }
+  }
+
+  const buttonLabel = () => {
+    if (status === 'loading') return 'JOINING...'
+    if (status === 'success') return '✓ You\'re in!'
+    return 'GET ACCESS'
+  }
+
+  const buttonClass = () => {
+    const base = 'px-6 py-3.5 font-bold text-sm tracking-widest uppercase rounded-xl whitespace-nowrap transition-all duration-200'
+    if (status === 'success') return `${base} bg-[#39ff14] text-black cursor-default`
+    if (status === 'loading') return `${base} bg-[#C9A84C] text-black opacity-60 cursor-not-allowed`
+    return `${base} bg-[#C9A84C] text-black hover:shadow-[0_0_20px_rgba(201,168,76,0.4)] hover:-translate-y-px`
+  }
+
+  const statusMessage = () => {
+    if (status === 'duplicate') return <p className="text-sm text-[#C9A84C] mt-3">You&apos;re already on the list 👊</p>
+    if (status === 'error') return <p className="text-sm text-red-400 mt-3">Something went wrong. Try again.</p>
+    return null
   }
 
   return (
@@ -559,19 +590,19 @@ export default function Home() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="your@email.com"
               required
-              className="flex-1 bg-[#111] border border-[#222] rounded-xl px-5 py-3.5 text-white text-base placeholder-[#555] focus:outline-none focus:border-[#C9A84C] focus:shadow-[0_0_0_3px_rgba(201,168,76,0.15)] transition-all"
+              disabled={status === 'loading' || status === 'success'}
+              className="flex-1 bg-[#111] border border-[#222] rounded-xl px-5 py-3.5 text-white text-base placeholder-[#555] focus:outline-none focus:border-[#C9A84C] focus:shadow-[0_0_0_3px_rgba(201,168,76,0.15)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             />
             <button
               type="submit"
-              className={`px-6 py-3.5 font-bold text-sm tracking-widest uppercase rounded-xl whitespace-nowrap transition-all duration-200 ${
-                submitted
-                  ? 'bg-[#39ff14] text-black cursor-default'
-                  : 'bg-[#C9A84C] text-black hover:shadow-[0_0_20px_rgba(201,168,76,0.4)] hover:-translate-y-px'
-              }`}
+              disabled={status === 'loading' || status === 'success'}
+              className={buttonClass()}
             >
-              {submitted ? '✓ You\'re in!' : 'GET ACCESS'}
+              {buttonLabel()}
             </button>
           </form>
+
+          {statusMessage()}
 
           <p className="text-xs text-[#444] mt-4">No spam. No fluff. Just early access when we launch.</p>
         </div>
