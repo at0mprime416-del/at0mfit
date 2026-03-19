@@ -117,6 +117,12 @@ export default function Home() {
     try {
       const { error } = await supabase.from('waitlist').insert({ email })
       if (!error) {
+        // Fire-and-forget confirmation email — don't block success state
+        fetch('/api/waitlist-confirm', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        }).catch(() => {/* ignore email failures */})
         setStatus('success')
       } else if (error.code === '23505') {
         // Unique violation — duplicate email
