@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AT0M FIT — Build Your Aerobic Engine</title>
+  <meta name="description" content="The Levi Cardio Blueprint — Zone 2 to Zone 4. A field guide for tactical athletes, lifters, and hybrid performers who want structure instead of guesswork." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg:           #0B0B0B;
+      --surface:      #111111;
+      --surface2:     #1A1A1A;
+      --border:       #2A2A2A;
+      --gold:         #C9A04A;
+      --gold-bright:  #D4AF37;
+      --gold-glow:    rgba(201, 160, 74, 0.25);
+      --gold-dim:     rgba(201, 160, 74, 0.08);
+      --grey-light:   #B0B0B0;
+      --grey-mid:     #6E6E6E;
+      --text:         #F0EDE8;
+      --text-muted:   #888888;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* — NAV — */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2rem;
+      background: rgba(11, 11, 11, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.9rem;
+      letter-spacing: 0.1em;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--gold); }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.55rem 1.4rem;
+      background: var(--gold);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .nav-cta:hover {
+      background: var(--gold-bright);
+      transform: translateY(-1px);
+    }
+
+    /* — GOLD DIVIDER — */
+    .gold-rule {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0.5;
+    }
+
+    /* — HERO — */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 2rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('./hero-banner.png') center/cover no-repeat;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      width: 100%;
+      position: relative;
+    }
+
+    .hero-content {}
+
+    .hero-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.8rem, 7vw, 6.5rem);
+      line-height: 0.93;
+      letter-spacing: 0.03em;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 em {
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--grey-light);
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+      max-width: 480px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      align-items: flex-start;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      background: var(--gold);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.95rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-bright);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px var(--gold-glow);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: transparent;
+      color: var(--gold);
+      font-weight: 600;
+      font-size: 0.88rem;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      border: 1px solid rgba(201, 160, 74, 0.4);
+      border-radius: 4px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--gold);
+      background: var(--gold-dim);
+    }
+
+    /* Hero image */
+    .hero-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .cover-wrapper {
+      position: relative;
+      transform: rotate(3deg);
+      transition: transform 0.3s;
+    }
+
+    .cover-wrapper:hover { transform: rotate(1deg) scale(1.02); }
+
+    .cover-wrapper img {
+      width: 100%;
+      max-width: 340px;
+      display: block;
+      border-radius: 4px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.7), 0 0 60px var(--gold-glow);
+    }
+
+    .cover-badge {
+      position: absolute;
+      bottom: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gold);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.4rem 1.2rem;
+      border-radius: 2px;
+      white-space: nowrap;
+    }
+
+    /* — PROOF BAR — */
+    .proof-bar {
+      border-top: 1px solid var(--gold);
+      border-bottom: 1px solid var(--gold);
+      background: var(--surface);
+      padding: 1.8rem 2rem;
+      opacity: 0.9;
+    }
+
+    .proof-bar-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .proof-stat {
+      text-align: center;
+    }
+
+    .proof-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.2rem;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+      line-height: 1;
+    }
+
+    .proof-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    .proof-divider {
+      width: 1px;
+      height: 40px;
+      background: var(--border);
+    }
+
+    /* — SHARED SECTION — */
+    section {
+      padding: 6rem 2rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-eyebrow {
+      font-size: 0.73rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      line-height: 1;
+      letter-spacing: 0.04em;
+      margin-bottom: 1.2rem;
+      color: var(--text);
+    }
+
+    .section-sub {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 520px;
+      line-height: 1.75;
+      margin-bottom: 3rem;
+    }
+
+    /* — WHAT YOU GET — */
+    .what-you-get {
+      background: var(--surface);
+    }
+
+    .what-header { text-align: center; margin-bottom: 3.5rem; }
+    .what-header .section-sub { margin: 0 auto; }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2rem 1.8rem;
+      transition: border-color 0.25s, transform 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+      transform-origin: left;
+    }
+
+    .card:hover {
+      border-color: rgba(201, 160, 74, 0.4);
+      transform: translateY(-4px);
+    }
+
+    .card:hover::before { transform: scaleX(1); }
+
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 1.2rem;
+      display: block;
+    }
+
+    .card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.05em;
+      color: var(--text);
+      margin-bottom: 0.6rem;
+    }
+
+    .card-desc {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    /* — WHO IT'S FOR — */
+    .who {
+      background: var(--bg);
+    }
+
+    .who-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .who-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .who-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      font-size: 1rem;
+      color: var(--grey-light);
+      line-height: 1.6;
+    }
+
+    .who-list li::before {
+      content: '›';
+      color: var(--gold);
+      font-size: 0.9rem;
+      flex-shrink: 0;
+      margin-top: 0.2rem;
+    }
+
+    .who-callout {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      padding: 2rem;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .who-callout-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+
+    .who-callout p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.7;
+      font-style: italic;
+    }
+
+    /* — QUICKSTART — */
+    .quickstart {
+      background: var(--surface);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quickstart::before {
+      content: '';
+      position: absolute;
+      top: -200px; left: 50%;
+      transform: translateX(-50%);
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, var(--gold-dim) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .quickstart-inner {
+      max-width: 640px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+    }
+
+    .quickstart h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      line-height: 1;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.5rem;
+    }
+
+    .quickstart h2 em {
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    .quickstart-sub {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+    }
+
+    .opt-in-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .opt-in-form .form-row {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .form-input {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.9rem 1.2rem;
+      color: var(--text);
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-input::placeholder { color: var(--text-muted); }
+
+    .form-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px var(--gold-glow);
+    }
+
+    .btn-form {
+      width: 100%;
+      padding: 1rem 2rem;
+      background: var(--gold);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.95rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .btn-form:hover {
+      background: var(--gold-bright);
+      transform: translateY(-1px);
+    }
+
+    .form-note {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.75rem;
+    }
+
+    /* — BUY SECTION — */
+    .buy-section {
+      background: var(--bg);
+    }
+
+    .buy-card {
+      max-width: 620px;
+      margin: 0 auto;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 3rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .buy-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 10%; right: 10%;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .buy-price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4rem;
+      color: var(--gold);
+      line-height: 1;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+
+    .buy-name {
+      font-size: 1rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 2rem;
+    }
+
+    .buy-includes {
+      list-style: none;
+      text-align: left;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .buy-includes li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.95rem;
+      color: var(--grey-light);
+    }
+
+    .buy-includes li::before {
+      content: '·';
+      color: var(--gold);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .btn-buy {
+      display: block;
+      width: 100%;
+      padding: 1.1rem 2rem;
+      background: var(--gold);
+      color: #000;
+      font-weight: 800;
+      font-size: 1rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      margin-bottom: 1rem;
+    }
+
+    .btn-buy:hover {
+      background: var(--gold-bright);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px var(--gold-glow);
+    }
+
+    .buy-small {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* — FOOTER — */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.9rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-logo span { color: var(--gold); }
+
+    .footer-copy {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--gold); }
+
+    /* — FADE ANIMATION — */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* — RESPONSIVE — */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.25rem; }
+
+      .hero { padding: 7rem 1.25rem 4rem; }
+
+      .hero-inner {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        text-align: center;
+      }
+
+      .hero-actions { align-items: center; }
+      .hero-sub { max-width: 100%; }
+
+      .hero-visual { order: -1; }
+      .cover-wrapper img { max-width: 240px; }
+
+      .cards-grid { grid-template-columns: 1fr; }
+
+      .who-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+
+      .proof-divider { display: none; }
+
+      .opt-in-form .form-row { flex-direction: column; }
+
+      .buy-card { padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="/">AT<span>0</span>M FIT</a>
+    <a class="nav-cta" href="/blueprint">Get the Blueprint</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-content fade-up">
+        <p class="hero-label">The Levi Cardio Blueprint</p>
+        <h1>Build Your<br><em>Aerobic</em><br>Engine.</h1>
+        <p class="hero-sub">Zone 2 to Zone 4. A field guide for tactical athletes, lifters, and hybrid performers who want structure instead of guesswork.</p>
+        <div class="hero-actions">
+          <a class="btn-primary" href="/blueprint">Get the Blueprint — $27</a>
+          <a class="btn-secondary" href="#quickstart">Get the Free Zone 2 Quickstart</a>
+        </div>
+      </div>
+      <div class="hero-visual fade-up">
+        <div class="cover-wrapper">
+          <img src="./cover.png" alt="Levi Cardio Blueprint — Zone 2 to Zone 4" />
+          <span class="cover-badge">$27 — Instant Download</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROOF BAR -->
+  <div class="proof-bar">
+    <div class="proof-bar-inner">
+      <div class="proof-stat">
+        <div class="proof-num">49 BPM</div>
+        <div class="proof-label">Resting HR</div>
+      </div>
+      <div class="proof-divider"></div>
+      <div class="proof-stat">
+        <div class="proof-num">15+</div>
+        <div class="proof-label">Miles / Week</div>
+      </div>
+      <div class="proof-divider"></div>
+      <div class="proof-stat">
+        <div class="proof-num">5%</div>
+        <div class="proof-label">Aerobic Efficiency Gain</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gold-rule"></div>
+
+  <!-- WHAT YOU GET -->
+  <section class="what-you-get">
+    <div class="container">
+      <div class="what-header fade-up">
+        <p class="section-eyebrow">What You Get</p>
+        <h2 class="section-title">THE SYSTEM, NOT THE GUESSWORK</h2>
+        <p class="section-sub">57 pages of structure, data, and implementation — built from real training, not theory.</p>
+      </div>
+      <div class="cards-grid">
+        <div class="card fade-up">
+          <span class="card-icon">·</span>
+          <h3 class="card-title">Zone System</h3>
+          <p class="card-desc">Understand all 5 heart-rate zones — what each one builds, when to use them, and why most people train in the wrong one. Finally, the science explained in plain terms.</p>
+        </div>
+        <div class="card fade-up">
+          <span class="card-icon">·</span>
+          <h3 class="card-title">Real Data</h3>
+          <p class="card-desc">Levi's actual training progression numbers — not hypothetical templates. See what base-building looks like over weeks and months of consistent structured training.</p>
+        </div>
+        <div class="card fade-up">
+          <span class="card-icon">›</span>
+          <h3 class="card-title">Action Steps</h3>
+          <p class="card-desc">Apple Watch setup, zone-based progression framework, and recovery protocols. Every chapter ends with clear implementation so you know exactly what to do next session.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="gold-rule"></div>
+
+  <!-- WHO IT'S FOR -->
+  <section class="who">
+    <div class="container">
+      <div class="who-inner">
+        <div class="fade-up">
+          <p class="section-eyebrow">Who It's For</p>
+          <h2 class="section-title">BUILT FOR<br>ATHLETES WHO<br>TRAIN HARD</h2>
+          <p class="section-sub">You've already got the discipline. You just need the system.</p>
+          <ul class="who-list">
+            <li>Lifters adding conditioning without losing their strength base</li>
+            <li>Tactical athletes — SWAT, military, law enforcement, first responders</li>
+            <li>Hybrid athletes who want performance with real structure</li>
+            <li>Beginners who want to learn cardio correctly from the start</li>
+            <li>Anyone tired of guessing with heart rate training and getting nowhere</li>
+          </ul>
+        </div>
+        <div class="fade-up">
+          <div class="who-callout">
+            <div class="who-callout-title">The AT0M FIT Buyer</div>
+            <p>"They train hard — but haven't trained smart. They own a wearable but don't know how to use it correctly. They're not looking for motivation — they've got that. They want a system: clear, practical, no fluff. They've wasted enough sessions already."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="gold-rule"></div>
+
+  <!-- QUICKSTART -->
+  <section class="quickstart" id="quickstart">
+    <div class="quickstart-inner">
+      <div class="fade-up">
+        <p class="section-eyebrow" style="text-align:center;">Free Resource</p>
+        <h2>Start here — <em>free.</em></h2>
+        <p class="quickstart-sub">
+          Most people doing "Zone 2" are doing it wrong — going too hard, guessing the intensity, and wondering why they're not seeing results.<br><br>
+          The <strong style="color:var(--text)">Zone 2 Quickstart</strong> gives you the 7 things you actually need to know to start training in the right zone today. One page. No fluff. Immediate download.
+        </p>
+        <form class="opt-in-form" onsubmit="handleQuickstart(event)">
+          <div class="form-row">
+            <input class="form-input" type="text" placeholder="First name" />
+            <input class="form-input" type="email" placeholder="Email address" required id="quickstartEmail" />
+          </div>
+          <button class="btn-form" type="submit">Send Me the Quickstart</button>
+        </form>
+        <p class="form-note">No spam. No subscriptions. Just the guide — free.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="gold-rule"></div>
+
+  <!-- BUY SECTION -->
+  <section class="buy-section" id="buy">
+    <div class="container">
+      <div class="buy-card fade-up">
+        <div class="buy-price">$27</div>
+        <div class="buy-name">Levi Cardio Blueprint — Zone 2 to Zone 4</div>
+        <ul class="buy-includes">
+          <li>All 5 heart-rate zones explained with the science that makes them stick</li>
+          <li>How to build a real aerobic base — not just "go slow"</li>
+          <li>Threshold and VO2 training — what they are, when to use them</li>
+          <li>Apple Watch setup for accurate zone training</li>
+          <li>Sprint and interval applications built on a real base</li>
+          <li>Recovery guidance so your training compounds, not breaks down</li>
+          <li>Levi's own progression data and real training adjustments</li>
+          <li>57 pages — a full guide, not a PDF cheat sheet</li>
+        </ul>
+        <a class="btn-buy" href="/blueprint">Get the Blueprint — $27</a>
+        <p class="buy-small">Digital PDF. Instant download via Gumroad.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">AT<span>0</span>M FIT</div>
+    <p class="footer-copy">© 2025 Levi Operations LLC. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+    </div>
+  </footer>
+
+  <script>
+    // Fade-up observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-up').forEach((el, i) => {
+      el.style.transitionDelay = `${(i % 3) * 0.1}s`;
+      observer.observe(el);
+    });
+
+    // Quickstart form handler
+    function handleQuickstart(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('.btn-form');
+      btn.textContent = '· Check your inbox!';
+      btn.style.background = '#2A2A2A';
+      btn.style.color = 'var(--gold)';
+      btn.style.border = '1px solid var(--gold)';
+      btn.style.pointerEvents = 'none';
+      setTimeout(() => {
+        btn.textContent = 'Send Me the Quickstart';
+        btn.style.background = '';
+        btn.style.color = '';
+        btn.style.border = '';
+        btn.style.pointerEvents = '';
+      }, 5000);
+    }
+  </script>
+
+</body>
+</html>
