@@ -1,0 +1,104 @@
+This is incomplete.
+
+You only ported the old homepage/waitlist project. AT0M FIT is not just a landing page.
+
+The current system must include:
+
+Required routes:
+- /
+- /blueprint
+- /calculator
+- /training
+- /portal
+- /coach
+
+Required docs/files:
+- REPLIT-HANDOFF.md
+- /handoff
+- FORGE-SQL-EXPORT.sql
+- FORGE-BACKEND-STATUS.md
+- STACK-BUSINESS-BRIEF.md
+- ARC-BRAND-GUIDE.md
+- SCOUT-REPLIT-CONTEXT.md
+
+Stop treating the homepage/waitlist as complete.
+
+Immediate task:
+1. Check the Git branch.
+2. Confirm whether this import is from master or main.
+3. master is the current production static HTML system.
+4. main is the old Next.js prototype and should be ignored.
+5. Locate the real AT0M FIT files for:
+   - /blueprint
+   - /calculator
+   - /training
+   - /portal
+   - /coach
+   - /handoff
+   - REPLIT-HANDOFF.md
+6. If those files are missing, report exactly:
+   “WRONG BRANCH OR INCOMPLETE IMPORT.”
+7. Do not continue building the old homepage-only version.
+
+If the files exist, migrate the missing routes into the Replit app immediately.
+
+Priority before 00:00:
+1. Confirm correct branch/source.
+2. Bring /blueprint into Replit.
+3. Bring /calculator into Replit.
+4. Bring /training into Replit.
+5. Bring /portal into Replit.
+6. Bring /coach into Replit.
+7. Confirm Supabase works with VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.
+8. Create .env.example.
+9. Create REPLIT_TAKEOVER_STATUS.md.
+10. Create REPLIT_NEXT_BUILD_PLAN.md.
+11. Create REPLIT_RUNBOOK.md.
+12. Create QCMD_REPLIT_GATE.md.
+
+Do not:
+- move production off Vercel
+- disable RLS
+- expose secrets
+- redesign the brand
+- delete working routes
+- keep working on a homepage-only build
+
+Return in this format:
+
+SOURCE CHECK
+- current branch:
+- correct source found: yes/no
+- old prototype detected: yes/no
+- handoff docs found: yes/no
+
+ROUTES FOUND
+- /:
+- /blueprint:
+- /calculator:
+- /training:
+- /portal:
+- /coach:
+
+MIGRATION STATUS
+- homepage/waitlist:
+- blueprint:
+- calculator:
+- training:
+- portal:
+- coach:
+
+FILES CREATED
+- list files
+
+FILES CHANGED
+- list files
+
+BLOCKERS
+- list owner actions needed
+
+NEXT ACTION
+- what you will do next before 00:00
+
+QCMD
+- PASS/FAIL for full AT0M FIT Replit takeover readiness
