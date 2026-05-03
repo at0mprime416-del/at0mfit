@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Levi Cardio Blueprint. Zone 2 to Zone 4 | AT0M FIT</title>
+  <meta name="description" content="Build the aerobic engine most athletes never develop. A 57 page field guide for tactical athletes and hybrid performers. $27 Instant Download." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg:           #0B0B0B;
+      --surface:      #111111;
+      --surface2:     #1A1A1A;
+      --border:       #2A2A2A;
+      --gold:         #C9A04A;
+      --gold-bright:  #D4AF37;
+      --gold-glow:    rgba(201, 160, 74, 0.25);
+      --gold-dim:     rgba(201, 160, 74, 0.08);
+      --grey-light:   #B0B0B0;
+      --grey-mid:     #6E6E6E;
+      --text:         #F0EDE8;
+      --text-muted:   #888888;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2rem;
+      background: rgba(11, 11, 11, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.9rem;
+      letter-spacing: 0.1em;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--gold); }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.55rem 1.4rem;
+      background: var(--gold);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .nav-cta:hover {
+      background: var(--gold-bright);
+      transform: translateY(-1px);
+    }
+
+    /* GOLD RULE */
+    .gold-rule {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0.5;
+    }
+
+    /* SHARED */
+    section { padding: 6rem 2rem; }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .container-sm {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .section-eyebrow {
+      font-size: 0.73rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      line-height: 1;
+      letter-spacing: 0.04em;
+      margin-bottom: 1.2rem;
+      color: var(--text);
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1.1rem 2.4rem;
+      background: var(--gold);
+      color: #000;
+      font-weight: 800;
+      font-size: 1rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-bright);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 35px var(--gold-glow);
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ICON SYSTEM */
+    .icon { width: 20px; height: 20px; display: inline-block; vertical-align: middle; }
+    .icon-gold { color: #C9A04A; }
+    .icon-grey { color: #6E6E6E; }
+
+    /* premium renders */
+    .premium-render {
+      width: 100%;
+      max-width: 600px;
+      border-radius: 4px;
+      box-shadow: 0 8px 40px rgba(201, 160, 74, 0.12);
+      display: block;
+    }
+    .render-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    .render-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 60%, #0B0B0B);
+      pointer-events: none;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 6rem;
+      position: relative;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -150px; left: 50%;
+      transform: translateX(-50%);
+      width: 900px; height: 900px;
+      background: radial-gradient(circle, rgba(201,160,74,0.07) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      max-width: 780px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--gold-dim);
+      border: 1px solid rgba(201,160,74,0.3);
+      color: var(--gold);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.4rem 1.1rem;
+      border-radius: 2px;
+      margin-bottom: 2rem;
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 5.5rem);
+      line-height: 0.95;
+      letter-spacing: 0.03em;
+      margin-bottom: 1.5rem;
+      color: var(--text);
+    }
+
+    .hero h1 em {
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--grey-light);
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+    }
+
+    .price-badge {
+      display: inline-block;
+      background: var(--gold);
+      color: #000;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.08em;
+      padding: 0.5rem 1.5rem;
+      border-radius: 4px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .trust-note {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    .trust-note span {
+      color: var(--grey-mid);
+      margin: 0 0.4rem;
+    }
+
+    /* PROBLEM */
+    .problem {
+      background: var(--bg);
+    }
+
+    .problem-inner {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .problem h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+      line-height: 1.05;
+      letter-spacing: 0.04em;
+      margin-bottom: 1.5rem;
+    }
+
+    .problem h2 em {
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    .problem-body {
+      color: var(--grey-light);
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+
+    .pain-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      border-left: 2px solid var(--gold);
+      padding-left: 1.5rem;
+    }
+
+    .pain-list li {
+      color: var(--grey-light);
+      font-size: 0.97rem;
+      line-height: 1.6;
+      padding-left: 0.25rem;
+    }
+
+    .pain-list li strong { color: var(--text); }
+
+    .problem-visual {
+      margin-top: 3rem;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+    .problem-visual img {
+      width: 100%;
+      display: block;
+      border-radius: 4px;
+      box-shadow: 0 8px 40px rgba(201, 160, 74, 0.12);
+    }
+    .problem-visual::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 65%, #0B0B0B);
+      pointer-events: none;
+    }
+
+    /* WHAT'S INSIDE */
+    .whats-inside {
+      background: var(--surface);
+    }
+
+    .inside-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .chapters {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .chapter {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 1.5rem;
+      align-items: start;
+      padding: 1.75rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s;
+    }
+
+    .chapter:first-child { border-top: 1px solid var(--border); }
+
+    .chapter:hover { background: var(--gold-dim); padding-left: 1rem; padding-right: 1rem; margin: 0 -1rem; border-radius: 2px; }
+
+    .chapter-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+      line-height: 1;
+    }
+
+    .chapter-content {}
+
+    .chapter-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      margin-bottom: 0.35rem;
+    }
+
+    .chapter-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+
+    /* chapter visual inserts */
+    .chapter-visual {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+    .chapter-visual img {
+      width: 100%;
+      display: block;
+      border-radius: 4px;
+      box-shadow: 0 8px 40px rgba(201, 160, 74, 0.12);
+    }
+    .chapter-visual::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 65%, var(--surface));
+      pointer-events: none;
+    }
+
+    /* WHO IT'S FOR */
+    .who {
+      background: var(--bg);
+    }
+
+    .who-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 2.5rem;
+    }
+
+    .who-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      transition: border-color 0.2s;
+    }
+
+    .who-card:hover { border-color: rgba(201,160,74,0.3); }
+
+    .who-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .who-card-text {
+      font-size: 0.92rem;
+      color: var(--grey-light);
+      line-height: 1.6;
+    }
+
+    .who-card-text strong { color: var(--text); display: block; margin-bottom: 0.2rem; }
+
+    /* TRANSFORMATION */
+    .transformation {
+      background: var(--surface);
+    }
+
+    .transform-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .transform-col {
+      padding: 2.5rem 2rem;
+    }
+
+    .transform-col.from {
+      background: var(--surface2);
+    }
+
+    .transform-col.to {
+      background: #131007;
+      border-left: 2px solid var(--gold);
+    }
+
+    .transform-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      margin-bottom: 1.5rem;
+    }
+
+    .transform-col.from .transform-label { color: var(--text-muted); }
+    .transform-col.to .transform-label { color: var(--gold); }
+
+    .transform-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .transform-list li {
+      font-size: 0.92rem;
+      line-height: 1.55;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .transform-col.from .transform-list li {
+      color: var(--text-muted);
+    }
+
+    .transform-col.from .transform-list li::before {
+      content: '×';
+      color: #555;
+      flex-shrink: 0;
+      font-weight: 700;
+    }
+
+    .transform-col.to .transform-list li {
+      color: var(--grey-light);
+    }
+
+    .transform-to-visual {
+      margin-top: 2rem;
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+    .transform-to-visual img {
+      width: 100%;
+      display: block;
+      border-radius: 4px;
+      opacity: 0.85;
+    }
+    .transform-to-visual::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 55%, #131007);
+      pointer-events: none;
+    }
+
+    /* AUTHOR */
+    .author {
+      background: var(--bg);
+    }
+
+    .author-inner {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .author-photo {
+      width: 100%;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      display: block;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+
+    .author-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      letter-spacing: 0.06em;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .author-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+
+    .author-bio {
+      color: var(--grey-light);
+      font-size: 0.97rem;
+      line-height: 1.8;
+    }
+
+    .author-bio p { margin-bottom: 1rem; }
+    .author-bio p:last-child { margin-bottom: 0; }
+
+    .author-stats {
+      display: flex;
+      gap: 2.5rem;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .a-stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+      line-height: 1;
+    }
+
+    .a-stat-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    /* FAQ */
+    .faq {
+      background: var(--surface);
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 0;
+    }
+
+    .faq-item:first-child { border-top: 1px solid var(--border); }
+
+    .faq-question {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .faq-question .faq-toggle {
+      color: var(--gold);
+      font-size: 1.4rem;
+      transition: transform 0.3s;
+      flex-shrink: 0;
+    }
+
+    .faq-question.open .faq-toggle {
+      transform: rotate(45deg);
+    }
+
+    .faq-answer {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .faq-answer.open {
+      max-height: 200px;
+    }
+
+    /* FINAL CTA */
+    .final-cta {
+      background: linear-gradient(135deg, #1a1200, #0d0d0d);
+      border-top: 1px solid var(--gold);
+      border-bottom: 1px solid var(--gold);
+      text-align: center;
+      padding: 5rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .final-cta-bg {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .final-cta-bg img {
+      height: 100%;
+      width: auto;
+      max-width: 40%;
+      object-fit: cover;
+      opacity: 0.15;
+    }
+
+    .final-cta-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .final-cta h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      letter-spacing: 0.04em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .final-cta h2 em {
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    .final-price-line {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      letter-spacing: 0.08em;
+    }
+
+    .btn-buy-final {
+      display: inline-block;
+      padding: 1.2rem 3rem;
+      background: transparent;
+      color: var(--gold);
+      font-weight: 800;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 2px solid var(--gold);
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s, transform 0.2s;
+    }
+
+    .btn-buy-final:hover {
+      background: var(--gold);
+      color: #000;
+      transform: translateY(-2px);
+    }
+
+    .final-trust {
+      margin-top: 1.5rem;
+      font-size: 0.8rem;
+      color: var(--grey-mid);
+      letter-spacing: 0.05em;
+    }
+
+    /* DISCLAIMER */
+    .disclaimer {
+      background: var(--bg);
+      padding: 3rem 2rem;
+    }
+
+    .disclaimer-text {
+      max-width: 720px;
+      margin: 0 auto;
+      font-size: 0.78rem;
+      color: var(--grey-mid);
+      line-height: 1.7;
+      border-top: 1px solid var(--border);
+      padding-top: 2rem;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.9rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-logo span { color: var(--gold); }
+
+    .footer-copy {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--gold); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.25rem; }
+
+      .hero { padding: 7rem 1.25rem 5rem; }
+
+      .who-grid { grid-template-columns: 1fr; }
+
+      .transform-grid { grid-template-columns: 1fr; }
+      .transform-col.to { border-left: none; border-top: 2px solid var(--gold); }
+
+      .author-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .author-photo { max-width: 220px; }
+
+      .chapter { grid-template-columns: 60px 1fr; gap: 1rem; }
+
+      section { padding: 4rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SVG ICON SYSTEM -->
+  <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <symbol id="icon-strength" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M6.5 6.5h11M12 6.5V18M8 18h8"/>
+      </symbol>
+      <symbol id="icon-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 2L4 6v6c0 4.4 3.4 8.5 8 9.5 4.6-1 8-5.1 8-9.5V6l-8-4z"/>
+      </symbol>
+      <symbol id="icon-performance" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+      </symbol>
+      <symbol id="icon-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+      </symbol>
+      <symbol id="icon-watch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="7" y="6" width="10" height="12" rx="2"/>
+        <path d="M9 4h6M9 20h6"/>
+      </symbol>
+      <symbol id="icon-recovery" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 4c-4.4 0-8 3.6-8 8s3.6 8 8 8"/><path d="M12 4l2 2-2 2"/>
+      </symbol>
+      <symbol id="icon-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </symbol>
+      <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"/>
+      </symbol>
+      <symbol id="icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="/">AT<span>0</span>M FIT</a>
+    <div style="display:flex;align-items:center;gap:1.2rem;">
+      <a href="/training" style="color:var(--gold);font-size:0.82rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;text-decoration:none;opacity:1;transition:opacity 0.2s;" onmouseover="this.style.opacity=0.7" onmouseout="this.style.opacity=1">Custom Training</a>
+      <a class="nav-cta" href="#buy">Get the Blueprint $27</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="hero-content fade-up">
+      <div class="hero-badge">AT0M FIT Field Guide</div>
+      <h1>Zone 2 to Zone 4.<br><em>Build the Aerobic Engine</em><br>Most Athletes Never Develop</h1>
+      <p class="hero-sub">A field guide for tactical athletes and hybrid performers who want structure, not guesswork.</p>
+      <div class="price-badge">$27 Instant Download</div>
+      <div class="hero-cta-group">
+        <a class="btn-primary" href="https://jeshjones.gumroad.com/l/Cardio-blueprint" target="_blank" rel="noopener">Get the Blueprint $27</a>
+        <p class="trust-note">
+          Immediate PDF download
+          <span>&#183;</span>
+          No subscription
+          <span>&#183;</span>
+          Keep forever
+        </p>
+        <p style="margin-top:1rem;font-size:0.9rem;color:var(--text-muted);">Not sure where you are? <a href="/calculator" style="color:var(--gold);text-decoration:none;font-weight:600;">Find your zones free &rarr;</a></p>
+      </div>
+    </div>
+  </section>
+
+  <div class="gold-rule"></div>
+
+  <!-- PROBLEM -->
+  <section class="problem">
+    <div class="problem-inner fade-up">
+      <p class="section-eyebrow">The Problem</p>
+      <h2>Most people doing cardio are training in<br><em>no man's land.</em></h2>
+      <p class="problem-body">
+        Too hard to be Zone 2. Not hard enough to be a real workout. They're burning energy without building anything real. The aerobic base stays weak. Performance plateaus. And nobody tells them why.<br><br>
+        They're guessing at intensities, misreading their heart rate zones, and wondering why their conditioning isn't improving despite the work they're putting in. The problem isn't discipline. It's the absence of a system.
+      </p>
+      <ul class="pain-list">
+        <li><strong>Your heart rate spikes</strong> the moment you pick up the pace, because you've never built the base underneath.</li>
+        <li><strong>You live in the "moderate effort" zone,</strong> the one that feels productive but actually develops nothing efficiently.</li>
+        <li><strong>Zone 2 feels too slow to be useful.</strong> You think you need to be working harder. That instinct is costing you results.</li>
+        <li><strong>You have no idea when to push and when to hold back,</strong> so you either overtrain or undertrain, never finding the right dial.</li>
+        <li><strong>Your wearable shows you heart rate data,</strong> but nobody ever taught you what to do with it.</li>
+      </ul>
+
+      <!-- aerobic vs anaerobic visual -->
+      <div class="problem-visual">
+        <img src="./aerobic-anaerobic.png" alt="Aerobic vs anaerobic energy systems comparison" class="premium-render" style="max-width:100%" />
+      </div>
+    </div>
+  </section>
+
+  <div class="gold-rule"></div>
+
+  <!-- WHAT'S INSIDE -->
+  <section class="whats-inside">
+    <div class="container">
+      <div class="inside-header fade-up">
+        <p class="section-eyebrow">What's Inside</p>
+        <h2 class="section-title">57 PAGES. 9 CHAPTERS.<br>ONE COMPLETE SYSTEM.</h2>
+      </div>
+      <div class="chapters fade-up">
+        <div class="chapter">
+          <div class="chapter-num">01</div>
+          <div class="chapter-content">
+            <div class="chapter-title">Why Aerobic Base Training Is the Foundation of Everything</div>
+            <p class="chapter-desc">The physiology behind why Zone 2 matters more than any other training zone, and why skipping it means building your conditioning on sand.</p>
+          </div>
+        </div>
+        <div class="chapter">
+          <div class="chapter-num">02</div>
+          <div class="chapter-content">
+            <div class="chapter-title">Understanding All 5 Heart Rate Zones</div>
+            <p class="chapter-desc">A clear breakdown of every zone. What it is, what it builds, when to use it, and the science that makes each one distinct. Not labels. Understanding.</p>
+            <div class="chapter-visual">
+              <img src="./heart-rate-zones.png" alt="AT0M FIT Heart Rate Training Zones" class="premium-render" style="width:100%;max-width:680px;margin:1.5rem auto;display:block;border-radius:4px;box-shadow:0 8px 40px rgba(201,160,74,0.18);" />
+            </div>
+          </div>
+        </div>
+        <div class="chapter">
+          <div class="chapter-num">03</div>
+          <div class="chapter-content">
+            <div class="chapter-title">Zone 2 for Beginners. Start Here.</div>
+            <p class="chapter-desc">If you've never trained with heart rate zones before, this is your entry point. How to find your Zone 2, set your targets, and start building correctly from day one.</p>
+          </div>
+        </div>
+        <div class="chapter">
+          <div class="chapter-num">04</div>
+          <div class="chapter-content">
+            <div class="chapter-title">Building Your Aerobic Base Progressively</div>
+            <p class="chapter-desc">The actual protocol. Frequency, duration, progression, and adaptation. How to build week over week without burning out or stagnating.</p>
+          </div>
+        </div>
+        <div class="chapter">
+          <div class="chapter-num">05</div>
+          <div class="chapter-content">
+            <div class="chapter-title">Zone 3 and Threshold Training. When and How.</div>
+            <p class="chapter-desc">Threshold work explained: what lactate threshold actually means, when it's appropriate to train there, and how it relates to the base you've built.</p>
+          </div>
+        </div>
+        <div class="chapter">
+          <div class="chapter-num">06</div>
+          <div class="chapter-content">
+            <div class="chapter-title">Zone 4 and VO2 Max Development</div>
+            <p class="chapter-desc">High intensity work done right. What VO2 training actually does, when to program it, and why it only works after you've built the base underneath.</p>
+          </div>
+        </div>
+        <div class="chapter">
+          <div class="chapter-num">07</div>
+          <div class="chapter-content">
+            <div class="chapter-title">Sprint, Interval, and Sprint Applications</div>
+            <p class="chapter-desc">How to layer in high intensity work without destroying your base. The sequencing, the ratios, and the protocols that compound your training instead of blowing it up.</p>
+          </div>
+        </div>
+        <div class="chapter">
+          <div class="chapter-num">08</div>
+          <div class="chapter-content">
+            <div class="chapter-title">Apple Watch Setup and Wearable Calibration</div>
+            <p class="chapter-desc">How to configure your Apple Watch (or similar HRM) for accurate zone training. The settings, the caveats, and how to stop relying on guessed zones.</p>
+            <div class="chapter-visual">
+              <img src="./watch-premium.png" alt="AT0M FIT Apple Watch Training Metrics" class="premium-render" style="width:100%;max-width:500px;margin:1.5rem auto;display:block;border-radius:4px;box-shadow:0 8px 40px rgba(201,160,74,0.18);" />
+              <img src="./watch-setup.png" alt="Apple Watch heart rate zone training setup" style="width:100%;margin-top:1rem;display:block;border-radius:4px;opacity:0.85;" />
+            </div>
+          </div>
+        </div>
+        <div class="chapter">
+          <div class="chapter-num">09</div>
+          <div class="chapter-content">
+            <div class="chapter-title">Recovery, Adaptation, and Full Year Programming</div>
+            <p class="chapter-desc">The part most guides skip. Recovery protocols, how to read your body's signals, and how to structure your training calendar so it compounds over time, not breaks down.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="gold-rule"></div>
+
+  <!-- WHO IT'S FOR -->
+  <section class="who">
+    <div class="container">
+      <div class="fade-up" style="text-align:center; margin-bottom:3rem;">
+        <p class="section-eyebrow">Who It's For</p>
+        <h2 class="section-title">BUILT FOR ATHLETES<br>WHO TRAIN HARD</h2>
+      </div>
+      <div class="who-grid fade-up">
+        <div class="who-card">
+          <span class="who-icon">
+            <svg class="icon icon-gold" style="width:24px;height:24px"><use href="#icon-strength"/></svg>
+          </span>
+          <div class="who-card-text">
+            <strong>Lifters Adding Conditioning</strong>
+            You've built strength. Now you need to build the engine. This is how you do it without sacrificing the gains.
+          </div>
+        </div>
+        <div class="who-card">
+          <span class="who-icon">
+            <svg class="icon icon-gold" style="width:24px;height:24px"><use href="#icon-shield"/></svg>
+          </span>
+          <div class="who-card-text">
+            <strong>Tactical Athletes</strong>
+            SWAT, military, law enforcement, and first responders who need real cardio capacity, not just the ability to pass a PT test.
+          </div>
+        </div>
+        <div class="who-card">
+          <span class="who-icon">
+            <svg class="icon icon-gold" style="width:24px;height:24px"><use href="#icon-performance"/></svg>
+          </span>
+          <div class="who-card-text">
+            <strong>Hybrid Athletes</strong>
+            You want strength and conditioning. Performance with structure. This is the missing piece most hybrid programs never provide.
+          </div>
+        </div>
+        <div class="who-card">
+          <span class="who-icon">
+            <svg class="icon icon-gold" style="width:24px;height:24px"><use href="#icon-target"/></svg>
+          </span>
+          <div class="who-card-text">
+            <strong>Beginners Who Want It Done Right</strong>
+            Starting correctly is worth more than starting fast. Chapter 3 is specifically designed to get you running on the right system from day one.
+          </div>
+        </div>
+        <div class="who-card">
+          <span class="who-icon">
+            <svg class="icon icon-gold" style="width:24px;height:24px"><use href="#icon-watch"/></svg>
+          </span>
+          <div class="who-card-text">
+            <strong>Wearable Owners Without a System</strong>
+            You've got the Apple Watch. You see the heart rate data. Now you need to know what to actually do with it.
+          </div>
+        </div>
+        <div class="who-card">
+          <span class="who-icon">
+            <svg class="icon icon-gold" style="width:24px;height:24px"><use href="#icon-arrow"/></svg>
+          </span>
+          <div class="who-card-text">
+            <strong>Anyone Tired of Guessing</strong>
+            Plateaued. Burned out. Going through the motions. If cardio feels random, this is what makes it make sense.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="gold-rule"></div>
+
+  <!-- TRANSFORMATION -->
+  <section class="transformation">
+    <div class="container">
+      <div class="fade-up" style="text-align:center; margin-bottom:3rem;">
+        <p class="section-eyebrow">The Shift</p>
+        <h2 class="section-title">WHERE YOU'RE GOING</h2>
+      </div>
+      <div class="transform-grid fade-up">
+        <div class="transform-col from">
+          <div class="transform-label">Before. The Old Way.</div>
+          <ul class="transform-list">
+            <li>Running random, no structure or intent behind sessions</li>
+            <li>Guessing at heart rate zones, or ignoring them entirely</li>
+            <li>Moderate intensity on everything, stuck in no man's land</li>
+            <li>Burning out on hard sessions, under-recovering, plateauing</li>
+            <li>A wearable on your wrist but no idea what the data means</li>
+            <li>No progression. Same sessions, same feel, same results.</li>
+          </ul>
+        </div>
+        <div class="transform-col to">
+          <div class="transform-label">After. The Blueprint Way.</div>
+          <ul class="transform-list">
+            <li>Every session has a zone target and a purpose. Nothing random.</li>
+            <li>Clear zones dialed in for your max heart rate and physiology</li>
+            <li>Base building done right. Slow enough to actually adapt.</li>
+            <li>Recovery built into the structure. Training compounds over time.</li>
+            <li>Apple Watch configured, accurate, and working for you</li>
+            <li>A framework that progresses week over week. Real aerobic development.</li>
+          </ul>
+          <div class="transform-to-visual">
+            <img src="./athlete-sprint-front.png" alt="Athlete at full sprint. The result of a built aerobic engine." />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="gold-rule"></div>
+
+  <!-- AUTHOR -->
+  <section class="author">
+    <div class="container">
+      <div class="author-inner fade-up">
+        <div>
+          <img src="./author.jpg" alt="Levi. Author, AT0M FIT" class="author-photo" />
+        </div>
+        <div>
+          <p class="section-eyebrow">From the Author</p>
+          <div class="author-name">LEVI</div>
+          <div class="author-title">SWAT Operator &middot; Founder, AT0M FIT</div>
+          <div class="author-bio">
+            <p>I built this guide because I couldn't find it anywhere else.</p>
+            <p>When I started seriously developing my conditioning, I was already putting in the work. Running, lifting, training hard. But my cardio felt like it was going nowhere. I'd finish sessions gassed, recover slowly, and still feel like I had no real engine underneath.</p>
+            <p>Turns out I'd never built a real aerobic base. I was living in the "moderate effort" zone, the one that feels productive but develops nothing efficiently. Zone 2 felt too slow. Zone 4 felt like the right level of suffering. I was wrong on both counts.</p>
+            <p>When I actually learned how heart rate zones work, not just the labels but the physiology, everything changed. My resting HR dropped to 49 BPM. I built to 15+ miles a week. My recovery improved. My high intensity work started producing real results because I finally had the foundation underneath it.</p>
+            <p>That education is what this book is. Not a workout plan. The missing system that makes all your training make sense.</p>
+          </div>
+          <div class="author-stats">
+            <div>
+              <div class="a-stat-num">49 BPM</div>
+              <div class="a-stat-label">Resting HR</div>
+            </div>
+            <div>
+              <div class="a-stat-num">15+</div>
+              <div class="a-stat-label">Miles / Week</div>
+            </div>
+            <div>
+              <div class="a-stat-num">SWAT</div>
+              <div class="a-stat-label">Active Operator</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="gold-rule"></div>
+
+  <!-- FAQ -->
+  <section class="faq">
+    <div class="container-sm">
+      <div class="fade-up" style="text-align:center; margin-bottom:3rem;">
+        <p class="section-eyebrow">Questions</p>
+        <h2 class="section-title">FAQ</h2>
+      </div>
+      <div class="faq-list fade-up">
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            What format is this?
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">PDF. Immediate download via Gumroad. Works on any device. Download once, keep forever. No app required.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Do I need special equipment?
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">An Apple Watch or similar heart rate monitor is recommended. The Apple Watch setup chapter is specific to the Watch. But the zone principles, training protocols, and programming frameworks apply to any wearable with HR tracking, or even perceived exertion. You don't need any specific equipment to apply 90% of this guide.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Is this for beginners?
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">Yes. Chapter 3 is specifically built for people who have never trained with heart rate zones before. It walks you through finding your zones, setting up your first sessions, and starting correctly. You don't need prior cardio experience to benefit from this guide.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            How long is it?
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">57 pages. This is a full length field guide, not a PDF cheat sheet. It covers the science, the implementation, and the protocols with enough depth to actually understand what you're doing and why.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            What if I don't like it?
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">Digital products are nonrefundable after download. That's the nature of instant access digital goods. But if you have a technical issue with your file, reach out and we'll fix it immediately.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="final-cta" id="buy">
+    <div class="final-cta-bg">
+      <img src="./athlete-run-steady.png" alt="" aria-hidden="true" />
+    </div>
+    <div class="final-cta-inner fade-up">
+      <p class="section-eyebrow" style="text-align:center;">Ready to Build</p>
+      <h2>Ready to build<br><em>the engine?</em></h2>
+      <p class="final-price-line">$27 &#183; Instant Download &#183; Keep Forever</p>
+      <a class="btn-buy-final" href="https://jeshjones.gumroad.com/l/Cardio-blueprint" target="_blank" rel="noopener">Get the Blueprint $27</a>
+      <p class="final-trust">Immediate PDF download via Gumroad &#183; No subscription &#183; Digital product, no returns after download</p>
+    </div>
+  </section>
+
+  <!-- DISCLAIMER -->
+  <div class="disclaimer">
+    <div class="disclaimer-text">
+      <strong>DISCLAIMER: NOT MEDICAL OR PROFESSIONAL ADVICE</strong><br><br>
+      The information provided in this guide and all AT0M FIT materials is for educational and informational purposes only. It is not intended as medical advice, diagnosis, or treatment. Before beginning any new exercise program, consult your physician or a qualified healthcare professional, especially if you have a preexisting medical condition, injury, or health concern. Training methods, heart rate guidelines, and programming concepts described are general in nature and may not be appropriate for every individual. Results will vary. AT0M FIT and Levi Operations LLC are not liable for any injury, health issue, or adverse outcome resulting from the use or misuse of this material. You train at your own risk. Train smart.
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">AT<span>0</span>M FIT</div>
+    <p class="footer-copy">© 2025 Levi Operations LLC. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+    </div>
+  </footer>
+
+  <script>
+    // Fade-up observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.fade-up').forEach((el, i) => {
+      el.style.transitionDelay = `${(i % 4) * 0.08}s`;
+      observer.observe(el);
+    });
+
+    // FAQ accordion
+    function toggleFaq(el) {
+      const answer = el.nextElementSibling;
+      const isOpen = answer.classList.contains('open');
+
+      // Close all
+      document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+      document.querySelectorAll('.faq-question').forEach(q => q.classList.remove('open'));
+
+      if (!isOpen) {
+        answer.classList.add('open');
+        el.classList.add('open');
+      }
+    }
+  </script>
+
+</body>
+</html>

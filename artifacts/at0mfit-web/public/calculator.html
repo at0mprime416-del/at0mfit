@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AT0M FIT Zone Calculator and 90 Day Forecast</title>
+  <meta name="description" content="Calculate your personal heart rate training zones using the Karvonen formula and get a realistic 90 day performance projection." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0B0B0B;
+      --surface: #111111;
+      --surface2: #1A1A1A;
+      --border: #2A2A2A;
+      --gold: #C9A04A;
+      --gold-bright: #D4AF37;
+      --gold-glow: rgba(201,160,74,0.2);
+      --grey-light: #B0B0B0;
+      --grey-mid: #6E6E6E;
+      --text: #F0EDE8;
+      --text-muted: #888888;
+
+      --z1: #4A4A4A;
+      --z2: #C9A04A;
+      --z3: #E07B39;
+      --z4: #C94A2D;
+      --z5: #9B1D1D;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ICON SYSTEM */
+    .icon { width: 20px; height: 20px; display: inline-block; vertical-align: middle; }
+    .icon-gold { color: #C9A04A; }
+    .icon-grey { color: #6E6E6E; }
+
+    /* NAV / HEADER */
+    .site-header {
+      border-bottom: 1px solid var(--border);
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 100;
+    }
+    .site-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+      text-decoration: none;
+    }
+    .site-logo span { color: var(--text); }
+
+    /* PROGRESS BAR */
+    .progress-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      padding: 28px 24px 0;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .prog-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      position: relative;
+    }
+    .prog-step::after {
+      content: '';
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      width: 100%;
+      height: 2px;
+      background: var(--border);
+      transition: background 0.4s;
+    }
+    .prog-step:last-child::after { display: none; }
+    .prog-step.active::after,
+    .prog-step.done::after { background: var(--gold); }
+
+    .prog-dot {
+      width: 36px;
+      height: 36px;
+      border-radius: 4px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      transition: all 0.35s;
+      z-index: 1;
+    }
+    .prog-step.active .prog-dot {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #000;
+    }
+    .prog-step.done .prog-dot {
+      background: transparent;
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .prog-label {
+      font-size: 0.65rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .prog-step.active .prog-label { color: var(--gold); }
+
+    /* LAYOUT */
+    .calc-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+    }
+
+    /* STEP SECTIONS */
+    .step {
+      display: none;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .step.active {
+      display: block;
+    }
+    .step.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* HEADINGS */
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      letter-spacing: 0.04em;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+    h1 span { color: var(--gold); }
+    h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      letter-spacing: 0.04em;
+      color: var(--text);
+    }
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .sub {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 36px;
+    }
+
+    /* FORM ELEMENTS */
+    .form-grid {
+      display: grid;
+      gap: 20px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 540px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--grey-light);
+    }
+    input[type="number"],
+    select {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      padding: 12px 14px;
+      width: 100%;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    input[type="number"]:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px var(--gold-glow);
+    }
+    input[type="number"]::placeholder { color: var(--text-muted); }
+
+    /* custom select arrow */
+    .select-wrap {
+      position: relative;
+    }
+    .select-wrap::after {
+      content: '';
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 6px solid var(--gold);
+      pointer-events: none;
+    }
+    .select-wrap select { padding-right: 36px; cursor: pointer; }
+
+    /* radio group */
+    .radio-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .radio-option input[type="radio"] {
+      accent-color: var(--gold);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+    .radio-option span {
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    .field-hint {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* hr divider */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 8px 0;
+    }
+
+    /* BUTTONS */
+    .btn-gold {
+      background: var(--gold);
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 16px 32px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-gold:hover {
+      background: var(--gold-bright);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px var(--gold-glow);
+    }
+    .btn-gold.full-width { width: 100%; justify-content: center; margin-top: 8px; }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-ghost:hover { border-color: var(--grey-mid); color: var(--text); }
+
+    .btn-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 32px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* ZONE BARS */
+    .zones-list { display: flex; flex-direction: column; gap: 12px; margin: 28px 0; }
+
+    .zone-card {
+      display: flex;
+      align-items: stretch;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .zone-bar-left {
+      width: 6px;
+      flex-shrink: 0;
+    }
+    .zone-body {
+      flex: 1;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .zone-name-wrap { flex: 1; min-width: 140px; }
+    .zone-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+    .zone-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.15rem;
+      letter-spacing: 0.04em;
+      color: var(--text);
+    }
+    .zone-bpm {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text);
+      white-space: nowrap;
+      min-width: 100px;
+      text-align: right;
+    }
+    .zone-bpm small {
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      display: block;
+      text-align: right;
+    }
+    .zone-desc {
+      width: 100%;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      line-height: 1.5;
+    }
+
+    /* animated fill bar */
+    .zone-fill-wrap {
+      width: 100%;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    .zone-fill {
+      height: 100%;
+      border-radius: 2px;
+      width: 0;
+      transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* PROFILE SUMMARY CARD */
+    .profile-card {
+      background: var(--surface);
+      border: 1px solid var(--gold);
+      border-radius: 10px;
+      padding: 22px 24px;
+      margin: 24px 0;
+    }
+    .profile-card-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+    .profile-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .profile-row:last-child { border-bottom: none; }
+    .profile-row-icon {
+      font-size: 0.9rem;
+      color: var(--gold);
+      margin-top: 2px;
+      flex-shrink: 0;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .profile-row-text {
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .profile-row-text strong { color: var(--gold); }
+
+    /* FORECAST */
+    .forecast-header {
+      margin-bottom: 36px;
+    }
+    .timeline { display: flex; flex-direction: column; gap: 24px; margin: 28px 0; }
+
+    .timeline-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 22px 24px;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s;
+    }
+    .timeline-card.visible { opacity: 1; transform: translateY(0); }
+    .timeline-card:hover { border-color: var(--gold); }
+
+    .day-badge {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .timeline-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+    .timeline-items { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .timeline-items li {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      padding-left: 24px;
+      position: relative;
+    }
+    .timeline-items li .item-icon {
+      position: absolute;
+      left: 0;
+      top: 2px;
+    }
+    .timeline-items li strong { color: var(--text); }
+
+    /* blueprint recommendation card */
+    .blueprint-rec {
+      background: linear-gradient(135deg, #1a1200, #111111);
+      border: 1px solid var(--gold);
+      border-radius: 10px;
+      padding: 22px 24px;
+      margin: 24px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .blueprint-rec-icon {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .blueprint-rec-content {}
+    .blueprint-rec-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .blueprint-rec-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .blueprint-rec-body {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    .blueprint-rec-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 20px;
+      background: var(--gold);
+      color: #000;
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    .blueprint-rec-link:hover { background: var(--gold-bright); }
+
+    /* disclaimer */
+    .disclaimer {
+      border: 1px solid var(--gold);
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin: 32px 0 24px;
+      background: rgba(201,160,74,0.04);
+    }
+    .disclaimer p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .disclaimer-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    /* drivers section */
+    .drivers-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .drivers-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 480px) {
+      .drivers-grid { grid-template-columns: 1fr; }
+    }
+    .driver-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .driver-icon-bar {
+      display: inline-block;
+      width: 3px;
+      height: 18px;
+      background: var(--gold);
+      border-radius: 2px;
+      margin-bottom: 10px;
+    }
+    .driver-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .driver-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* CTA CARDS */
+    .cta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 28px 0;
+    }
+    @media (max-width: 560px) {
+      .cta-grid { grid-template-columns: 1fr; }
+    }
+
+    .cta-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .cta-card:hover {
+      border-color: var(--gold);
+      box-shadow: 0 0 24px var(--gold-glow);
+    }
+    .cta-card.featured { border-color: var(--gold); }
+    .cta-tag {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+    }
+    .cta-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      line-height: 1.15;
+    }
+    .cta-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      flex: 1;
+    }
+    .cta-price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      color: var(--gold);
+      letter-spacing: 0.04em;
+    }
+    .cta-price-free {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      color: var(--grey-light);
+      letter-spacing: 0.04em;
+    }
+    .cta-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 20px;
+      border-radius: 6px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .cta-link.ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .cta-link.ghost:hover { border-color: var(--gold); color: var(--gold); }
+    .cta-link.solid {
+      background: var(--gold);
+      color: #000;
+      border: none;
+    }
+    .cta-link.solid:hover {
+      background: var(--gold-bright);
+      box-shadow: 0 4px 20px var(--gold-glow);
+    }
+    .cta-footnote {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    /* VALIDATION */
+    .error-msg {
+      font-size: 0.78rem;
+      color: #e05c5c;
+      margin-top: 4px;
+      display: none;
+    }
+    .field.has-error input,
+    .field.has-error select {
+      border-color: #e05c5c;
+    }
+    .field.has-error .error-msg { display: block; }
+
+    /* MISC */
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      margin-bottom: 16px;
+      display: block;
+    }
+    .mt-8 { margin-top: 8px; }
+    .mt-16 { margin-top: 16px; }
+    .mt-24 { margin-top: 24px; }
+    .mt-32 { margin-top: 32px; }
+
+    /* mobile tweaks */
+    @media (max-width: 768px) {
+      .calc-wrap { padding: 24px 16px 60px; }
+      .zone-body { gap: 10px; }
+      .zone-bpm { font-size: 1.15rem; min-width: 80px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SVG ICON SYSTEM -->
+  <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <symbol id="icon-strength" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M6.5 6.5h11M12 6.5V18M8 18h8"/>
+      </symbol>
+      <symbol id="icon-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 2L4 6v6c0 4.4 3.4 8.5 8 9.5 4.6-1 8-5.1 8-9.5V6l-8-4z"/>
+      </symbol>
+      <symbol id="icon-performance" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+      </symbol>
+      <symbol id="icon-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+      </symbol>
+      <symbol id="icon-watch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="7" y="6" width="10" height="12" rx="2"/>
+        <path d="M9 4h6M9 20h6"/>
+      </symbol>
+      <symbol id="icon-recovery" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 4c-4.4 0-8 3.6-8 8s3.6 8 8 8"/><path d="M12 4l2 2-2 2"/>
+      </symbol>
+      <symbol id="icon-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </symbol>
+      <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"/>
+      </symbol>
+      <symbol id="icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <header class="site-header">
+    <a href="/" class="site-logo">AT0M<span> FIT</span></a>
+    <nav style="font-size:0.8rem;color:var(--text-muted);display:flex;gap:1.2rem;align-items:center;">
+      <a href="/training" style="color:var(--gold);font-weight:700;text-decoration:none;font-size:0.82rem;letter-spacing:0.06em;text-transform:uppercase;">Custom Training</a>
+      <span>Zone Calculator</span>
+    </nav>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-bar" id="progressBar">
+    <div class="prog-step active" data-step="1">
+      <div class="prog-dot">01</div>
+      <span class="prog-label">Your Data</span>
+    </div>
+    <div class="prog-step" data-step="2">
+      <div class="prog-dot">02</div>
+      <span class="prog-label">Your Zones</span>
+    </div>
+    <div class="prog-step" data-step="3">
+      <div class="prog-dot">03</div>
+      <span class="prog-label">Forecast</span>
+    </div>
+    <div class="prog-step" data-step="4">
+      <div class="prog-dot">04</div>
+      <span class="prog-label">Next Step</span>
+    </div>
+  </div>
+
+  <main class="calc-wrap">
+
+    <!-- STEP 1: DATA INPUT -->
+    <section class="step active" id="step1">
+      <h1>Calculate Your<br><span>Training Zones</span></h1>
+      <p class="sub">Based on your physiology. Built on the Karvonen Heart Rate Reserve method, the same formula used by sports scientists.</p>
+
+      <form id="calcForm" novalidate>
+        <div class="form-grid">
+
+          <!-- Age -->
+          <div class="field" id="field-age">
+            <label for="age">Age</label>
+            <input type="number" id="age" name="age" placeholder="e.g. 32" min="14" max="90" inputmode="numeric" />
+            <span class="field-hint">Used to estimate max heart rate if not measured directly.</span>
+            <span class="error-msg">Enter your age (14 to 90).</span>
+          </div>
+
+          <!-- RHR -->
+          <div class="field" id="field-rhr">
+            <label for="rhr">Resting Heart Rate (bpm)</label>
+            <input type="number" id="rhr" name="rhr" placeholder="e.g. 55" min="30" max="120" inputmode="numeric" />
+            <span class="field-hint">Measure first thing in the morning before getting up.</span>
+            <span class="error-msg">Enter your resting heart rate (30 to 120 bpm).</span>
+          </div>
+
+          <!-- Max HR toggle -->
+          <div class="field" id="field-maxhr-type" style="grid-column:1/-1;">
+            <label>Max Heart Rate</label>
+            <div class="radio-group mt-8">
+              <label class="radio-option">
+                <input type="radio" name="maxhr_type" value="manual" checked />
+                <span>I know my max HR</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="maxhr_type" value="age" />
+                <span>Estimate from age (Tanaka formula)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Max HR manual -->
+          <div class="field" id="field-maxhr" style="grid-column:1/-1;">
+            <label for="maxhr">Max Heart Rate (bpm)</label>
+            <input type="number" id="maxhr" name="maxhr" placeholder="e.g. 185" min="100" max="230" inputmode="numeric" />
+            <span class="field-hint">From a lab test, recent all out effort, or prior data. Leave blank to estimate using Tanaka: 208 minus 0.7 times age.</span>
+            <span class="error-msg">Enter your max heart rate (100 to 230 bpm).</span>
+          </div>
+
+          <hr class="divider" style="grid-column:1/-1;" />
+
+          <!-- Weekly Mileage -->
+          <div class="field" id="field-weekly-miles">
+            <label for="weekly_miles">Current Weekly Mileage</label>
+            <input type="number" id="weekly_miles" name="weekly_miles" placeholder="e.g. 12" min="0" max="200" inputmode="numeric" />
+            <span class="field-hint">Average miles per week over the last 4 weeks.</span>
+            <span class="error-msg">Enter your weekly mileage (0 to 200).</span>
+          </div>
+
+          <!-- Training Days Per Week -->
+          <div class="field" id="field-cardio-days">
+            <label for="cardio_days">Training Days Per Week</label>
+            <div class="select-wrap">
+              <select id="cardio_days" name="cardio_days">
+                <option value="">Select</option>
+                <option value="1">1 day</option>
+                <option value="2">2 days</option>
+                <option value="3">3 days</option>
+                <option value="4">4 days</option>
+                <option value="5">5 or more days</option>
+              </select>
+            </div>
+            <span class="error-msg">Select your training days per week.</span>
+          </div>
+
+          <!-- Goal -->
+          <div class="field" id="field-goal">
+            <label for="goal">Goal Focus</label>
+            <div class="select-wrap">
+              <select id="goal" name="goal">
+                <option value="">Select</option>
+                <option value="fat_loss">Fat Loss</option>
+                <option value="endurance">Endurance</option>
+                <option value="hybrid">Hybrid Performance</option>
+                <option value="tactical">Tactical Readiness</option>
+              </select>
+            </div>
+            <span class="error-msg">Select your goal focus.</span>
+          </div>
+
+          <!-- Training Consistency -->
+          <div class="field" id="field-consistency">
+            <label for="consistency">Training Consistency</label>
+            <div class="select-wrap">
+              <select id="consistency" name="consistency">
+                <option value="">Select</option>
+                <option value="low">Low (sporadic, missing sessions often)</option>
+                <option value="moderate">Moderate (most sessions completed)</option>
+                <option value="high">High (rarely miss, structured approach)</option>
+              </select>
+            </div>
+            <span class="error-msg">Select your training consistency.</span>
+          </div>
+
+          <!-- Experience Level -->
+          <div class="field" id="field-level">
+            <label for="level">Experience Level</label>
+            <div class="select-wrap">
+              <select id="level" name="level">
+                <option value="">Select</option>
+                <option value="beginner">Beginner (under 6 months consistent training)</option>
+                <option value="intermediate">Intermediate (6 months to 2 years)</option>
+                <option value="advanced">Advanced (2 or more years structured training)</option>
+              </select>
+            </div>
+            <span class="error-msg">Select your experience level.</span>
+          </div>
+
+          <!-- Session Length -->
+          <div class="field" id="field-session-len">
+            <label for="session_len">Avg Session Length</label>
+            <div class="select-wrap">
+              <select id="session_len" name="session_len">
+                <option value="">Select</option>
+                <option value="under20">Under 20 min</option>
+                <option value="20-30">20 to 30 min</option>
+                <option value="30-45">30 to 45 min</option>
+                <option value="45-60">45 to 60 min</option>
+                <option value="60+">60 or more min</option>
+              </select>
+            </div>
+            <span class="error-msg">Select your average session length.</span>
+          </div>
+
+        </div><!-- /form-grid -->
+
+        <button type="submit" class="btn-gold full-width mt-32">
+          <svg class="icon" style="width:18px;height:18px"><use href="#icon-chart"/></svg>
+          Calculate My Zones
+        </button>
+      </form>
+    </section>
+
+    <!-- STEP 2: ZONE RESULTS -->
+    <section class="step" id="step2">
+      <h1>Your <span>Heart Rate Zones</span></h1>
+      <p class="sub">Calculated using the Karvonen Heart Rate Reserve formula, personalised to your physiology.</p>
+
+      <span class="section-label">
+        <svg class="icon icon-gold" style="margin-right:4px"><use href="#icon-chart"/></svg>
+        Heart Rate Zones. Karvonen Method.
+      </span>
+      <div class="zones-list" id="zonesList">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- Profile summary -->
+      <div class="profile-card">
+        <div class="profile-card-label">Training Profile Summary</div>
+        <div id="profileSummary"><!-- Populated by JS --></div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-ghost" onclick="goTo(1)">Back</button>
+        <button class="btn-gold" onclick="goTo(3)">
+          See Your 90 Day Forecast
+          <svg class="icon"><use href="#icon-arrow"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- STEP 3: 90-DAY FORECAST -->
+    <section class="step" id="step3">
+      <div class="forecast-header">
+        <h1>Your <span>90 Day</span><br>AT0M FIT Projection</h1>
+        <p class="sub">If you follow the program consistently, here's what most athletes at your level experience.</p>
+      </div>
+
+      <span class="section-label">
+        <svg class="icon icon-gold" style="margin-right:4px"><use href="#icon-performance"/></svg>
+        Performance Timeline
+      </span>
+      <div class="timeline" id="forecastTimeline">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- Blueprint Recommendation -->
+      <div class="blueprint-rec" id="blueprintRec">
+        <div class="blueprint-rec-icon">
+          <svg class="icon icon-gold" style="width:28px;height:28px"><use href="#icon-target"/></svg>
+        </div>
+        <div class="blueprint-rec-content">
+          <div class="blueprint-rec-label">Recommended Next Step</div>
+          <div class="blueprint-rec-title">The Levi Cardio Blueprint</div>
+          <div class="blueprint-rec-body" id="blueprintRecBody">
+            Your zones are set. Now you need the full system to execute against them. The Levi Cardio Blueprint is a 57 page field guide covering all 5 zones, Apple Watch setup, progressive programming, and recovery protocols. Built for athletes who want structure, not guesswork.
+          </div>
+          <a href="/blueprint" class="blueprint-rec-link">
+            Get the Blueprint $27
+            <svg class="icon"><use href="#icon-arrow"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Disclaimer -->
+      <div class="disclaimer">
+        <div class="disclaimer-label">Note on Projections</div>
+        <p>This projection is based on general training science and population level data. Individual results vary based on recovery quality, sleep, training accuracy, bodyweight changes, and overall adherence. This is not a guarantee. It is a realistic projection for consistent effort.</p>
+      </div>
+
+      <!-- What drives results -->
+      <div class="mt-24">
+        <div class="drivers-label">What Drives Your Results</div>
+        <div class="drivers-grid">
+          <div class="driver-card">
+            <div class="driver-icon-bar"></div>
+            <div class="driver-title">
+              <svg class="icon icon-gold" style="margin-right:4px"><use href="#icon-recovery"/></svg>
+              Recovery and Sleep
+            </div>
+            <div class="driver-desc">Adaptation happens at rest. 7 to 9 hours of sleep is where aerobic base is actually built. Cut it, cut the gains.</div>
+          </div>
+          <div class="driver-card">
+            <div class="driver-icon-bar"></div>
+            <div class="driver-title">
+              <svg class="icon icon-gold" style="margin-right:4px"><use href="#icon-watch"/></svg>
+              Zone Accuracy
+            </div>
+            <div class="driver-desc">Most athletes train Zone 3 when they think they're in Zone 2. A chest strap HR monitor removes the guesswork.</div>
+          </div>
+          <div class="driver-card">
+            <div class="driver-icon-bar"></div>
+            <div class="driver-title">
+              <svg class="icon icon-gold" style="margin-right:4px"><use href="#icon-target"/></svg>
+              Adherence
+            </div>
+            <div class="driver-desc">90 days of consistent low level stimulus beats 30 days of sporadic intensity. Show up, stay in zone, repeat.</div>
+          </div>
+          <div class="driver-card">
+            <div class="driver-icon-bar"></div>
+            <div class="driver-title">
+              <svg class="icon icon-gold" style="margin-right:4px"><use href="#icon-strength"/></svg>
+              Strength Integration
+            </div>
+            <div class="driver-desc">Resistance training preserves muscle during aerobic development. Don't drop your strength days. They compound the result.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-ghost" onclick="goTo(2)">Back</button>
+        <button class="btn-gold" onclick="goTo(4)">
+          See Next Steps
+          <svg class="icon"><use href="#icon-arrow"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- STEP 4: CTA -->
+    <section class="step" id="step4">
+      <h1>Ready to <span>Move?</span></h1>
+      <p class="sub">Your zones are set. Your forecast is in front of you. Here's where to start.</p>
+
+      <div class="cta-grid">
+        <!-- Free -->
+        <div class="cta-card">
+          <div class="cta-tag">Free Resource</div>
+          <div class="cta-title">Zone 2 Quickstart</div>
+          <div class="cta-desc">One page. Your zones, a structure, and a starting session. No fluff. Start today.</div>
+          <div class="cta-price-free">Free</div>
+          <a href="/#quickstart" class="cta-link ghost">Get the Free Guide</a>
+        </div>
+
+        <!-- Paid -->
+        <div class="cta-card featured">
+          <div class="cta-tag">Full System</div>
+          <div class="cta-title">The AT0M FIT Blueprint</div>
+          <div class="cta-desc">57 page field guide. All 5 zones. Apple Watch setup. 9 chapter system built for hybrid athletes who can't afford to guess.</div>
+          <div class="cta-price">$27</div>
+          <a href="/blueprint" class="cta-link solid">Get the Blueprint $27</a>
+        </div>
+      </div>
+
+      <p class="cta-footnote">Built for tactical athletes and serious hybrid performers.</p>
+
+      <div class="btn-row" style="margin-top:40px;">
+        <button class="btn-ghost" onclick="goTo(3)">Back</button>
+        <button class="btn-ghost" onclick="goTo(1)">Start Over</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    // STATE
+    let userInputs = {};
+    let currentStep = 1;
+
+    // NAVIGATION
+    function goTo(step) {
+      const prev = document.getElementById('step' + currentStep);
+      prev.classList.remove('visible');
+      setTimeout(() => {
+        prev.classList.remove('active');
+        currentStep = step;
+        const next = document.getElementById('step' + currentStep);
+        next.classList.add('active');
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            next.classList.add('visible');
+            if (step === 3) triggerForecastAnimations();
+          });
+        });
+        updateProgress(step);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 250);
+    }
+
+    function updateProgress(step) {
+      document.querySelectorAll('.prog-step').forEach(el => {
+        const s = parseInt(el.dataset.step);
+        el.classList.remove('active', 'done');
+        if (s === step) el.classList.add('active');
+        else if (s < step) el.classList.add('done');
+      });
+    }
+
+    // STEP 1: HR TYPE TOGGLE
+    document.querySelectorAll('input[name="maxhr_type"]').forEach(r => {
+      r.addEventListener('change', (e) => {
+        const isAge = e.target.value === 'age';
+        document.getElementById('field-maxhr').style.display = isAge ? 'none' : '';
+      });
+    });
+
+    // FORM VALIDATION + SUBMIT
+    document.getElementById('calcForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!validateForm()) return;
+      collectInputs();
+      renderZones();
+      renderProfile();
+      renderForecast();
+      goTo(2);
+      setTimeout(() => animateZoneBars(), 600);
+    });
+
+    function validateForm() {
+      let valid = true;
+
+      const age = parseInt(document.getElementById('age').value);
+      clearError('field-age');
+      if (!age || age < 14 || age > 90) { setError('field-age'); valid = false; }
+
+      const rhr = parseInt(document.getElementById('rhr').value);
+      clearError('field-rhr');
+      if (!rhr || rhr < 30 || rhr > 120) { setError('field-rhr'); valid = false; }
+
+      const isAge = document.querySelector('input[name="maxhr_type"]:checked').value === 'age';
+      if (!isAge) {
+        clearError('field-maxhr');
+        const maxhr = parseInt(document.getElementById('maxhr').value);
+        if (!maxhr || maxhr < 100 || maxhr > 230) { setError('field-maxhr'); valid = false; }
+      }
+
+      const weeklyMiles = parseFloat(document.getElementById('weekly_miles').value);
+      clearError('field-weekly-miles');
+      if (isNaN(weeklyMiles) || weeklyMiles < 0 || weeklyMiles > 200) { setError('field-weekly-miles'); valid = false; }
+
+      ['cardio_days', 'goal', 'consistency', 'level', 'session_len'].forEach(id => {
+        const el = document.getElementById(id);
+        const fieldId = 'field-' + id.replace(/_/g, '-');
+        clearError(fieldId);
+        if (!el.value) { setError(fieldId); valid = false; }
+      });
+
+      return valid;
+    }
+
+    function setError(fieldId) {
+      const f = document.getElementById(fieldId);
+      if (f) f.classList.add('has-error');
+    }
+    function clearError(fieldId) {
+      const f = document.getElementById(fieldId);
+      if (f) f.classList.remove('has-error');
+    }
+
+    function collectInputs() {
+      const age = parseInt(document.getElementById('age').value);
+      const rhr = parseInt(document.getElementById('rhr').value);
+      const isAge = document.querySelector('input[name="maxhr_type"]:checked').value === 'age';
+      let maxhr;
+      if (isAge) {
+        maxhr = Math.round(208 - 0.7 * age);
+      } else {
+        maxhr = parseInt(document.getElementById('maxhr').value);
+      }
+
+      userInputs = {
+        age,
+        rhr,
+        maxhr,
+        weekly_miles: parseFloat(document.getElementById('weekly_miles').value) || 0,
+        cardio_days: document.getElementById('cardio_days').value,
+        goal: document.getElementById('goal').value,
+        consistency: document.getElementById('consistency').value,
+        level: document.getElementById('level').value,
+        session_len: document.getElementById('session_len').value,
+      };
+    }
+
+    // ZONE CALCULATION
+    function calcZones(rhr, maxhr) {
+      const hrr = maxhr - rhr;
+      return [
+        {
+          num: 1,
+          name: 'Zone 1',
+          purpose: 'Recovery',
+          color: 'var(--z1)',
+          lo: Math.round(rhr + hrr * 0.50),
+          hi: Math.round(rhr + hrr * 0.60),
+          fillPct: 30,
+          desc: 'Active recovery and warmup. Use after hard sessions or on rest days. Sustainable for hours and should feel almost effortless.',
+        },
+        {
+          num: 2,
+          name: 'Zone 2',
+          purpose: 'Aerobic Base',
+          color: 'var(--z2)',
+          lo: Math.round(rhr + hrr * 0.60),
+          hi: Math.round(rhr + hrr * 0.70),
+          fillPct: 48,
+          desc: 'The most important zone for long term performance. Builds mitochondrial density, fat oxidation, and aerobic efficiency. You should be able to hold a full conversation.',
+        },
+        {
+          num: 3,
+          name: 'Zone 3',
+          purpose: 'Threshold',
+          color: 'var(--z3)',
+          lo: Math.round(rhr + hrr * 0.70),
+          hi: Math.round(rhr + hrr * 0.80),
+          fillPct: 62,
+          desc: 'Tempo pace. Raises lactate threshold and builds fatigue resistance. Use sparingly. Too much here undercuts aerobic base development.',
+        },
+        {
+          num: 4,
+          name: 'Zone 4',
+          purpose: 'VO2 Max',
+          color: 'var(--z4)',
+          lo: Math.round(rhr + hrr * 0.80),
+          hi: Math.round(rhr + hrr * 0.90),
+          fillPct: 76,
+          desc: 'High intensity interval territory. Develops VO2 max and anaerobic capacity. Requires full recovery between efforts. 1 to 2 sessions per week maximum.',
+        },
+        {
+          num: 5,
+          name: 'Zone 5',
+          purpose: 'Sprint / Peak',
+          color: 'var(--z5)',
+          lo: Math.round(rhr + hrr * 0.90),
+          hi: maxhr,
+          fillPct: 90,
+          desc: 'All out effort. Neuromuscular power development. Very short duration, 10 to 30 seconds. Reserved for sport performance or specific sprint protocols.',
+        },
+      ];
+    }
+
+    function renderZones() {
+      const { rhr, maxhr } = userInputs;
+      const zones = calcZones(rhr, maxhr);
+      const list = document.getElementById('zonesList');
+      list.innerHTML = '';
+
+      zones.forEach(z => {
+        const card = document.createElement('div');
+        card.className = 'zone-card';
+        card.innerHTML = `
+          <div class="zone-bar-left" style="background:${z.color};"></div>
+          <div class="zone-body">
+            <div class="zone-name-wrap">
+              <div class="zone-tag">${z.name}</div>
+              <div class="zone-title">${z.purpose}</div>
+            </div>
+            <div class="zone-bpm">
+              ${z.lo} to ${z.hi}
+              <small>bpm</small>
+            </div>
+            <div class="zone-desc">${z.desc}</div>
+            <div class="zone-fill-wrap">
+              <div class="zone-fill" id="fill${z.num}" style="background:${z.color}; width:0%;"></div>
+            </div>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+
+      userInputs._zones = zones;
+    }
+
+    function animateZoneBars() {
+      if (!userInputs._zones) return;
+      userInputs._zones.forEach(z => {
+        const bar = document.getElementById('fill' + z.num);
+        if (bar) bar.style.width = z.fillPct + '%';
+      });
+    }
+
+    // PROFILE SUMMARY
+    function renderProfile() {
+      const { rhr, maxhr, level, goal, cardio_days, consistency, weekly_miles, _zones } = userInputs;
+      const z2 = _zones[1];
+      const levelLabel = { beginner: 'Building Base', intermediate: 'Developing Engine', advanced: 'Optimising System' }[level];
+      const goalLabel = { fat_loss: 'Fat Loss', endurance: 'Endurance', hybrid: 'Hybrid Performance', tactical: 'Tactical Readiness' }[goal];
+      const consistencyLabel = { low: 'Low', moderate: 'Moderate', high: 'High' }[consistency];
+      const rec = buildWeeklyRec(userInputs);
+
+      const container = document.getElementById('profileSummary');
+      container.innerHTML = `
+        <div class="profile-row">
+          <div class="profile-row-icon">&#9632;</div>
+          <div class="profile-row-text">Zone 2 target: <strong>${z2.lo} to ${z2.hi} bpm</strong>. Your aerobic base building range.</div>
+        </div>
+        <div class="profile-row">
+          <div class="profile-row-icon">&#9632;</div>
+          <div class="profile-row-text">Training classification: <strong>${levelLabel}</strong>. ${goalLabel} focus. Consistency: <strong>${consistencyLabel}</strong>.</div>
+        </div>
+        <div class="profile-row">
+          <div class="profile-row-icon">&#9632;</div>
+          <div class="profile-row-text">${rec}</div>
+        </div>
+        <div class="profile-row">
+          <div class="profile-row-icon">&#9632;</div>
+          <div class="profile-row-text">Heart Rate Reserve: <strong>${maxhr - rhr} bpm</strong> (Max ${maxhr} minus Resting ${rhr}). Current mileage: <strong>${weekly_miles} miles/week</strong>.</div>
+        </div>
+      `;
+    }
+
+    function buildWeeklyRec({ level, goal, cardio_days, consistency }) {
+      const days = parseInt(cardio_days);
+      let z2days, z3days, rec;
+
+      const consistencyAdj = consistency === 'high' ? 1 : consistency === 'low' ? -1 : 0;
+
+      if (goal === 'fat_loss') {
+        z2days = Math.max(days - 1, 1);
+        z3days = days > 2 ? 1 : 0;
+        rec = `Recommended structure: <strong>${z2days} Zone 2 sessions</strong> + ${z3days > 0 ? z3days + ' Zone 3 session' : 'no Zone 3 yet'} per week for fat loss.`;
+      } else if (goal === 'endurance') {
+        z2days = Math.max(days - 1, 2);
+        z3days = days > 3 ? 1 : 0;
+        rec = `Recommended structure: <strong>${z2days} Zone 2 sessions</strong> + ${z3days > 0 ? z3days + ' threshold session' : 'no threshold work yet'} per week. Build the base before adding intensity.`;
+      } else if (goal === 'hybrid') {
+        z2days = Math.ceil(days * 0.6);
+        z3days = days - z2days;
+        rec = `Recommended structure: <strong>${z2days} Zone 2 sessions</strong> + ${z3days} higher intensity session${z3days !== 1 ? 's' : ''} per week. Aerobic base first.`;
+      } else { // tactical
+        z2days = Math.max(days - 1, 2);
+        z3days = 1;
+        rec = `Recommended structure: <strong>${z2days} Zone 2 sessions</strong> + 1 tactical effort session per week. Tactical readiness requires both engines running.`;
+      }
+
+      return rec;
+    }
+
+    // FORECAST BUILDER
+    function buildForecast(inputs) {
+      const { level, cardio_days, session_len, consistency, goal, rhr, maxhr, weekly_miles, age } = inputs;
+
+      const levelFactor = { beginner: 1.2, intermediate: 1.0, advanced: 0.7 };
+      const lf = levelFactor[level] || 1.0;
+
+      const consistencyFactor = { high: 1.2, moderate: 1.0, low: 0.7 }[consistency] || 1.0;
+
+      const cardioScore = Math.min(parseInt(cardio_days) * 2, 10);
+      const sessionScore = { 'under20': 1, '20-30': 2, '30-45': 3, '45-60': 4, '60+': 5 }[session_len] || 2;
+      const volumeScore = (cardioScore + sessionScore) / 2;
+
+      const z2lo = inputs._zones[1].lo;
+      const z2hi = inputs._zones[1].hi;
+
+      // Resting HR projections
+      const rhrDropLow = level === 'beginner' ? 5 : level === 'intermediate' ? 3 : 2;
+      const rhrDropHigh = level === 'beginner' ? 10 : level === 'intermediate' ? 7 : 4;
+      const rhrDay90lo = Math.round(rhr - rhrDropHigh * consistencyFactor);
+      const rhrDay90hi = Math.round(rhr - rhrDropLow);
+
+      // Aerobic efficiency (Zone 2 pace) improvement
+      const paceImprovementLow = level === 'beginner' ? 45 : level === 'intermediate' ? 25 : 15;
+      const paceImprovementHigh = level === 'beginner' ? 90 : level === 'intermediate' ? 45 : 25;
+
+      // Volume / mileage increase
+      const weeklyVolumeIncreasePct = Math.round(volumeScore * lf * consistencyFactor * 15);
+      const milesNow = weekly_miles || 0;
+      const milesDay90 = Math.round(milesNow * (1 + weeklyVolumeIncreasePct / 100));
+
+      // Zone 3/4 capacity
+      const z34increase = level === 'beginner' ? 35 : level === 'intermediate' ? 25 : 18;
+
+      const day30Bullets = level === 'beginner'
+        ? [
+            `Zone 2 effort feels less forced. Most beginners hold Zone 2 without walk breaks by week 3 to 4.`,
+            `Pace at the same heart rate should improve 30 to 60 seconds per mile as aerobic efficiency builds.`,
+            `Heart rate recovery between efforts typically improves 10 to 15% by Day 30.`,
+            `Resting HR may start trending down 1 to 3 bpm if sleep and nutrition are dialled in.`,
+          ]
+        : level === 'intermediate'
+        ? [
+            `Zone 2 at ${z2lo} to ${z2hi} bpm begins to feel sustainable, not forced.`,
+            `Heart rate recovery between efforts improving. Note your personal benchmarks now.`,
+            `Most intermediate athletes report Zone 2 feels like a working pace by week 4.`,
+            `Weekly cardio volume starts to build without excessive fatigue accumulation.`,
+          ]
+        : [
+            `Measurable cadence improvement and sustained Zone 2 control at ${z2lo} to ${z2hi} bpm.`,
+            `Advanced athletes may notice improved fat oxidation. Zone 2 effort cost decreases.`,
+            `Heart rate drift at the end of long efforts should reduce compared to baseline.`,
+            `Recovery metrics (HRV, resting HR morning readings) should trend positive by Day 30.`,
+          ];
+
+      const day60Bullets = [
+        `Zone 2 feels like a working pace, not a crawl. This is the adaptation completing.`,
+        `Weekly cardio volume has increased roughly ${Math.round(weeklyVolumeIncreasePct * 0.6)}% versus your Day 0 baseline.`,
+        `Zone 3 efforts become more accessible. Threshold tolerance improving.`,
+        `Recovery time between hard efforts noticeably shorter.`,
+        level === 'beginner'
+          ? `Resting HR likely down 2 to 5 bpm from starting point (currently ${rhr} bpm).`
+          : `Resting HR likely down 1 to 3 bpm. HRV scores should trend upward.`,
+      ];
+
+      const day90Bullets = [
+        `Aerobic efficiency: Zone 2 pace improved by approximately ${paceImprovementLow} to ${paceImprovementHigh} seconds per mile at the same heart rate.`,
+        `Most athletes at your level handle ${z34increase}% more Zone 3 and Zone 4 work than at Day 0.`,
+        `Weekly mileage tolerance: capacity has increased approximately ${weeklyVolumeIncreasePct}%. Projected sustainable volume: ${milesDay90 > 0 ? milesDay90 + ' miles/week' : 'significantly above your starting point'}.`,
+        level === 'beginner'
+          ? `Zone 2 base is built. Ready to introduce structured interval blocks. This is the green light.`
+          : level === 'intermediate'
+          ? `Zone 3 and Zone 4 capacity meaningfully elevated. Time to program threshold blocks into the structure.`
+          : `Performance ceiling raised. Threshold pace and VO2 benchmarks should reflect the base work.`,
+        `Resting HR projection: ${rhrDay90lo} to ${rhrDay90hi} bpm based on training consistency. Down from your current ${rhr} bpm.`,
+      ];
+
+      return {
+        day30: {
+          title: level === 'beginner' ? 'Early Adaptation' : level === 'intermediate' ? 'Efficiency Building' : 'Precision Calibration',
+          bullets: day30Bullets,
+        },
+        day60: {
+          title: 'Base Solidifying',
+          bullets: day60Bullets,
+        },
+        day90: {
+          title: level === 'beginner' ? 'Base Established. Intervals Ready.' : level === 'intermediate' ? 'Threshold Phase Ready' : 'Performance Ceiling Elevated',
+          bullets: day90Bullets,
+        },
+      };
+    }
+
+    function renderForecast() {
+      const forecast = buildForecast(userInputs);
+      const timeline = document.getElementById('forecastTimeline');
+      timeline.innerHTML = '';
+
+      const days = [
+        { key: 'day30', label: 'DAY 30' },
+        { key: 'day60', label: 'DAY 60' },
+        { key: 'day90', label: 'DAY 90' },
+      ];
+
+      days.forEach((d, i) => {
+        const data = forecast[d.key];
+        const card = document.createElement('div');
+        card.className = 'timeline-card';
+        card.style.transitionDelay = (i * 0.15) + 's';
+        card.innerHTML = `
+          <div class="day-badge">${d.label}</div>
+          <div class="timeline-title">${data.title}</div>
+          <ul class="timeline-items">
+            ${data.bullets.map(b => `<li><span class="item-icon"><svg class="icon icon-gold" style="width:14px;height:14px"><use href="#icon-check"/></svg></span>${b}</li>`).join('')}
+          </ul>
+        `;
+        timeline.appendChild(card);
+      });
+
+      // Update blueprint rec body based on goal
+      const goalMessages = {
+        fat_loss: 'Your fat loss goal is best served by a structured Zone 2 protocol. The Blueprint shows you exactly how to configure your zones for maximum fat oxidation, when to add intensity, and how to avoid the "moderate effort" trap that kills results.',
+        endurance: 'Building real endurance requires progressive base loading. The Blueprint gives you the full 9-chapter system: zone calculations, progressive mileage protocols, threshold timing, and Apple Watch setup to track every session accurately.',
+        hybrid: 'Hybrid performance requires both aerobic efficiency and strength. The Blueprint is the missing cardio piece most hybrid athletes never have. It integrates seamlessly with strength training days and builds real engine capacity.',
+        tactical: 'Tactical readiness demands a real aerobic engine, not just the ability to pass a test. The Blueprint is built for operators who need sustainable conditioning for high stress environments. Structure, not guesswork.'
+      };
+      const recBody = document.getElementById('blueprintRecBody');
+      if (recBody) {
+        recBody.textContent = goalMessages[userInputs.goal] || goalMessages.hybrid;
+      }
+    }
+
+    function triggerForecastAnimations() {
+      document.querySelectorAll('.timeline-card').forEach((card, i) => {
+        setTimeout(() => card.classList.add('visible'), i * 180);
+      });
+    }
+
+    // INITIAL STATE
+    (function init() {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          document.getElementById('step1').classList.add('visible');
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

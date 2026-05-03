@@ -1,0 +1,85 @@
+Good progress, but this is not complete.
+
+You ported the homepage/waitlist project. The current AT0M FIT system is larger than that.
+
+Required current routes:
+- /
+- /blueprint
+- /calculator
+- /training
+- /portal
+- /coach
+
+Required handoff files:
+- REPLIT-HANDOFF.md
+- /handoff/FORGE-SQL-EXPORT.sql
+- /handoff/FORGE-BACKEND-STATUS.md
+- /handoff/STACK-BUSINESS-BRIEF.md
+- /handoff/ARC-BRAND-GUIDE.md
+- /handoff/SCOUT-REPLIT-CONTEXT.md
+
+Stop treating the homepage/waitlist port as the full migration.
+
+Immediate task:
+1. Inspect the imported GitHub repo.
+2. Confirm the current branch.
+3. Confirm whether this is master or main.
+4. master is supposed to contain the current static HTML production AT0M FIT system.
+5. main is old prototype and should be ignored.
+6. Locate /portal, /coach, /training, /calculator, /blueprint, and /handoff.
+7. If those files are missing, report: WRONG BRANCH OR INCOMPLETE GITHUB IMPORT.
+8. Do not keep building the old homepage-only project if the current system is missing.
+
+If the current files exist:
+- port all missing routes into the Replit artifact
+- preserve existing styling
+- preserve Supabase connection
+- do not disable RLS
+- do not expose secrets
+- do not move production off Vercel
+- do not redesign the brand
+
+Priority before 00:00:
+1. Confirm correct source branch/files.
+2. Bring all current routes into Replit.
+3. Confirm /portal exists.
+4. Confirm /coach exists.
+5. Confirm /training exists.
+6. Confirm /calculator exists.
+7. Confirm /blueprint exists.
+8. Confirm handoff docs exist.
+9. Create REPLIT_TAKEOVER_STATUS.md.
+10. Create REPLIT_NEXT_BUILD_PLAN.md.
+
+Return in this format:
+
+SOURCE CHECK
+- current branch:
+- correct source found: yes/no
+- old prototype detected: yes/no
+- handoff docs found: yes/no
+
+ROUTES FOUND
+- /:
+- /blueprint:
+- /calculator:
+- /training:
+- /portal:
+- /coach:
+
+MIGRATION STATUS
+- homepage/waitlist:
+- calculator:
+- blueprint:
+- training:
+- portal:
+- coach:
+
+FILES CHANGED
+- list exact files
+
+BLOCKERS
+- list owner actions needed
+
+NEXT ACTION
+- what you will do next before 00:00

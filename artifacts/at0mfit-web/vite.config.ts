@@ -26,9 +26,40 @@ if (!basePath) {
   );
 }
 
+const staticHtmlRoutes: Record<string, string> = {
+  "/blueprint": "/blueprint.html",
+  "/calculator": "/calculator.html",
+  "/training": "/training.html",
+  "/portal": "/portal.html",
+  "/coach": "/coach.html",
+};
+
+function staticHtmlRewritePlugin() {
+  return {
+    name: "static-html-rewrite",
+    configureServer(server: import("vite").ViteDevServer) {
+      server.middlewares.use((req, _res, next) => {
+        if (req.url && staticHtmlRoutes[req.url.split("?")[0]]) {
+          req.url = staticHtmlRoutes[req.url.split("?")[0]];
+        }
+        next();
+      });
+    },
+    configurePreviewServer(server: import("vite").PreviewServer) {
+      server.middlewares.use((req, _res, next) => {
+        if (req.url && staticHtmlRoutes[req.url.split("?")[0]]) {
+          req.url = staticHtmlRoutes[req.url.split("?")[0]];
+        }
+        next();
+      });
+    },
+  };
+}
+
 export default defineConfig({
   base: basePath,
   plugins: [
+    staticHtmlRewritePlugin(),
     react(),
     tailwindcss(),
     runtimeErrorOverlay(),
