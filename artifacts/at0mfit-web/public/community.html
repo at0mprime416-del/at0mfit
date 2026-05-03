@@ -353,10 +353,10 @@
           ${p.photo_url ? `<img class="post-photo" src="${p.photo_url}" alt="post photo" onerror="this.style.display='none'" />` : ''}
           <div class="post-actions">
             <button class="btn-react ${myReaction?.reaction === 'fire' ? 'reacted' : ''}" onclick="toggleReact('${p.id}', 'fire')">
-              &#128293; ${fireCount > 0 ? fireCount : ''}
+              FIRE${fireCount > 0 ? ' ' + fireCount : ''}
             </button>
             <button class="btn-react ${myReaction?.reaction === 'strong' ? 'reacted' : ''}" onclick="toggleReact('${p.id}', 'strong')">
-              &#128170; ${strongCount > 0 ? strongCount : ''}
+              SOLID${strongCount > 0 ? ' ' + strongCount : ''}
             </button>
             <button class="btn-toggle-comments" onclick="toggleComments('${p.id}')">
               ${comments.length} comment${comments.length !== 1 ? 's' : ''}

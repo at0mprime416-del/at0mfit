@@ -1,0 +1,139 @@
+Yes. Build it now.
+
+Do not ask another confirmation question. Use the remaining free Replit window to execute.
+
+Priority:
+Build the community moderation panel inside /coach, then build an owner setup/status panel so I can see exactly what still needs manual setup.
+
+Rules:
+- No emojis anywhere.
+- Do not move production off Vercel.
+- Do not expose secrets.
+- Do not disable RLS.
+- Do not use service role key in frontend.
+- Do not redesign.
+- Do not wait on Gmail, OpenAI, or Supabase Storage secrets.
+- Build everything that can be built without those owner actions.
+
+TASK 1 — COACH COMMUNITY MODERATION PANEL
+
+Inside /coach, add a section/tab:
+
+Community Moderation
+
+It must include:
+- community posts list
+- filter by post type
+- filter hidden/visible
+- view post title, body, author display name, created date
+- view comments count
+- hide post action
+- unhide post action
+- hide comment action if comments are shown
+- moderation status labels:
+  - VISIBLE
+  - HIDDEN
+  - NEEDS REVIEW
+
+If backend/RLS is not fully active yet:
+- wire the UI to Supabase where possible
+- include graceful empty states
+- document exact table/policy dependencies
+
+TASK 2 — ASK AT0M REVIEW PANEL
+
+Inside /coach, add a section/tab:
+
+Ask AT0M Review
+
+It must include:
+- latest Ask AT0M questions
+- client name/display name
+- question
+- answer
+- safety flag status
+- coach review recommended status
+- timestamp
+- filter by safety flag
+- filter by client
+- placeholder action: “Mark Reviewed”
+
+If OPENAI_API_KEY is missing:
+- keep contextual fallback behavior
+- save logs if possible
+- show “AI key not configured” in Ops
+- do not crash
+
+TASK 3 — OWNER SETUP PANEL
+
+Inside /coach, add an Ops/Setup panel showing remaining manual actions:
+
+Required owner actions:
+1. Run ATOM_FIT_FEATURE_EXPANSION.sql in Supabase
+2. Run FULL_PREMIUM_BUILDOUT_SETUP.sql in Supabase
+3. Create Supabase Storage bucket:
+   - progress-photos
+4. Add Replit secrets:
+   - GMAIL_USER
+   - GMAIL_APP_PASSWORD
+   - NOTIFICATION_TO_EMAIL
+   - OPENAI_API_KEY
+5. Restart API server workflow after secrets are added
+
+Each item should show:
+- NOT SET UP
+- READY
+- DONE if detectable
+
+TASK 4 — FINAL SETUP GUIDE
+
+Create a file:
+
+OWNER_SETUP_CHECKLIST.md
+
+Include:
+- exact Supabase SQL files to run
+- exact storage bucket to create
+- exact Replit secrets to add
+- how to restart API server workflow
+- how to test email notifications
+- how to test Ask AT0M
+- how to test progress photo uploads
+- how to confirm QCmd after setup
+
+TASK 5 — UPDATE STATUS FILES
+
+Update:
+- REPLIT_TAKEOVER_STATUS.md
+- FULL_PREMIUM_BUILDOUT_STATUS.md
+- REPLIT_NEXT_BUILD_PLAN.md
+- QCMD_REPLIT_GATE.md
+
+TASK 6 — FINAL REPORT
+
+Return only this:
+
+STATUS
+- community moderation panel:
+- Ask AT0M review panel:
+- owner setup panel:
+- owner setup checklist:
+- QCmd updated:
+- service key exposed:
+- RLS disabled:
+- Vercel production touched:
+- emojis removed:
+
+FILES CHANGED
+- list files and why
+
+FILES CREATED
+- list files and purpose
+
+OWNER ACTIONS REMAINING
+- list exact actions
+
+QCMD
+- PASS or FAIL
+
+Execute now. Do not stop to ask another question.

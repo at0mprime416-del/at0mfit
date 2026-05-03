@@ -1,0 +1,178 @@
+IMAGE ASSET BUG — FIX BEFORE MORE FEATURES
+
+Stop feature expansion until image loading is verified.
+
+Issue:
+Earlier, the live site loaded but pictures were missing/broken. We need this fixed permanently across all routes.
+
+Priority:
+Make every image load correctly in Replit preview and document how to keep images working when deployed.
+
+Rules:
+- Do not redesign.
+- Do not change brand.
+- Do not move production off Vercel.
+- Do not expose secrets.
+- No emojis.
+- Fix image paths surgically.
+
+TASK 1 — FULL IMAGE AUDIT
+
+Audit every route:
+- /
+- /blueprint
+- /calculator
+- /training
+- /portal
+- /coach
+- /community
+- /terms
+- /privacy
+- /waiver
+- /support
+
+Find every image reference:
+- <img src="">
+- CSS background-image
+- JavaScript image paths
+- imported assets
+- inline style image URLs
+
+For each image, verify:
+- file exists
+- path is correct
+- capitalization matches exactly
+- extension matches exactly
+- image is inside the correct public/static folder
+- image loads in Replit preview
+- image does not depend on a local OpenClaw path
+- image does not depend on a broken Vercel-only path
+- image does not point to missing /assets/... path
+
+TASK 2 — FIX VITE/REPLIT STATIC ASSET PATHS
+
+This project is now React/Vite in Replit.
+
+Use stable public paths.
+
+Preferred structure:
+- artifacts/at0mfit-web/public/assets/
+
+All image references should use:
+
+/assets/filename.ext
+
+Do not use:
+- ./assets/... if it breaks across routes
+- ../assets/...
+- /public/assets/...
+- OpenClaw local paths
+- Next.js image imports
+- old Vercel-only paths
+
+TASK 3 — COPY / NORMALIZE ASSETS
+
+Confirm all image files exist in:
+
+artifacts/at0mfit-web/public/assets/
+
+If images are elsewhere, copy them there.
+
+Normalize filenames if needed:
+- lowercase
+- no spaces
+- no weird characters
+- consistent extensions
+
+Examples:
+- hero-banner.png
+- cover.png
+- athlete-run-steady.png
+- athlete-sprint-front.png
+- watch-premium.png
+- zone-chart.png
+- gear-flatlay.png
+- author.jpg
+
+If code references a filename, the actual filename must match exactly.
+
+TASK 4 — ADD IMAGE FALLBACKS
+
+For important images, add graceful fallback behavior:
+- if image fails, show branded black/gold placeholder
+- do not show broken image icon
+- log missing image path in console only
+
+Fallback text:
+“AT0M FIT image loading”
+
+TASK 5 — ROUTE-BY-ROUTE IMAGE TEST
+
+Test images on:
+- homepage hero
+- blueprint cover/product image
+- calculator graphics
+- training hero images
+- portal visuals
+- coach visuals
+- community visuals
+- any premium feature images
+
+TASK 6 — CREATE IMAGE MANIFEST
+
+Create:
+
+IMAGE_ASSET_MANIFEST.md
+
+Include:
+- image filename
+- current location
+- routes/pages where used
+- status: PASS/FAIL
+- fixed path
+- notes
+
+TASK 7 — CREATE IMAGE QCMD GATE
+
+Update:
+
+QCMD_REPLIT_GATE.md
+
+Add required image checks:
+- all referenced images exist
+- all images load in Replit preview
+- no /public/assets/ paths used in src
+- no OpenClaw local paths
+- no broken image icons
+- route image test completed
+- mobile preview images load
+
+TASK 8 — FINAL REPORT
+
+Return only:
+
+IMAGE STATUS
+- image audit complete:
+- assets folder confirmed:
+- broken paths found:
+- broken paths fixed:
+- fallback added:
+- all route images load:
+- mobile image check:
+- OpenClaw paths removed:
+- Vercel-only paths removed:
+
+FILES CHANGED
+- list files and why
+
+FILES CREATED
+- IMAGE_ASSET_MANIFEST.md
+- any other files
+
+BROKEN IMAGES FOUND
+- list filename/path and fix
+
+QCMD
+- PASS or FAIL for image reliability
+
+Execute now. Do not continue feature expansion until image QCmd passes.

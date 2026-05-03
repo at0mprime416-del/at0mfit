@@ -1,0 +1,275 @@
+FINAL HARDENING SPRINT — AT0M FIT
+
+Add the final business, legal, safety, and launch-readiness structure.
+
+Do not redesign.
+Do not move production off Vercel.
+Do not expose secrets.
+Do not disable RLS.
+Do not use service role key in frontend.
+No emojis.
+
+Build what can be built now. If something requires owner/legal review, create the page/shell and mark it “Needs Owner Review.”
+
+NEW REQUIRED ROUTES/PAGES
+
+Add these if missing:
+
+1. /terms
+Purpose: Terms of Service page.
+Status: draft placeholder, needs owner/legal review.
+
+2. /privacy
+Purpose: Privacy Policy page.
+Status: draft placeholder, needs owner/legal review.
+
+3. /waiver
+Purpose: Training waiver / assumption of risk / medical disclaimer.
+Status: draft placeholder, needs owner/legal review.
+
+4. /support
+Purpose: Client support/contact page.
+Include:
+- contact email placeholder
+- issue type
+- message form UI
+- “For emergencies, contact emergency services” note
+- “For pain/injury/medical concerns, contact a qualified medical professional” note
+
+5. /launch-checklist
+Purpose: internal launch readiness page or markdown if route is too much.
+Include:
+- app status
+- owner actions
+- secrets
+- SQL
+- storage bucket
+- payments
+- email
+- AI
+- QA
+- legal pages
+- production deployment status
+
+PORTAL ADDITIONS
+
+In /portal, add:
+
+1. Welcome Checklist
+- complete onboarding
+- review assigned plan
+- submit first check-in
+- upload progress photos
+- log first workout
+- read community rules
+- ask coach a question
+
+2. Support / Help section
+- link to /support
+- contact coach
+- report issue
+
+3. Account / Membership section
+- membership status
+- billing status placeholder
+- cancellation instructions placeholder
+- data/privacy request placeholder
+
+4. Safety disclaimer card
+- training is not medical advice
+- stop if pain, dizziness, chest pain, fainting, or serious symptoms
+- contact coach/medical professional when appropriate
+
+COACH DASHBOARD ADDITIONS
+
+In /coach, add:
+
+1. Launch Control Panel
+Show:
+- SQL setup status
+- storage bucket status
+- Gmail secrets status
+- OpenAI key status
+- payment link status
+- legal pages status
+- QCmd status
+- production untouched status
+
+2. Client Admin Controls
+For each client:
+- active/inactive status
+- founding client yes/no
+- payment status
+- tags
+- risk flag
+- coach-only notes
+- archive/deactivate placeholder
+- password reset instructions placeholder
+
+3. Audit / Activity Log section
+Show recent:
+- login
+- check-in
+- workout log
+- message
+- application
+- progress upload
+- Ask AT0M question
+- community post
+
+If table missing, create SQL.
+
+4. Risk / Attention Panel
+Flags:
+- missed workouts
+- no check-in
+- low readiness
+- high stress
+- injury/pain keywords
+- no login in 7 days
+- unpaid/past due placeholder
+
+SUPABASE TABLES / SQL
+
+Create:
+
+FINAL_HARDENING_SETUP.sql
+
+Include tables if missing:
+
+1. client_onboarding_tasks
+- id
+- client_id
+- task_key
+- completed
+- completed_at
+- created_at
+
+2. support_requests
+- id
+- client_id nullable
+- name
+- email
+- issue_type
+- message
+- status default 'open'
+- created_at
+
+3. client_admin_status
+- id
+- client_id
+- active boolean
+- founding_client boolean
+- payment_status
+- tags text[]
+- risk_flag boolean
+- risk_reason text
+- coach_notes text
+- created_at
+- updated_at
+
+4. activity_log
+- id
+- client_id nullable
+- event_type
+- summary
+- metadata jsonb
+- created_at
+
+5. legal_acceptances
+- id
+- client_id
+- document_type
+- accepted_at
+- ip_address nullable
+- user_agent nullable
+
+RLS:
+- clients can see their own onboarding, support requests, legal acceptances
+- clients can insert support requests
+- coach can see all support/admin/activity/legal rows
+- public can insert support requests if not logged in
+- public cannot read private rows
+
+EMAIL NOTIFICATIONS
+
+Extend notification system to coach when:
+- support request submitted
+- waiver accepted
+- cancellation/help request submitted
+- risk flag triggered
+- client marked low readiness
+
+If Gmail secrets missing:
+- save data
+- do not crash
+- log notification skipped
+
+DOCUMENTATION
+
+Create/update:
+
+1. OWNER_SETUP_CHECKLIST.md
+2. FINAL_LAUNCH_CHECKLIST.md
+3. LEGAL_PAGES_STATUS.md
+4. SECURITY_AND_RLS_CHECKLIST.md
+5. CLIENT_SUPPORT_RUNBOOK.md
+6. QCMD_REPLIT_GATE.md
+7. REPLIT_NEXT_BUILD_PLAN.md
+
+QCMD FINAL HARDENING GATE
+
+Check:
+- all routes load
+- legal pages exist
+- waiver page exists
+- support page exists
+- launch checklist exists
+- no emojis
+- no secrets exposed
+- service role not in frontend
+- RLS not disabled
+- Vercel production untouched
+- owner actions documented
+- SQL setup files created
+- missing secrets handled gracefully
+- client portal still loads
+- coach dashboard still loads
+- community still protected
+- Ask AT0M key not exposed
+
+FINAL REPORT
+
+Return only:
+
+STATUS
+- terms page:
+- privacy page:
+- waiver page:
+- support page:
+- launch checklist:
+- portal welcome checklist:
+- portal support/account/safety:
+- coach launch control:
+- coach admin controls:
+- audit/activity log:
+- risk/attention panel:
+- final SQL file:
+- no emojis:
+- secrets exposed:
+- RLS disabled:
+- Vercel touched:
+
+FILES CREATED
+- list
+
+FILES CHANGED
+- list
+
+OWNER ACTIONS
+- list exact actions
+
+QCMD
+- PASS or FAIL
+
+Execute now. This is the final hardening layer before launch.

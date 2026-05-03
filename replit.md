@@ -44,10 +44,10 @@ clean paths → `.html` files. All 15 image assets are also in `public/`.
 
 | Secret | Used By | Status |
 |--------|---------|--------|
-| `VITE_SUPABASE_URL` | Frontend | ✅ Set |
-| `VITE_SUPABASE_ANON_KEY` | Frontend | ✅ Set |
-| `GMAIL_USER` | API server | ⚠️ Not set |
-| `GMAIL_APP_PASSWORD` | API server | ⚠️ Not set |
+| `VITE_SUPABASE_URL` | Frontend | SET |
+| `VITE_SUPABASE_ANON_KEY` | Frontend | SET |
+| `GMAIL_USER` | API server | NOT SET |
+| `GMAIL_APP_PASSWORD` | API server | NOT SET |
 
 ## Key Commands
 

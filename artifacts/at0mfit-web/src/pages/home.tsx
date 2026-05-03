@@ -3,56 +3,56 @@ import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 
 const FEATURES = [
   {
-    icon: '⚡',
+    icon: 'AI',
     title: 'AI COACH',
     desc: 'Personalized workouts built from your history. Progressive overload, carb cycling, sleep optimization. Adapts weekly based on your actual data.',
     badge: 'PRO',
     stat: 'Fully adaptive',
   },
   {
-    icon: '💪',
+    icon: 'WT',
     title: 'WORKOUT TRACKER',
     desc: 'Set-by-set logging with rest timers, 1RM calculator, and previous performance shown inline. Notes per exercise. 100+ movements.',
     badge: null,
     stat: '100+ exercises',
   },
   {
-    icon: '📊',
+    icon: 'PA',
     title: 'PROGRESS ANALYTICS',
     desc: "Body weight trend, personal records, training volume over time. Toggle 7D / 30D / 90D ranges. See exactly where you're winning.",
     badge: null,
     stat: '3 time ranges',
   },
   {
-    icon: '🏆',
+    icon: 'CX',
     title: 'COMPETE',
     desc: 'Wall Street-style leaderboard. AT0M INDEX. Teams. Futures contracts. Token rewards. Real-time live updates.',
     badge: null,
     stat: 'Live rankings',
   },
   {
-    icon: '🏃',
+    icon: 'RUN',
     title: 'LIVE RUN TRACKING',
     desc: 'GPS route on Google Maps, real-time pace, distance, and duration. Mileage charts over time. Every mile logged.',
     badge: null,
     stat: 'GPS powered',
   },
   {
-    icon: '🥗',
+    icon: 'NX',
     title: 'NUTRITION + SLEEP',
     desc: 'Meal logging with macros, supplement tracker, and sleep quality tracking. All feeds the AI coach so it accounts for your recovery.',
     badge: null,
     stat: 'Feeds the AI',
   },
   {
-    icon: '📷',
+    icon: 'FC',
     title: 'FORM CHECK',
     desc: 'Record your lifts directly in-app. Review form with full camera playback. Progress photo grid with before/after comparison.',
     badge: null,
     stat: 'In-app camera',
   },
   {
-    icon: '🗓️',
+    icon: 'CAL',
     title: 'CALENDAR',
     desc: 'Full training history. Every workout, run, and meal in one timeline. Look back at any day and see exactly what you did.',
     badge: null,
@@ -72,33 +72,33 @@ const FREE_FEATURES = [
 
 const PRO_FEATURES = [
   'Everything in Free',
-  '⚡ AI Daily Brief — full training + nutrition + sleep prescription',
-  '⚡ AI Workout Generator — adaptive program from your history',
-  '⚡ Carb cycling protocol (high/low/moderate days)',
-  '⚡ Intermittent fasting window recommendations',
-  '⚡ Sleep optimization targets',
-  '⚡ Progressive overload auto-calculated',
-  '⚡ Weekly program adaptation',
+  '+ AI Daily Brief — full training + nutrition + sleep prescription',
+  '+ AI Workout Generator — adaptive program from your history',
+  '+ Carb cycling protocol (high/low/moderate days)',
+  '+ Intermittent fasting window recommendations',
+  '+ Sleep optimization targets',
+  '+ Progressive overload auto-calculated',
+  '+ Weekly program adaptation',
 ]
 
 const PERSONAS = [
   {
-    emoji: '🪖',
+    emoji: 'OPS',
     title: 'The Operator',
     desc: 'You need performance, not a hobby. AI Coach prescribes your program around your shifts, recovery, and physical standards.',
   },
   {
-    emoji: '🏋️',
+    emoji: 'LFT',
     title: 'The Lifter',
     desc: 'Every PR tracked. 1RM auto-calculated. Progressively overloaded each session. Form checks recorded. Nothing guessed.',
   },
   {
-    emoji: '🏃',
+    emoji: 'RUN',
     title: 'The Runner',
     desc: 'Live GPS tracking, pace analytics, mileage charts. Every run in your calendar. Training load balanced against lifting days.',
   },
   {
-    emoji: '📈',
+    emoji: 'CMP',
     title: 'The Competitor',
     desc: 'You want to know where you stand. The Wall Street leaderboard runs 24/7. Earn tokens. Build a team. Move the index.',
   },
@@ -163,7 +163,7 @@ export default function Home() {
   }
 
   const statusMessage = () => {
-    if (status === 'duplicate') return <p className="text-sm text-[#C9A84C] mt-3">You&apos;re already on the list 👊</p>
+    if (status === 'duplicate') return <p className="text-sm text-[#C9A84C] mt-3">You&apos;re already on the list.</p>
     if (status === 'error') return <p className="text-sm text-red-400 mt-3">Something went wrong. Try again.</p>
     return null
   }
@@ -289,7 +289,7 @@ export default function Home() {
                 key={title}
                 className="bg-[#0a0a0a] border border-[#222] rounded-2xl p-7 hover:border-[rgba(201,168,76,0.3)] hover:-translate-y-1 transition-all duration-300"
               >
-                <div className="text-3xl mb-4">{emoji}</div>
+                <div className="text-sm font-extrabold tracking-widest text-[#C9A84C] mb-4 px-2 py-1 inline-block bg-[rgba(201,168,76,0.08)] border border-[rgba(201,168,76,0.2)] rounded" style={{ fontFamily: "'Bebas Neue', sans-serif", letterSpacing: '0.12em' }}>{emoji}</div>
                 <h3
                   className="text-xl tracking-wide text-[#C9A84C] mb-2"
                   style={{ fontFamily: "'Bebas Neue', sans-serif" }}
@@ -332,7 +332,7 @@ export default function Home() {
                 {[
                   { label: 'AT0M INDEX', value: '1,247', change: '↑ LIVE', color: '#C9A84C' },
                   { label: 'MARKETS OPEN', value: '14:32:07', change: 'UNTIL CLOSE', color: '#00d4ff' },
-                  { label: 'TOP TOKENS', value: '⚛ 8,420', change: '▲ GAINERS', color: '#39ff14' },
+                  { label: 'TOP TOKENS', value: 'AT0M 8,420', change: '▲ GAINERS', color: '#39ff14' },
                 ].map(({ label, value, change, color }) => (
                   <div key={label} className="bg-[#0a0a0a] border border-[#222] rounded-xl p-5 font-mono">
                     <div className="text-xs text-[#555] tracking-widest mb-2">{label}</div>
@@ -381,7 +381,7 @@ export default function Home() {
               >
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="flex items-start justify-between mb-4">
-                  <span className="text-3xl">{icon}</span>
+                  <span className="text-sm font-extrabold tracking-widest text-[#C9A84C] px-2 py-1 bg-[rgba(201,168,76,0.08)] border border-[rgba(201,168,76,0.2)] rounded" style={{ fontFamily: "'Bebas Neue', sans-serif", letterSpacing: '0.12em' }}>{icon}</span>
                   {badge ? (
                     <span className="text-[10px] font-bold tracking-widest px-2 py-0.5 rounded bg-[rgba(201,168,76,0.15)] border border-[rgba(201,168,76,0.4)] text-[#C9A84C]">
                       {badge}
@@ -423,19 +423,19 @@ export default function Home() {
             {[
               {
                 num: '01',
-                icon: '👤',
+                icon: 'PROFILE',
                 title: 'BUILD YOUR PROFILE',
                 desc: 'Set your goals, fitness level, and body composition. This is the foundation — the AI uses this baseline to calibrate everything from day one.',
               },
               {
                 num: '02',
-                icon: '📋',
+                icon: 'LOG',
                 title: 'TRAIN AND LOG EVERYTHING',
                 desc: 'Every workout, run, meal, and night of sleep. The more data you feed it, the smarter your coaching becomes. The AI is only as good as your honesty.',
               },
               {
                 num: '03',
-                icon: '⚡',
+                icon: 'AI',
                 title: 'AI PRESCRIBES YOUR PROGRAM',
                 desc: 'Your coach adapts weekly based on your actual data — progressive overload, carb cycling, recovery windows, all auto-calculated. It learns. It adjusts. It delivers.',
               },

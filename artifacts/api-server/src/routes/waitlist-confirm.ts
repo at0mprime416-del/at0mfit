@@ -75,7 +75,7 @@ router.post("/waitlist-confirm", async (req, res) => {
       from: `"At0m Fit" <${gmailUser}>`,
       replyTo: gmailUser,
       to: email,
-      subject: "You're in. Welcome to At0m Fit. ⚛️",
+      subject: "You're in. Welcome to AT0M FIT.",
       html: HTML_BODY,
     });
 
