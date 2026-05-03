@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout Cancelled — AT0M FIT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #0a0a0a;
+      --surface: #111111;
+      --surface2: #1a1a1a;
+      --border: #242424;
+      --gold: #c9a04a;
+      --text: #e8e8e8;
+      --text-muted: #6b6b6b;
+    }
+    html, body { background: var(--black); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; }
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.25rem 2rem; border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.12em; color: var(--text); text-decoration: none; }
+    .nav-logo span { color: var(--gold); }
+    .page {
+      min-height: calc(100vh - 65px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 3rem 1.5rem;
+    }
+    .card {
+      max-width: 480px; width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 3rem 2.5rem;
+      text-align: center;
+    }
+    .eyebrow { font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: 1rem; }
+    .heading { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; letter-spacing: 0.06em; color: var(--text); margin-bottom: 1rem; }
+    .sub { font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 2.5rem; }
+    .btn-primary {
+      display: inline-block;
+      background: var(--gold);
+      color: #000;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      padding: 0.9rem 2.5rem;
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      text-decoration: none;
+      margin-bottom: 1rem;
+    }
+    .links { display: flex; justify-content: center; gap: 2rem; margin-top: 1.5rem; }
+    .links a { font-size: 0.82rem; color: var(--text-muted); text-decoration: none; border-bottom: 1px solid var(--border); }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="nav-logo" href="/"><span>AT0M</span> FIT</a>
+  </nav>
+
+  <div class="page">
+    <div class="card">
+      <div class="eyebrow">No Charge Made</div>
+      <h1 class="heading">Checkout Cancelled</h1>
+      <p class="sub">Your purchase was not completed and you were not charged. You can return and try again whenever you are ready.</p>
+
+      <a class="btn-primary" href="/blueprint">Return to Blueprint</a>
+      <br/>
+      <a class="btn-primary" href="/training" style="background:transparent;border:1px solid var(--gold);color:var(--gold)">Return to Training</a>
+
+      <div class="links">
+        <a href="/support">Contact Support</a>
+        <a href="/">Home</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

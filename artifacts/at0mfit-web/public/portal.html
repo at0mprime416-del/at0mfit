@@ -825,6 +825,26 @@
         </div>
       </div>
 
+      <div class="card" id="billingCard">
+        <div class="card-eyebrow">Billing</div>
+        <div class="card-title">Subscription Management</div>
+        <div id="billingStatusDisplay" style="margin-bottom:1.25rem">
+          <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem">
+            <div class="form-label" style="margin:0;min-width:110px">Status</div>
+            <div id="billingStatusBadge" style="font-size:0.82rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:0.3rem 0.75rem;border-radius:2px;background:var(--surface2);color:var(--text-muted);display:inline-block">Checking...</div>
+          </div>
+          <div id="billingProductRow" style="display:flex;align-items:center;gap:0.75rem;display:none">
+            <div class="form-label" style="margin:0;min-width:110px">Product</div>
+            <div id="billingProduct" style="font-size:0.88rem;color:var(--text)"></div>
+          </div>
+        </div>
+        <div id="billingActions">
+          <button class="btn-submit" id="manageSubBtn" onclick="openBillingPortal()" style="display:none">Manage Billing</button>
+          <a href="/training" id="subscribeLink" style="display:none;font-size:0.85rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold)">Subscribe to Coaching</a>
+        </div>
+        <p style="font-size:0.78rem;color:var(--text-muted);margin-top:1rem" id="billingNote"></p>
+      </div>
+
       <div class="card" style="border:1px solid rgba(201,74,74,0.25)">
         <div class="card-title" style="color:var(--red)">Cancel or Sign Out</div>
         <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem">To cancel your membership or request account deletion, contact your coach directly or submit a support request in the Help tab.</p>
@@ -932,6 +952,7 @@
         loadPhotoHistory(uid),
         loadReadinessHistory(uid),
         loadAccountInfo(user),
+        loadBillingStatus(user),
         loadWelcomeChecklist(uid)
       ]);
     }
@@ -1545,6 +1566,80 @@
         err.style.display = 'block';
       }
       btn.disabled = false; btn.textContent = 'Send Request';
+    }
+
+    // ── BILLING ──
+    async function loadBillingStatus(user) {
+      const badge = document.getElementById('billingStatusBadge');
+      const manageBtn = document.getElementById('manageSubBtn');
+      const subscribeLink = document.getElementById('subscribeLink');
+      const noteEl = document.getElementById('billingNote');
+      const productRow = document.getElementById('billingProductRow');
+      const productEl = document.getElementById('billingProduct');
+      try {
+        const session = await sb.auth.getSession();
+        const token = session.data.session?.access_token;
+        if (!token) {
+          if (badge) badge.textContent = 'Not available';
+          return;
+        }
+        const res = await fetch('/api/stripe/billing-status', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        const status = data.subscription_status || data.status || 'none';
+        const statusColors = {
+          active: { bg: 'rgba(76,175,128,0.15)', color: '#4caf80', label: 'Active' },
+          trialing: { bg: 'rgba(201,160,74,0.12)', color: 'var(--gold)', label: 'Trial' },
+          past_due: { bg: 'rgba(201,74,74,0.12)', color: 'var(--red)', label: 'Past Due' },
+          canceled: { bg: 'rgba(107,107,107,0.15)', color: 'var(--text-muted)', label: 'Canceled' },
+          none: { bg: 'var(--surface2)', color: 'var(--text-muted)', label: 'None' },
+          unauthenticated: { bg: 'var(--surface2)', color: 'var(--text-muted)', label: 'Not Found' }
+        };
+        const s = statusColors[status] || statusColors.none;
+        if (badge) {
+          badge.textContent = s.label;
+          badge.style.background = s.bg;
+          badge.style.color = s.color;
+        }
+        if (data.product_type && productEl && productRow) {
+          productEl.textContent = data.product_type === 'training' ? 'AT0M FIT Coaching' : data.product_type === 'blueprint' ? 'AT0M FIT Blueprint' : data.product_type;
+          productRow.style.display = 'flex';
+        }
+        if (status === 'active' || status === 'trialing' || status === 'past_due') {
+          if (manageBtn) manageBtn.style.display = 'inline-block';
+          if (noteEl) noteEl.textContent = 'Manage your billing, update payment method, or cancel via the secure billing portal.';
+        } else {
+          if (subscribeLink) subscribeLink.style.display = 'inline-block';
+          if (noteEl) noteEl.textContent = 'No active subscription found.';
+        }
+      } catch {
+        if (badge) badge.textContent = 'Unavailable';
+      }
+    }
+
+    async function openBillingPortal() {
+      const btn = document.getElementById('manageSubBtn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Opening...'; }
+      try {
+        const session = await sb.auth.getSession();
+        const token = session.data.session?.access_token;
+        if (!token) throw new Error('Not authenticated');
+        const res = await fetch('/api/stripe/customer-portal', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert(data.error || 'Unable to open billing portal. Contact support.');
+          if (btn) { btn.disabled = false; btn.textContent = 'Manage Billing'; }
+        }
+      } catch {
+        alert('Connection error. Please try again.');
+        if (btn) { btn.disabled = false; btn.textContent = 'Manage Billing'; }
+      }
     }
 
     // ── ACCOUNT TAB ──

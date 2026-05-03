@@ -38,6 +38,8 @@ const staticHtmlRoutes: Record<string, string> = {
   "/waiver": "/waiver.html",
   "/support": "/support.html",
   "/launch-checklist": "/launch-checklist.html",
+  "/checkout/success": "/checkout-success.html",
+  "/checkout/cancel": "/checkout-cancel.html",
 };
 
 function staticHtmlRewritePlugin() {

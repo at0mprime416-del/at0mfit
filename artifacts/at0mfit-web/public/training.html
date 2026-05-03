@@ -957,7 +957,7 @@
         </div>
       </div>
       <div class="hero-visual fade-up">
-        <img src="./assets/athlete-sprint-front.png" alt="Tactical athlete in full sprint. Built by consistent, structured training." />
+        <img src="./assets/athlete-sprint-front.png" alt="Tactical athlete in full sprint. Built by consistent, structured training." onerror="this.style.display='none'" />
       </div>
     </div>
   </section>
@@ -1006,7 +1006,7 @@
         </div>
         <div class="fade-up">
           <div class="who-image-panel">
-            <img src="./assets/athlete-start.png" alt="Athlete preparing to train. Structured conditioning for tactical fitness." />
+            <img src="./assets/athlete-start.png" alt="Athlete preparing to train. Structured conditioning for tactical fitness." onerror="this.style.display='none'" />
           </div>
         </div>
       </div>
@@ -1089,9 +1089,13 @@
             Apply Now
             <svg class="icon" style="width:18px;height:18px"><use href="#icon-arrow"/></svg>
           </button>
+          <button class="btn-primary" onclick="startTrainingCheckout(event)" style="margin-left:0.75rem;background:transparent;border:2px solid var(--gold);color:var(--gold)">
+            Subscribe Now
+            <svg class="icon" style="width:18px;height:18px"><use href="#icon-arrow"/></svg>
+          </button>
         </div>
         <div class="why-image-wrap fade-up">
-          <img src="./assets/athlete-run-steady.png" alt="Athlete running at steady state Zone 2 conditioning pace." />
+          <img src="./assets/athlete-run-steady.png" alt="Athlete running at steady state Zone 2 conditioning pace." onerror="this.style.display='none'" />
         </div>
       </div>
     </div>
@@ -1358,6 +1362,31 @@
       el.style.transitionDelay = `${(i % 3) * 0.1}s`;
       observer.observe(el);
     });
+
+    // Stripe subscription checkout
+    async function startTrainingCheckout(e) {
+      e && e.preventDefault();
+      const btn = e && e.target.closest('button');
+      if (btn) { btn.disabled = true; btn.style.opacity = '0.7'; }
+      try {
+        const base = window.location.pathname.replace('/training', '').replace(/\/$/, '');
+        const res = await fetch(`${base}/api/stripe/checkout`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ product_type: 'training' })
+        });
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert(data.error || 'Checkout unavailable. Please try again or contact support.');
+          if (btn) { btn.disabled = false; btn.style.opacity = ''; }
+        }
+      } catch {
+        alert('Connection error. Please try again.');
+        if (btn) { btn.disabled = false; btn.style.opacity = ''; }
+      }
+    }
   </script>
 
 </body>
