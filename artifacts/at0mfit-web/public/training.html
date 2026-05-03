@@ -1315,6 +1315,25 @@
         const { error } = await sb.from('applications').insert([payload]);
         if (error) throw error;
 
+        // Notify coach (fire-and-forget — never blocks success)
+        fetch('/api/notify-coach', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'New Training Application',
+            client_name: payload.full_name,
+            client_email: payload.email,
+            subject: 'New AT0M FIT Application',
+            summary: `${payload.full_name} applied for Custom Training.`,
+            metadata: {
+              goal: payload.primary_goal,
+              background: payload.training_background,
+              days_per_week: payload.days_per_week,
+              notes: payload.additional_notes || '—'
+            }
+          })
+        }).catch(() => {});
+
         document.getElementById('formContent').style.display = 'none';
         document.getElementById('formSuccess').style.display = 'block';
       } catch (err) {

@@ -1,39 +1,49 @@
-# REPLIT TAKEOVER STATUS — COMPLETE + FUNCTIONAL
+# REPLIT TAKEOVER STATUS — FULL PREMIUM BUILDOUT COMPLETE
+
+**Last updated:** 2026-05-03
 
 ## Summary
 
-All 6 routes live. Portal and coach auth fully wired to Supabase.
-All data operations wired through RLS. No service key exposed. Brand intact.
+7 routes live. Portal and coach auth fully wired to Supabase.
+Full premium feature set built: progress photos, nutrition plans, weekly calendar,
+goal tracker, readiness scores, resource vault, community, Ask AT0M AI.
+Coach email notifications wired to all submission events.
+No service key exposed. RLS active. Vercel production untouched. Brand intact.
 
 ---
 
 ## Route Status
 
-| Route        | Status | Auth | Notes |
-|--------------|--------|------|-------|
-| `/`          | LIVE   | None | React/Vite waitlist landing page |
-| `/blueprint` | LIVE   | None | Static HTML from master branch |
-| `/calculator`| LIVE   | None | Static HTML — client-side zone calculator |
-| `/training`  | LIVE   | None | Static HTML — custom training page |
-| `/portal`    | LIVE   | Supabase email/password | Full dashboard wired |
-| `/coach`     | LIVE   | Supabase email/password + email gate | Full dashboard wired |
+| Route | Status | Auth | Notes |
+|-------|--------|------|-------|
+| `/` | LIVE | None | React/Vite waitlist landing page — notifies coach on signup |
+| `/blueprint` | LIVE | None | Static HTML — Zone 2 blueprint |
+| `/calculator` | LIVE | None | Static HTML — zone calculator |
+| `/training` | LIVE | None | Static HTML — custom training page — notifies coach on application |
+| `/portal` | LIVE | Supabase email/password | 12-tab client dashboard |
+| `/coach` | LIVE | Supabase email/password + email gate | Full coach command center |
+| `/community` | LIVE | Supabase email/password | Community feed — clients only |
 
 ---
 
-## /portal — Client Dashboard
+## /portal — Client Dashboard (12 Tabs)
 
-| Feature | Status |
-|---------|--------|
-| Login form | WIRED — Supabase signInWithPassword |
-| Error messages | WIRED — invalid credentials shown inline |
-| Session persistence | WIRED — getSession() on init, onAuthStateChange listener |
-| Logout | WIRED — signOut() + returns to login view |
-| Assigned workouts | WIRED — queries assigned_workouts + workouts, shows this week's workout |
-| **Log workout form** | **WIRED (new)** — RPE, duration, notes → workout_logs insert + marks assigned_workout completed |
-| Weekly check-in form | WIRED — 4 ratings (training/sleep/stress/energy) + notes → checkins insert |
-| Messages thread | WIRED — loads from messages, send inserts with sender='client' |
-| Coach notes | WIRED — reads coach_notes WHERE is_visible_to_client=true |
-| Progress metrics | WIRED — weight from progress_metrics, last check-in date, sessions this week |
+| Tab | Feature | Status |
+|-----|---------|--------|
+| Today | Metrics snapshot, assigned workout, coach notes | LIVE |
+| Workouts | Assigned workout display + log form (RPE, duration, notes) | LIVE |
+| Nutrition | Active nutrition plan — calories, macros, water, meal notes | LIVE |
+| Calendar | 7-day weekly view with All/Workouts/Nutrition/Recovery filters | LIVE |
+| Goals | Phase tracker, progress bar, target date, milestones, coach note | LIVE |
+| Photos | Upload front/side/back photos + photo history grid | LIVE |
+| Messages | Full thread + send (fires coach notification) | LIVE |
+| Check-In | 4 ratings + notes (fires coach notification) | LIVE |
+| Readiness | 5 sliders → readiness % + training recommendation | LIVE |
+| Resources | 8 guide cards — Zone 2, warm-up, recovery, nutrition, more | LIVE |
+| Community | Link card to /community + rules panel | LIVE |
+| Ask AT0M | Question form → AI answer (with OpenAI fallback) | LIVE |
+
+All submit events fire `POST /api/notify-coach` — fire-and-forget, never blocks UX.
 
 ---
 
@@ -41,18 +51,41 @@ All data operations wired through RLS. No service key exposed. Brand intact.
 
 | Feature | Status |
 |---------|--------|
-| Login form | WIRED — Supabase signInWithPassword |
-| Email gate | WIRED — only jeshua@levioperations.com allowed; others sign out immediately and see restricted view |
-| Session persistence | WIRED — getSession() on init |
-| Logout | WIRED — signOut() + returns to login view |
-| Applications queue | WIRED — reads applications WHERE status='pending', "Mark Reviewed" updates status |
-| Client roster | WIRED — reads all clients, click to expand detail panel |
-| Create program | WIRED — inserts into programs with client_id, name, start_date, description |
-| Assign workout | WIRED — inserts into workouts + assigned_workouts (two-step) |
-| View assigned workouts | WIRED — per client in detail panel |
-| View check-ins | WIRED — per client with 1-5 ratings |
-| View workout logs | WIRED — per client with RPE, duration, notes |
-| Coach → client messages | WIRED — inserts into messages with sender='coach', live reload |
+| Login + email gate (jeshua@levioperations.com only) | LIVE |
+| Applications queue + mark reviewed | LIVE |
+| Client roster with expandable detail | LIVE |
+| Create program, assign workout | LIVE |
+| Nutrition plan create/update per client | LIVE |
+| Goal tracker set/update per client | LIVE |
+| Weekly calendar assign per client | LIVE |
+| Progress photos view per client | LIVE |
+| Check-ins, workout logs, messages per client | LIVE |
+
+---
+
+## /community — Client Community
+
+| Feature | Status |
+|---------|--------|
+| Authenticated access only | LIVE |
+| Create post (text + category) | LIVE |
+| Filter: All/Progress/Wins/Questions/Accountability/Milestones | LIVE |
+| React (fire, strong) | LIVE |
+| Comments | LIVE |
+| Delete own post | LIVE |
+| Community rules banner | LIVE |
+| Coach notification on new post | LIVE |
+
+---
+
+## API Routes
+
+| Route | Status |
+|-------|--------|
+| POST /api/notify-coach | LIVE — branded HTML email, graceful skip if Gmail missing |
+| POST /api/ask-atom | LIVE — OpenAI gpt-4o-mini, safety filter, contextual fallback |
+| POST /api/waitlist-confirm | LIVE |
+| GET /api/healthz | LIVE |
 
 ---
 
@@ -60,7 +93,7 @@ All data operations wired through RLS. No service key exposed. Brand intact.
 
 | Constraint | Status |
 |------------|--------|
-| Service role key exposed | NO — anon key only, designed for public use |
+| Service role key exposed in frontend | NO — anon key only |
 | RLS disabled | NO — all tables enforced |
 | Vercel production touched | NO |
 | Brand redesigned | NO |
@@ -68,20 +101,31 @@ All data operations wired through RLS. No service key exposed. Brand intact.
 
 ---
 
-## Secrets
+## SQL Files (Run in Supabase — Owner Action)
+
+1. `AT0M_FIT_FEATURE_EXPANSION.sql` — progress_photos, nutrition_plans, weekly_plan_items, client_goals
+2. `FULL_PREMIUM_BUILDOUT_SETUP.sql` — community_posts, community_comments, community_reactions, ask_atom_logs, readiness_scores, client_badges, resource_vault, exercise_library, coach_alerts, weekly_reports
+
+---
+
+## Secrets Status
 
 | Secret | Status |
 |--------|--------|
 | `VITE_SUPABASE_URL` | Configured |
 | `VITE_SUPABASE_ANON_KEY` | Configured |
-| `GMAIL_USER` | Not set — email confirmation deferred |
-| `GMAIL_APP_PASSWORD` | Not set — email confirmation deferred |
+| `GMAIL_USER` | Not set — coach emails will skip gracefully |
+| `GMAIL_APP_PASSWORD` | Not set — coach emails will skip gracefully |
+| `NOTIFICATION_TO_EMAIL` | Not set — defaults to jeshua@levioperations.com |
+| `OPENAI_API_KEY` | Not set — Ask AT0M falls back to contextual responses |
 
 ---
 
-## Remaining Blockers (Owner Action)
+## Owner Actions Required
 
-1. **GMAIL_USER + GMAIL_APP_PASSWORD** — set in Replit Secrets when ready for email confirmation
-2. **Supabase coach RLS policies** — must be applied once in Supabase SQL editor for coach dashboard to read all clients/applications. SQL is in `handoff/sql/05_coach_dashboard_rls.sql` and embedded in coach.html lines 1476–1518.
-3. **Coach password reset** — jeshua@levioperations.com password was set via Supabase Dashboard on Vercel. Same account + password works here (same Supabase project). If login fails, reset via Supabase Dashboard → Authentication → Users.
-4. **Client onboarding** — new clients must be created in Supabase Auth by the coach (signups are disabled per spec). Then add a row to `clients` table manually or via coach "Accept Application" flow (not yet built).
+1. Run `AT0M_FIT_FEATURE_EXPANSION.sql` in Supabase SQL editor
+2. Run `FULL_PREMIUM_BUILDOUT_SETUP.sql` in Supabase SQL editor
+3. Create `progress-photos` storage bucket in Supabase (private)
+4. Set `GMAIL_USER` + `GMAIL_APP_PASSWORD` + `NOTIFICATION_TO_EMAIL` in Replit Secrets
+5. Set `OPENAI_API_KEY` in Replit Secrets (optional — fallback works without it)
+6. Restart API Server workflow after setting secrets

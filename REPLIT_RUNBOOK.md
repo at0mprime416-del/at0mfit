@@ -1,132 +1,142 @@
 # REPLIT RUNBOOK
 
 **Last updated:** 2026-05-03
-**Status:** All routes live. Portal + coach auth fully wired.
+**Status:** Full premium buildout complete. 7 routes live.
 
 ---
 
-## How to Run Locally in Replit
+## Workflows
 
-The app runs via Replit workflows. Do NOT use `pnpm dev` at the workspace root.
+| Workflow | Command | Purpose |
+|----------|---------|---------|
+| `artifacts/at0mfit-web: web` | `pnpm --filter @workspace/at0mfit-web run dev` | Vite dev server — all 7 routes |
+| `artifacts/api-server: API Server` | `pnpm --filter @workspace/api-server run dev` | Express API — /api/* routes |
 
-### Start / Restart the Frontend
-
-In the Replit sidebar, the workflow `artifacts/at0mfit-web: web` controls the Vite dev server.
-Click the workflow to restart it, or use the shell:
-```
-pnpm --filter @workspace/at0mfit-web run dev
-```
-
-### Start / Restart the API Server
-
-The workflow `artifacts/api-server: API Server` controls the Express backend.
-```
-pnpm --filter @workspace/api-server run dev
-```
+Do NOT use `pnpm dev` at the workspace root.
 
 ---
 
-## How Static HTML Routes Are Served
+## Route Map
 
-Static HTML pages live in `artifacts/at0mfit-web/public/`.
-A Vite middleware plugin (`staticHtmlRewritePlugin`) in `vite.config.ts` rewrites
-clean paths to `.html` files at request time:
-
-| Request | Served File |
-|---------|-------------|
+| Request | File / Handler |
+|---------|----------------|
+| `/` | `src/pages/home.tsx` — React waitlist landing |
 | `/blueprint` | `public/blueprint.html` |
 | `/calculator` | `public/calculator.html` |
 | `/training` | `public/training.html` |
-| `/portal` | `public/portal.html` |
-| `/coach` | `public/coach.html` |
+| `/portal` | `public/portal.html` — 12-tab client dashboard |
+| `/coach` | `public/coach.html` — coach command center |
+| `/community` | `public/community.html` — client community |
 
-Images are also in `public/` and resolve via relative paths from the HTML.
+Static HTML routes are rewritten via `staticHtmlRewritePlugin` in `vite.config.ts`.
+
+---
+
+## API Routes
+
+| Route | Purpose |
+|-------|---------|
+| `GET /api/healthz` | Health check |
+| `POST /api/waitlist-confirm` | Waitlist email confirmation (requires Gmail secrets) |
+| `POST /api/notify-coach` | Coach notification email for all submit events |
+| `POST /api/ask-atom` | Ask AT0M AI — OpenAI with safety filter + contextual fallback |
 
 ---
 
 ## How to Test Routes
 
-| Route | What to check |
-|-------|---------------|
-| `/` | Landing page renders, waitlist form visible |
-| `/blueprint` | Zone 2 blueprint page renders, images load |
-| `/calculator` | Zone calculator renders, number inputs work |
-| `/training` | Custom training page renders, hero image loads |
-| `/portal` | Login form shows → sign in with a client account → dashboard loads |
-| `/coach` | Login form shows → sign in as jeshua@levioperations.com → coach dashboard loads |
-
-For the API endpoint:
 ```bash
+# Health check
 curl http://localhost:80/api/healthz
+
+# Test notify-coach (will skip email if Gmail not set, returns 200)
+curl -X POST http://localhost:80/api/notify-coach \
+  -H "Content-Type: application/json" \
+  -d '{"type":"Test","client_name":"Test User","client_email":"test@test.com","subject":"Test","summary":"Test notification"}'
+
+# Test ask-atom (returns contextual fallback if no OPENAI_API_KEY)
+curl -X POST http://localhost:80/api/ask-atom \
+  -H "Content-Type: application/json" \
+  -d '{"question":"How do I build my Zone 2 base?"}'
 ```
 
 ---
 
-## How to Test Portal Auth
+## Secrets Setup
 
-1. Go to `/portal`
-2. Enter a client email + password (created in Supabase Auth)
-3. On success: dashboard loads with assigned workouts, log form, check-in, messages
-4. Sign out: returns to login
-5. Refresh: session persists (getSession() on init)
-6. Wrong credentials: error shown inline
-
-## How to Test Coach Auth
-
-1. Go to `/coach`
-2. Enter `jeshua@levioperations.com` + password
-3. On success: applications queue + client roster loads
-4. Any other email: signed out immediately, "Unauthorized coach account" shown
-5. Sign out: returns to login
-
----
-
-## How to Add Secrets
-
-1. In Replit, click the Secrets tab (lock icon in left sidebar)
+1. Click the Secrets tab in Replit (lock icon in left sidebar)
 2. Add each key-value pair
-3. After adding secrets, restart affected workflows
+3. Restart the API Server workflow after adding secrets
 
-### Required Secrets
-
-| Secret | Used By | Status |
-|--------|---------|--------|
-| `VITE_SUPABASE_URL` | Frontend | Configured |
-| `VITE_SUPABASE_ANON_KEY` | Frontend | Configured |
-| `GMAIL_USER` | API server (waitlist emails) | Not set |
-| `GMAIL_APP_PASSWORD` | API server (waitlist emails) | Not set |
+| Secret | Used By | Required |
+|--------|---------|----------|
+| `VITE_SUPABASE_URL` | Frontend + API | YES — configured |
+| `VITE_SUPABASE_ANON_KEY` | Frontend + API | YES — configured |
+| `GMAIL_USER` | API /api/notify-coach | Optional — skips gracefully if missing |
+| `GMAIL_APP_PASSWORD` | API /api/notify-coach | Optional — skips gracefully if missing |
+| `NOTIFICATION_TO_EMAIL` | API /api/notify-coach | Optional — defaults to jeshua@levioperations.com |
+| `OPENAI_API_KEY` | API /api/ask-atom | Optional — falls back to contextual responses |
+| `SUPABASE_SERVICE_ROLE_KEY` | API (future coach accept) | Never in frontend |
 
 ---
 
-## Supabase Coach RLS — Apply Once
+## Supabase Setup (Owner Must Run)
 
-If the coach dashboard shows "Could not load applications" or "Could not load clients",
-the coach RLS policies have not been applied yet. Run this once in Supabase SQL editor:
+### Step 1 — SQL Migrations (run in order in Supabase SQL editor)
 
 ```
-See: handoff/sql/05_coach_dashboard_rls.sql
+1. AT0M_FIT_FEATURE_EXPANSION.sql
+   Creates: progress_photos, nutrition_plans, weekly_plan_items, client_goals
+
+2. FULL_PREMIUM_BUILDOUT_SETUP.sql
+   Creates: community_posts, community_comments, community_reactions,
+            ask_atom_logs, readiness_scores, client_badges, resource_vault,
+            exercise_library, coach_alerts, weekly_reports
 ```
 
-The SQL is also embedded in coach.html lines 1476–1518 as a comment.
+### Step 2 — Storage Bucket
+
+```
+Name: progress-photos
+Public: NO (private)
+Policies: authenticated users can upload own files; coach can view all
+```
+
+### Step 3 — Coach RLS
+
+If coach dashboard shows "Could not load clients/applications":
+- Run `handoff/sql/05_coach_dashboard_rls.sql` in Supabase SQL editor
+
+---
+
+## Auth Notes
+
+- Coach login: jeshua@levioperations.com — Supabase Auth account
+- Client login: Created in Supabase Auth by coach (signups disabled)
+- If coach login fails: Supabase Dashboard → Authentication → Users → reset password
 
 ---
 
 ## Architecture
 
 ```
-artifacts/at0mfit-web/         — Vite + React frontend + static HTML pages
-  public/                      — Static HTML (portal, coach, blueprint, calculator, training)
-  public/*.png *.jpg           — All 15 image assets
-  src/pages/home.tsx           — React waitlist landing page (/)
-  vite.config.ts               — Includes staticHtmlRewritePlugin for clean routes
+artifacts/at0mfit-web/
+  public/               — Static HTML (portal, coach, community, blueprint, calculator, training)
+  public/images/        — All brand image assets
+  src/pages/home.tsx    — React waitlist landing page (/)
+  vite.config.ts        — staticHtmlRewritePlugin + /community route
 
-artifacts/api-server/          — Express backend (serves /api/* routes)
-  src/routes/waitlist-confirm  — Email confirmation endpoint
+artifacts/api-server/
+  src/routes/
+    health.ts           — GET /api/healthz
+    waitlist-confirm.ts — POST /api/waitlist-confirm
+    notify-coach.ts     — POST /api/notify-coach
+    ask-atom.ts         — POST /api/ask-atom
+  src/routes/index.ts   — Registers all routes
 
-handoff/                       — Full handoff package from original dev
-  sql/                         — 5 ordered SQL migration files
-  docs/                        — Route map, API map, import steps
-  env/.env.example             — Required env var names
+AT0M_FIT_FEATURE_EXPANSION.sql   — 4 new tables (run first)
+FULL_PREMIUM_BUILDOUT_SETUP.sql  — 10 new tables (run second)
+FULL_PREMIUM_BUILDOUT_STATUS.md  — Full feature status report
 ```
 
 ---
@@ -134,7 +144,7 @@ handoff/                       — Full handoff package from original dev
 ## Safety Rules
 
 - Never run `vercel deploy` or `vercel --prod` from this environment
-- Never modify Supabase RLS policies — query only through anon key
-- Never disable Supabase Row Level Security
+- Never modify or disable Supabase RLS policies
 - Never use the Supabase service_role key in frontend code
+- Never hardcode secrets — use Replit Secrets only
 - Production Vercel is untouched — treat as read-only until owner sign-off

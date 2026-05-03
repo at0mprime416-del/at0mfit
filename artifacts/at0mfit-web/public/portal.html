@@ -186,6 +186,13 @@
     .note-text { color: var(--grey-light); font-size: 0.9rem; line-height: 1.65; }
     .note-date { color: var(--text-muted); font-size: 0.72rem; margin-top: 0.3rem; }
 
+    /* ── RESOURCE VAULT ── */
+    .resource-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 1.1rem 1.25rem; cursor: default; transition: border-color 0.15s; }
+    .resource-card:hover { border-color: rgba(201,160,74,0.4); }
+    .resource-icon { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 0.5rem; }
+    .resource-name { font-weight: 700; font-size: 0.85rem; color: var(--text); margin-bottom: 0.35rem; }
+    .resource-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.55; }
+
     /* ── FOOTER ── */
     .portal-footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; text-align: center; color: var(--text-muted); font-size: 0.75rem; }
     .portal-footer a { color: var(--text-muted); text-decoration: none; }
@@ -282,6 +289,10 @@
       <button class="tab-btn" onclick="showTab('photos')">Photos</button>
       <button class="tab-btn" onclick="showTab('messages')">Messages</button>
       <button class="tab-btn" onclick="showTab('checkin')">Check-In</button>
+      <button class="tab-btn" onclick="showTab('readiness')">Readiness</button>
+      <button class="tab-btn" onclick="showTab('resources')">Resources</button>
+      <button class="tab-btn" onclick="showTab('community')">Community</button>
+      <button class="tab-btn" onclick="showTab('askatom')">Ask AT0M</button>
     </nav>
 
     <!-- LOADING -->
@@ -523,9 +534,154 @@
       </div>
     </div>
 
+    <!-- ══ READINESS TAB ══ -->
+    <div id="tab-readiness" class="tab-panel">
+      <div class="section-card">
+        <div class="card-title">Readiness Score</div>
+        <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1.5rem">Rate yourself honestly. This drives your training recommendation for the day.</p>
+        <form id="readinessForm" onsubmit="submitReadiness(event)">
+          <div class="form-group">
+            <label class="form-label">Sleep Quality</label>
+            <div class="rating-row" id="rating-rs-sleep"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Soreness Level <span style="font-weight:400;text-transform:none;font-size:0.72rem">(1 = very sore)</span></label>
+            <div class="rating-row" id="rating-rs-soreness"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Stress Level <span style="font-weight:400;text-transform:none;font-size:0.72rem">(1 = very stressed)</span></label>
+            <div class="rating-row" id="rating-rs-stress"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Energy Level</label>
+            <div class="rating-row" id="rating-rs-energy"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Motivation</label>
+            <div class="rating-row" id="rating-rs-motivation"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Notes (optional)</label>
+            <textarea class="form-input" id="readinessNotes" placeholder="Anything affecting your readiness today?"></textarea>
+          </div>
+          <button class="btn-submit" type="submit" id="readinessBtn">Submit Readiness</button>
+          <div class="inline-ok" id="readinessMsg">Readiness logged.</div>
+        </form>
+        <div id="readinessResult" style="display:none;margin-top:1.5rem;padding:1.25rem;background:var(--surface2);border:1px solid var(--border);border-radius:4px">
+          <div style="font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.35rem">Today's Score</div>
+          <div id="readinessPct" style="font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--gold);line-height:1">--</div>
+          <div id="readinessRec" style="margin-top:0.5rem;font-size:0.9rem;color:var(--text)"></div>
+        </div>
+        <div style="margin-top:1.75rem">
+          <div style="font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.75rem">Recent Scores</div>
+          <div id="readinessHistory" style="color:var(--text-muted);font-size:0.85rem;font-style:italic">No previous scores.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ RESOURCES TAB ══ -->
+    <div id="tab-resources" class="tab-panel">
+      <div class="section-card">
+        <div class="card-title">Resource Vault</div>
+        <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1.5rem">Guides, protocols, and references from your coach.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem">
+          <div class="resource-card" onclick="">
+            <div class="resource-icon">Z2</div>
+            <div class="resource-name">Zone 2 Training Guide</div>
+            <div class="resource-desc">What Zone 2 is, why it builds the base, how to find your zone, and how to structure your sessions.</div>
+          </div>
+          <div class="resource-card">
+            <div class="resource-icon">WU</div>
+            <div class="resource-name">Warm-Up Protocol</div>
+            <div class="resource-desc">A 5–8 minute movement prep routine to prime your body before any training session.</div>
+          </div>
+          <div class="resource-card">
+            <div class="resource-icon">REC</div>
+            <div class="resource-name">Recovery Guide</div>
+            <div class="resource-desc">Sleep, nutrition timing, active recovery, and stress management for faster adaptation.</div>
+          </div>
+          <div class="resource-card">
+            <div class="resource-icon">NX</div>
+            <div class="resource-name">Night Shift Training</div>
+            <div class="resource-desc">How to train, eat, and recover when your schedule runs opposite to the sun.</div>
+          </div>
+          <div class="resource-card">
+            <div class="resource-icon">GR</div>
+            <div class="resource-name">Performance Grocery List</div>
+            <div class="resource-desc">Simple, practical foods that support performance without overcomplicating nutrition.</div>
+          </div>
+          <div class="resource-card">
+            <div class="resource-icon">MOB</div>
+            <div class="resource-name">Mobility Basics</div>
+            <div class="resource-desc">Hip, thoracic, and ankle mobility work for athletes spending time on their feet.</div>
+          </div>
+          <div class="resource-card">
+            <div class="resource-icon">HI</div>
+            <div class="resource-name">HIIT vs Zone 2</div>
+            <div class="resource-desc">When to use high-intensity work and when to protect the aerobic base. Both have a place.</div>
+          </div>
+          <div class="resource-card">
+            <div class="resource-icon">STR</div>
+            <div class="resource-name">Functional Strength Basics</div>
+            <div class="resource-desc">The movement patterns that carry over to life, sport, and long-term durability.</div>
+          </div>
+        </div>
+        <p style="color:var(--text-muted);font-size:0.78rem;margin-top:1.5rem">Full content for each guide will be loaded from your coach as they are published.</p>
+      </div>
+    </div>
+
+    <!-- ══ COMMUNITY TAB ══ -->
+    <div id="tab-community" class="tab-panel">
+      <div class="section-card" style="text-align:center;padding:3rem 2rem">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:0.05em;margin-bottom:0.75rem">Community</div>
+        <p style="color:var(--text-muted);max-width:480px;margin:0 auto 2rem;font-size:0.9rem;line-height:1.7">Connect with other AT0M FIT clients. Share progress, wins, and accountability. Clients only.</p>
+        <div style="display:flex;flex-direction:column;gap:0.75rem;align-items:center">
+          <a href="/community" style="display:inline-block;padding:1rem 2.5rem;background:var(--gold);color:#000;font-weight:800;font-size:0.9rem;letter-spacing:0.07em;text-transform:uppercase;border-radius:4px;text-decoration:none">Open Community</a>
+          <p style="font-size:0.78rem;color:var(--text-muted)">Opens in full view. Use the Back button to return to your portal.</p>
+        </div>
+        <div style="margin-top:2.5rem;padding:1.25rem;background:var(--surface2);border:1px solid var(--border);border-radius:4px;text-align:left;max-width:480px;margin-left:auto;margin-right:auto">
+          <div style="font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:0.75rem;font-weight:700">Community Rules</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:0.4rem;font-size:0.82rem;color:var(--text-muted)">
+            <li>Encourage, don't tear down.</li>
+            <li>Share only what you want others to see.</li>
+            <li>No medical advice.</li>
+            <li>No spam.</li>
+            <li>Progress over ego.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ ASK AT0M TAB ══ -->
+    <div id="tab-askatom" class="tab-panel">
+      <div class="section-card">
+        <div class="card-title">Ask AT0M</div>
+        <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1.5rem">Get a direct answer from the AT0M coaching system. Training and lifestyle questions only. For pain, injury, or medical concerns — contact your coach or a medical professional.</p>
+        <div class="form-group">
+          <label class="form-label">Your Question</label>
+          <textarea class="form-input" id="atomQuestion" placeholder="How do I structure Zone 2 if I only have 30 minutes? What should I eat before a night shift workout?..." rows="4"></textarea>
+        </div>
+        <button class="btn-submit" id="atomBtn" onclick="submitAskAtom()">Ask AT0M</button>
+        <div style="margin-top:1.25rem;display:none" id="atomLoading">
+          <div class="spinner" style="width:24px;height:24px;margin:0 0 0.5rem"></div>
+          <span style="color:var(--text-muted);font-size:0.85rem">Processing...</span>
+        </div>
+        <div id="atomResponse" style="display:none;margin-top:1.25rem;padding:1.25rem;background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:0 4px 4px 0">
+          <div style="font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:0.75rem;font-weight:700">AT0M Response</div>
+          <div id="atomAnswer" style="font-size:0.9rem;line-height:1.75;color:var(--text)"></div>
+          <div id="atomNotice" style="margin-top:0.75rem;font-size:0.75rem;color:var(--text-muted);font-style:italic"></div>
+        </div>
+        <div style="margin-top:2rem">
+          <div style="font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.75rem">Previous Questions</div>
+          <div id="atomHistory" style="color:var(--text-muted);font-size:0.85rem;font-style:italic">No previous questions this session.</div>
+        </div>
+      </div>
+    </div>
+
     <footer class="portal-footer">
       <span>&copy; 2026 Levi Operations LLC.</span>
       &nbsp;&nbsp;<a href="/">AT0M FIT Home</a>
+      &nbsp;&nbsp;<a href="/community">Community</a>
       &nbsp;&nbsp;<a href="/training">Custom Training</a>
     </footer>
   </div>
@@ -597,6 +753,7 @@
       document.querySelectorAll('.tab-panel').forEach(p => p.style.display = '');
       showTab('today');
       document.getElementById('photoDate').value = new Date().toISOString().split('T')[0];
+      buildReadinessRatings();
       renderCalendar();
     }
 
@@ -614,7 +771,8 @@
         loadNutritionPlan(uid),
         loadGoal(uid),
         loadWeeklyPlan(uid),
-        loadPhotoHistory(uid)
+        loadPhotoHistory(uid),
+        loadReadinessHistory(uid)
       ]);
     }
 
@@ -1012,6 +1170,140 @@
         alert('Could not submit check-in. Please try again.');
       } finally {
         btn.disabled = false; btn.textContent = 'Submit Check-in';
+      }
+    }
+
+    // ── READINESS ──
+    const rsRatings = { sleep: 0, soreness: 0, stress: 0, energy: 0, motivation: 0 };
+    const rsLabels = { sleep: 'rs-sleep', soreness: 'rs-soreness', stress: 'rs-stress', energy: 'rs-energy', motivation: 'rs-motivation' };
+
+    function buildReadinessRatings() {
+      Object.keys(rsRatings).forEach(key => {
+        const el = document.getElementById(`rating-${rsLabels[key]}`);
+        if (!el) return;
+        el.innerHTML = '';
+        [1,2,3,4,5].forEach(n => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'rating-btn';
+          btn.textContent = n;
+          btn.onclick = () => {
+            rsRatings[key] = n;
+            el.querySelectorAll('.rating-btn').forEach(b => b.classList.toggle('selected', parseInt(b.textContent) === n));
+          };
+          el.appendChild(btn);
+        });
+      });
+    }
+
+    async function submitReadiness(e) {
+      e.preventDefault();
+      const btn = document.getElementById('readinessBtn');
+      btn.disabled = true; btn.textContent = 'Logging...';
+
+      const { sleep, soreness, stress, energy, motivation } = rsRatings;
+      if (!sleep || !soreness || !stress || !energy || !motivation) {
+        alert('Please rate all 5 categories before submitting.');
+        btn.disabled = false; btn.textContent = 'Submit Readiness';
+        return;
+      }
+
+      const pct = Math.round(((sleep + (6 - soreness) + (6 - stress) + energy + motivation) / 25) * 100);
+      let rec = 'Train as planned.';
+      if (pct >= 80) rec = 'Train as planned — you are ready to push.';
+      else if (pct >= 60) rec = 'Moderate session. Reduce intensity if needed.';
+      else if (pct >= 40) rec = 'Recovery focus today. Low intensity or active rest.';
+      else rec = 'Full rest day. Contact your coach if this persists.';
+
+      const notes = document.getElementById('readinessNotes').value.trim() || null;
+
+      try {
+        await sb.from('readiness_scores').insert([{
+          client_id: currentUser.id,
+          sleep_quality: sleep, soreness, stress, energy, motivation,
+          recommendation: rec, notes
+        }]);
+      } catch(e) {}
+
+      document.getElementById('readinessPct').textContent = pct + '%';
+      document.getElementById('readinessPct').style.color = pct >= 70 ? '#4ac97a' : pct >= 45 ? 'var(--gold)' : '#c94a4a';
+      document.getElementById('readinessRec').textContent = rec;
+      document.getElementById('readinessResult').style.display = 'block';
+
+      const msg = document.getElementById('readinessMsg');
+      msg.style.display = 'block';
+      setTimeout(() => { msg.style.display = 'none'; }, 4000);
+      btn.disabled = false; btn.textContent = 'Submit Readiness';
+
+      notifyCoach('Readiness Score Submitted', { score: pct + '%', recommendation: rec });
+    }
+
+    async function loadReadinessHistory(uid) {
+      try {
+        const { data } = await sb.from('readiness_scores').select('scored_at,readiness_pct,recommendation').eq('client_id', uid).order('scored_at', { ascending: false }).limit(5);
+        const el = document.getElementById('readinessHistory');
+        if (!el) return;
+        if (!data || data.length === 0) { el.textContent = 'No previous scores.'; return; }
+        el.innerHTML = data.map(r =>
+          `<div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid var(--border);font-size:0.83rem">
+            <span style="color:var(--text-muted)">${r.scored_at}</span>
+            <span style="color:var(--gold);font-weight:700">${r.readiness_pct ?? '--'}%</span>
+            <span style="color:var(--text-muted);font-size:0.75rem;max-width:200px;text-align:right">${r.recommendation || ''}</span>
+          </div>`).join('');
+      } catch(e) {}
+    }
+
+    // ── ASK AT0M ──
+    const atomHistory = [];
+
+    async function submitAskAtom() {
+      const question = document.getElementById('atomQuestion').value.trim();
+      if (!question) return;
+
+      const btn = document.getElementById('atomBtn');
+      btn.disabled = true;
+      document.getElementById('atomLoading').style.display = 'block';
+      document.getElementById('atomResponse').style.display = 'none';
+
+      try {
+        const res = await fetch('/api/ask-atom', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            question,
+            client_id: currentUser.id,
+            client_email: currentUser.email,
+            client_name: currentClientName
+          })
+        });
+        const data = await res.json();
+        const answer = data.answer || 'No response received.';
+        const notice = data.notice || (data.saved ? 'Your question was saved for coach review.' : '');
+
+        document.getElementById('atomAnswer').textContent = answer;
+        document.getElementById('atomNotice').textContent = notice;
+        document.getElementById('atomResponse').style.display = 'block';
+
+        // Update history display
+        atomHistory.unshift({ question: question.substring(0, 80), answer: answer.substring(0, 120) });
+        const histEl = document.getElementById('atomHistory');
+        if (histEl) {
+          histEl.innerHTML = atomHistory.slice(0, 5).map(h =>
+            `<div style="padding:0.75rem 0;border-bottom:1px solid var(--border)">
+              <div style="font-size:0.8rem;font-weight:600;color:var(--text);margin-bottom:0.25rem">${esc(h.question)}${h.question.length >= 80 ? '...' : ''}</div>
+              <div style="font-size:0.78rem;color:var(--text-muted)">${esc(h.answer)}${h.answer.length >= 120 ? '...' : ''}</div>
+            </div>`).join('');
+        }
+
+        document.getElementById('atomQuestion').value = '';
+        notifyCoach('Ask AT0M Question', { question: question.substring(0, 100), flagged: data.flagged });
+      } catch(e) {
+        document.getElementById('atomAnswer').textContent = 'Ask AT0M is temporarily unavailable. Your question was noted.';
+        document.getElementById('atomNotice').textContent = '';
+        document.getElementById('atomResponse').style.display = 'block';
+      } finally {
+        document.getElementById('atomLoading').style.display = 'none';
+        btn.disabled = false;
       }
     }
 

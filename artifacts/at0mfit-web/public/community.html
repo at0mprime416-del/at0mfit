@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Community | AT0M FIT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0B0B0B; --surface: #111; --surface2: #1A1A1A; --surface3: #222;
+      --border: #2A2A2A; --gold: #C9A04A; --gold-bright: #D4AF37;
+      --gold-dim: rgba(201,160,74,0.08); --gold-glow: rgba(201,160,74,0.25);
+      --text: #F0EDE8; --text-muted: #888; --green: #4AC97A; --red: #C94A4A;
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.6; min-height: 100vh; }
+
+    /* AUTH VIEWS */
+    #loginView { display: none; min-height: 100vh; align-items: center; justify-content: center; padding: 2rem; }
+    #loginView.active { display: flex; }
+    .login-card { background: var(--surface); border: 1px solid var(--border); border-top: 2px solid var(--gold); border-radius: 4px; padding: 3rem; width: 100%; max-width: 420px; }
+    .login-logo { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; letter-spacing: 0.1em; text-align: center; margin-bottom: 0.25rem; }
+    .login-logo span { color: var(--gold); }
+    .login-sub { text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 2.5rem; }
+    .login-error { color: #e05555; font-size: 0.85rem; margin-top: 0.75rem; display: none; }
+
+    /* MAIN VIEW */
+    #mainView { display: none; }
+    #mainView.active { display: block; }
+
+    /* NAV */
+    nav.top-nav { position: sticky; top: 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 2rem; background: rgba(11,11,11,0.96); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.1em; color: var(--text); text-decoration: none; }
+    .nav-logo span { color: var(--gold); }
+    .nav-badge { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); background: var(--gold-dim); border: 1px solid rgba(201,160,74,0.3); padding: 0.2rem 0.6rem; border-radius: 2px; margin-left: 0.75rem; }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-name { font-size: 0.8rem; color: var(--text-muted); }
+    .btn-logout { background: none; border: 1px solid var(--border); color: var(--text-muted); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.35rem 0.85rem; border-radius: 4px; cursor: pointer; font-family: 'Inter', sans-serif; }
+    .btn-logout:hover { border-color: #555; color: var(--text); }
+
+    /* LAYOUT */
+    .page-wrap { max-width: 820px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+    .page-eyebrow { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.3rem; }
+    .page-heading { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; letter-spacing: 0.04em; margin-bottom: 1.75rem; }
+
+    /* RULES BANNER */
+    .rules-banner { background: var(--surface2); border: 1px solid var(--border); border-left: 3px solid var(--gold); border-radius: 0 4px 4px 0; padding: 1rem 1.25rem; margin-bottom: 1.75rem; font-size: 0.8rem; color: var(--text-muted); line-height: 1.7; }
+    .rules-banner strong { color: var(--gold); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; display: block; margin-bottom: 0.5rem; }
+
+    /* FILTER TABS */
+    .filter-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .filter-btn { padding: 0.4rem 0.9rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 3px; color: var(--text-muted); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; }
+    .filter-btn:hover { color: var(--text); }
+    .filter-btn.active { background: var(--gold-dim); border-color: rgba(201,160,74,0.5); color: var(--gold); }
+
+    /* POST FORM */
+    .post-form-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; margin-bottom: 1.75rem; }
+    .post-form-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.25rem; letter-spacing: 0.05em; margin-bottom: 1rem; color: var(--gold); }
+    .form-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 0.75rem 1rem; color: var(--text); font-size: 0.9rem; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s; margin-bottom: 0.75rem; }
+    .form-input::placeholder { color: var(--text-muted); }
+    .form-input:focus { border-color: var(--gold); }
+    textarea.form-input { resize: vertical; min-height: 90px; }
+    select.form-input { cursor: pointer; }
+    .form-row { display: flex; gap: 0.75rem; }
+    .form-row .form-input { flex: 1; margin-bottom: 0; }
+    .btn-post { padding: 0.75rem 1.5rem; background: var(--gold); color: #000; font-weight: 800; font-size: 0.82rem; letter-spacing: 0.07em; text-transform: uppercase; border: none; border-radius: 4px; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.2s; }
+    .btn-post:hover { background: var(--gold-bright); }
+    .btn-post:disabled { opacity: 0.6; cursor: not-allowed; }
+    .post-success { color: var(--gold); font-size: 0.82rem; margin-top: 0.5rem; display: none; }
+
+    /* POSTS FEED */
+    .posts-feed { display: flex; flex-direction: column; gap: 1rem; }
+    .post-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1.35rem; transition: border-color 0.2s; }
+    .post-card:hover { border-color: #444; }
+    .post-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
+    .post-author { font-weight: 700; font-size: 0.9rem; color: var(--text); }
+    .post-time { font-size: 0.7rem; color: var(--text-muted); }
+    .post-cat-badge { display: inline-block; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.18rem 0.6rem; border-radius: 2px; margin-bottom: 0.6rem; }
+    .cat-general { background: rgba(110,110,110,0.15); color: #888; border: 1px solid #333; }
+    .cat-progress { background: rgba(201,160,74,0.1); color: var(--gold); border: 1px solid rgba(201,160,74,0.25); }
+    .cat-wins { background: rgba(74,201,122,0.1); color: #4ac97a; border: 1px solid rgba(74,201,122,0.2); }
+    .cat-questions { background: rgba(100,150,255,0.1); color: #8ab4ff; border: 1px solid rgba(100,150,255,0.2); }
+    .cat-accountability { background: rgba(255,150,80,0.1); color: #ffa060; border: 1px solid rgba(255,150,80,0.2); }
+    .cat-milestones { background: rgba(201,74,160,0.1); color: #e074d0; border: 1px solid rgba(201,74,160,0.2); }
+    .post-content { color: #c8c4be; font-size: 0.9rem; line-height: 1.7; margin-bottom: 0.85rem; }
+    .post-photo { width: 100%; max-height: 320px; object-fit: cover; border-radius: 4px; margin-bottom: 0.85rem; display: block; }
+    .post-actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+    .btn-react { padding: 0.3rem 0.65rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 3px; font-size: 0.78rem; color: var(--text-muted); cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; }
+    .btn-react:hover { border-color: rgba(201,160,74,0.4); color: var(--text); }
+    .btn-react.reacted { background: var(--gold-dim); border-color: rgba(201,160,74,0.4); color: var(--gold); }
+    .reaction-count { font-size: 0.72rem; color: var(--text-muted); }
+    .btn-toggle-comments { background: none; border: none; color: var(--text-muted); font-size: 0.78rem; cursor: pointer; font-family: 'Inter', sans-serif; padding: 0.3rem 0; text-decoration: underline; text-decoration-style: dotted; margin-left: auto; }
+    .btn-toggle-comments:hover { color: var(--text); }
+    .post-delete { background: none; border: none; color: #555; font-size: 0.72rem; cursor: pointer; font-family: 'Inter', sans-serif; margin-left: 0.5rem; }
+    .post-delete:hover { color: var(--red); }
+
+    /* COMMENTS */
+    .comments-section { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); display: none; }
+    .comments-section.open { display: block; }
+    .comment-item { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; }
+    .comment-body { flex: 1; }
+    .comment-author { font-size: 0.75rem; font-weight: 700; color: var(--text); margin-bottom: 0.15rem; }
+    .comment-text { font-size: 0.82rem; color: #b0aaa4; line-height: 1.55; }
+    .comment-input-row { display: flex; gap: 0.65rem; margin-top: 0.75rem; }
+    .comment-input-row .form-input { flex: 1; padding: 0.55rem 0.85rem; margin-bottom: 0; font-size: 0.85rem; }
+    .btn-comment { padding: 0.55rem 0.9rem; background: var(--surface3); border: 1px solid var(--border); border-radius: 4px; color: var(--text-muted); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; font-family: 'Inter', sans-serif; white-space: nowrap; transition: all 0.15s; }
+    .btn-comment:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* EMPTY */
+    .empty-state { color: var(--text-muted); font-style: italic; font-size: 0.9rem; padding: 2.5rem 0; text-align: center; }
+
+    /* SPINNER */
+    .spinner { width: 28px; height: 28px; border: 2px solid var(--border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 0.75rem; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-state { text-align: center; padding: 3rem; color: var(--text-muted); }
+
+    /* FORM LABEL */
+    .form-label { display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; text-align: center; color: var(--text-muted); font-size: 0.75rem; }
+    footer a { color: var(--text-muted); text-decoration: none; }
+    footer a:hover { color: var(--gold); }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      .page-wrap { padding: 1.25rem 1.25rem 3rem; }
+      .form-row { flex-direction: column; }
+      nav.top-nav { padding: 0.75rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN VIEW -->
+  <div id="loginView" class="active">
+    <div class="login-card">
+      <div class="login-logo">AT<span>0</span>M FIT</div>
+      <p class="login-sub">Community — Clients Only</p>
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div style="margin-bottom:1rem">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" id="loginEmail" placeholder="your@email.com" required autocomplete="email" />
+        </div>
+        <div style="margin-bottom:1.5rem">
+          <label class="form-label">Password</label>
+          <input class="form-input" type="password" id="loginPassword" placeholder="Password" required autocomplete="current-password" />
+        </div>
+        <button style="width:100%;padding:0.95rem;background:var(--gold);color:#000;font-weight:800;font-size:0.9rem;letter-spacing:0.07em;text-transform:uppercase;border:none;border-radius:4px;cursor:pointer;font-family:'Inter',sans-serif" type="submit" id="loginBtn">Sign In</button>
+        <div class="login-error" id="loginError">Invalid email or password.</div>
+      </form>
+      <div style="margin-top:1.5rem;text-align:center;font-size:0.78rem;color:var(--text-muted)">
+        Not a client yet? <a href="/training" style="color:var(--gold);text-decoration:none">Apply for Custom Training</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN VIEW -->
+  <div id="mainView">
+    <nav class="top-nav">
+      <div style="display:flex;align-items:center">
+        <a class="nav-logo" href="/">AT<span>0</span>M FIT</a>
+        <span class="nav-badge">Community</span>
+      </div>
+      <div class="nav-right">
+        <span class="nav-name" id="navName"></span>
+        <a href="/portal" style="font-size:0.72rem;color:var(--text-muted);text-decoration:none;font-weight:600">Portal</a>
+        <button class="btn-logout" onclick="handleLogout()">Sign Out</button>
+      </div>
+    </nav>
+
+    <div class="page-wrap">
+      <div class="page-eyebrow">AT0M FIT</div>
+      <h1 class="page-heading">Community</h1>
+
+      <!-- RULES -->
+      <div class="rules-banner">
+        <strong>Community Rules</strong>
+        Encourage, don't tear down. &nbsp;·&nbsp; Share only what you want others to see. &nbsp;·&nbsp; No medical advice. &nbsp;·&nbsp; No spam. &nbsp;·&nbsp; Progress over ego. &nbsp;·&nbsp; Private check-ins, weight, and logs stay private unless you choose to share.
+      </div>
+
+      <!-- POST FORM -->
+      <div class="post-form-card" id="postFormCard">
+        <div class="post-form-title">Share with the Group</div>
+        <div class="form-row" style="margin-bottom:0.75rem">
+          <div style="flex:1">
+            <label class="form-label">Category</label>
+            <select class="form-input" id="postCategory" style="margin-bottom:0">
+              <option value="general">General</option>
+              <option value="progress">Progress</option>
+              <option value="wins">Win</option>
+              <option value="questions">Question</option>
+              <option value="accountability">Accountability</option>
+              <option value="milestones">Milestone</option>
+            </select>
+          </div>
+          <div style="flex:1">
+            <label class="form-label">Display Name (optional)</label>
+            <input class="form-input" type="text" id="postDisplayName" placeholder="How you want to appear" style="margin-bottom:0" />
+          </div>
+        </div>
+        <textarea class="form-input" id="postContent" placeholder="What's on your mind? Share a win, a question, or some accountability..." rows="4"></textarea>
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem">
+          <button class="btn-post" id="postBtn" onclick="submitPost()">Post</button>
+          <div class="post-success" id="postSuccess">Posted.</div>
+        </div>
+      </div>
+
+      <!-- FILTER -->
+      <div class="filter-row">
+        <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+        <button class="filter-btn" onclick="setFilter('progress', this)">Progress</button>
+        <button class="filter-btn" onclick="setFilter('wins', this)">Wins</button>
+        <button class="filter-btn" onclick="setFilter('questions', this)">Questions</button>
+        <button class="filter-btn" onclick="setFilter('accountability', this)">Accountability</button>
+        <button class="filter-btn" onclick="setFilter('milestones', this)">Milestones</button>
+      </div>
+
+      <!-- POSTS -->
+      <div id="feedLoading" class="loading-state"><div class="spinner"></div>Loading community...</div>
+      <div class="posts-feed" id="postsFeed"></div>
+    </div>
+
+    <footer>
+      <span>&copy; 2026 Levi Operations LLC.</span>
+      &nbsp;&nbsp;<a href="/">AT0M FIT</a>
+      &nbsp;&nbsp;<a href="/portal">Client Portal</a>
+      &nbsp;&nbsp;<a href="/training">Custom Training</a>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    const { createClient } = supabase;
+    const sb = createClient(
+      'https://kgozddcutazpqmfbzafa.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtnb3pkZGN1dGF6cHFtZmJ6YWZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzOTMxOTYsImV4cCI6MjA4ODk2OTE5Nn0.aTi5ZXQi5zSTGb-xQyotF07Tcur5yizux3J8oNejRfE'
+    );
+
+    let currentUser = null;
+    let currentFilter = 'all';
+    let allPosts = [];
+
+    // ── AUTH ──
+    async function handleLogin(e) {
+      e.preventDefault();
+      const btn = document.getElementById('loginBtn');
+      const err = document.getElementById('loginError');
+      btn.disabled = true; btn.textContent = 'Signing in...';
+      err.style.display = 'none';
+      const { data, error } = await sb.auth.signInWithPassword({
+        email: document.getElementById('loginEmail').value.trim(),
+        password: document.getElementById('loginPassword').value
+      });
+      if (error) {
+        err.style.display = 'block';
+        btn.disabled = false; btn.textContent = 'Sign In';
+        return;
+      }
+      currentUser = data.user;
+      showMain();
+    }
+
+    async function handleLogout() {
+      await sb.auth.signOut();
+      currentUser = null;
+      document.getElementById('mainView').classList.remove('active');
+      document.getElementById('loginView').classList.add('active');
+    }
+
+    async function showMain() {
+      document.getElementById('loginView').classList.remove('active');
+      document.getElementById('mainView').classList.add('active');
+      // Get display name from clients table
+      try {
+        const { data } = await sb.from('clients').select('full_name').eq('id', currentUser.id).single();
+        document.getElementById('navName').textContent = data?.full_name || currentUser.email.split('@')[0];
+        document.getElementById('postDisplayName').placeholder = data?.full_name || 'Your name';
+      } catch(e) {}
+      await loadPosts();
+    }
+
+    // ── POSTS ──
+    async function loadPosts() {
+      document.getElementById('feedLoading').style.display = 'block';
+      document.getElementById('postsFeed').innerHTML = '';
+      try {
+        const { data } = await sb
+          .from('community_posts')
+          .select('*, community_reactions(id, client_id, reaction), community_comments(id, client_id, display_name, content, created_at)')
+          .eq('is_approved', true)
+          .order('created_at', { ascending: false })
+          .limit(50);
+        allPosts = data || [];
+      } catch(e) {
+        allPosts = [];
+      }
+      document.getElementById('feedLoading').style.display = 'none';
+      renderPosts();
+    }
+
+    function setFilter(cat, btn) {
+      currentFilter = cat;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderPosts();
+    }
+
+    function renderPosts() {
+      const feed = document.getElementById('postsFeed');
+      const filtered = currentFilter === 'all' ? allPosts : allPosts.filter(p => p.category === currentFilter);
+      if (filtered.length === 0) {
+        feed.innerHTML = `<div class="empty-state">No ${currentFilter === 'all' ? '' : currentFilter + ' '}posts yet. Be the first to share.</div>`;
+        return;
+      }
+      feed.innerHTML = filtered.map(p => renderPostCard(p)).join('');
+    }
+
+    function renderPostCard(p) {
+      const reactions = p.community_reactions || [];
+      const comments = p.community_comments || [];
+      const reactionCount = reactions.length;
+      const fireCount = reactions.filter(r => r.reaction === 'fire').length;
+      const strongCount = reactions.filter(r => r.reaction === 'strong').length;
+      const myReaction = reactions.find(r => r.client_id === currentUser?.id);
+      const isOwn = p.client_id === currentUser?.id;
+      const timeAgo = formatTimeAgo(p.created_at);
+      const catClass = `cat-${p.category}`;
+      const displayName = p.display_name || 'Athlete';
+
+      const commentsHtml = comments.length === 0
+        ? '<div style="color:var(--text-muted);font-size:0.82rem;padding:0.5rem 0;font-style:italic">No comments yet.</div>'
+        : comments.map(c => `
+            <div class="comment-item">
+              <div class="comment-body">
+                <div class="comment-author">${esc(c.display_name || 'Athlete')}</div>
+                <div class="comment-text">${esc(c.content)}</div>
+              </div>
+            </div>`).join('');
+
+      return `
+        <div class="post-card" id="post-${p.id}">
+          <div class="post-header">
+            <div>
+              <div class="post-author">${esc(displayName)}</div>
+              <div class="post-time">${timeAgo}</div>
+            </div>
+            <span class="post-cat-badge ${catClass}">${p.category}</span>
+          </div>
+          ${p.content ? `<div class="post-content">${esc(p.content)}</div>` : ''}
+          ${p.photo_url ? `<img class="post-photo" src="${p.photo_url}" alt="post photo" onerror="this.style.display='none'" />` : ''}
+          <div class="post-actions">
+            <button class="btn-react ${myReaction?.reaction === 'fire' ? 'reacted' : ''}" onclick="toggleReact('${p.id}', 'fire')">
+              &#128293; ${fireCount > 0 ? fireCount : ''}
+            </button>
+            <button class="btn-react ${myReaction?.reaction === 'strong' ? 'reacted' : ''}" onclick="toggleReact('${p.id}', 'strong')">
+              &#128170; ${strongCount > 0 ? strongCount : ''}
+            </button>
+            <button class="btn-toggle-comments" onclick="toggleComments('${p.id}')">
+              ${comments.length} comment${comments.length !== 1 ? 's' : ''}
+            </button>
+            ${isOwn ? `<button class="post-delete" onclick="deletePost('${p.id}')">Delete</button>` : ''}
+          </div>
+          <div class="comments-section" id="comments-${p.id}">
+            ${commentsHtml}
+            <div class="comment-input-row">
+              <input class="form-input" type="text" id="commentInput-${p.id}" placeholder="Add a comment..." />
+              <button class="btn-comment" onclick="submitComment('${p.id}')">Post</button>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function toggleComments(postId) {
+      const el = document.getElementById(`comments-${postId}`);
+      if (el) el.classList.toggle('open');
+    }
+
+    async function toggleReact(postId, reaction) {
+      if (!currentUser) return;
+      const post = allPosts.find(p => p.id === postId);
+      if (!post) return;
+      const existing = (post.community_reactions || []).find(r => r.client_id === currentUser.id);
+
+      if (existing) {
+        await sb.from('community_reactions').delete().eq('id', existing.id);
+        post.community_reactions = post.community_reactions.filter(r => r.id !== existing.id);
+      } else {
+        const { data } = await sb.from('community_reactions').insert([{
+          post_id: postId, client_id: currentUser.id, reaction
+        }]).select().single();
+        if (data) post.community_reactions = [...(post.community_reactions || []), data];
+      }
+      renderPosts();
+    }
+
+    async function submitComment(postId) {
+      const input = document.getElementById(`commentInput-${postId}`);
+      const content = input?.value.trim();
+      if (!content || !currentUser) return;
+      input.value = '';
+
+      let displayName = '';
+      try {
+        const { data } = await sb.from('clients').select('full_name').eq('id', currentUser.id).single();
+        displayName = data?.full_name || currentUser.email.split('@')[0];
+      } catch(e) {}
+
+      const { data } = await sb.from('community_comments').insert([{
+        post_id: postId, client_id: currentUser.id, content, display_name: displayName
+      }]).select().single();
+
+      if (data) {
+        const post = allPosts.find(p => p.id === postId);
+        if (post) {
+          post.community_comments = [...(post.community_comments || []), data];
+          renderPosts();
+          setTimeout(() => {
+            const el = document.getElementById(`comments-${postId}`);
+            if (el) el.classList.add('open');
+          }, 50);
+        }
+      }
+    }
+
+    async function deletePost(postId) {
+      if (!confirm('Delete this post?')) return;
+      await sb.from('community_posts').delete().eq('id', postId).eq('client_id', currentUser.id);
+      allPosts = allPosts.filter(p => p.id !== postId);
+      renderPosts();
+    }
+
+    async function submitPost() {
+      const content = document.getElementById('postContent').value.trim();
+      if (!content) return;
+      const btn = document.getElementById('postBtn');
+      btn.disabled = true; btn.textContent = 'Posting...';
+
+      const category = document.getElementById('postCategory').value;
+      const displayName = document.getElementById('postDisplayName').value.trim();
+
+      try {
+        const { data, error } = await sb.from('community_posts').insert([{
+          client_id: currentUser.id,
+          category,
+          content,
+          display_name: displayName || null,
+          is_approved: true
+        }]).select('*, community_reactions(id, client_id, reaction), community_comments(id, client_id, display_name, content, created_at)').single();
+
+        if (error) throw error;
+        allPosts = [data, ...allPosts];
+        document.getElementById('postContent').value = '';
+        const okEl = document.getElementById('postSuccess');
+        okEl.style.display = 'block';
+        setTimeout(() => { okEl.style.display = 'none'; }, 3000);
+        renderPosts();
+
+        // Notify coach
+        fetch('/api/notify-coach', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'New Community Post',
+            client_name: displayName || currentUser.email.split('@')[0],
+            client_email: currentUser.email,
+            subject: `New AT0M FIT Community Post — ${category}`,
+            summary: content.substring(0, 120),
+            metadata: { category }
+          })
+        }).catch(() => {});
+      } catch(e) {
+        alert('Could not post. The community_posts table may not exist yet — run FULL_PREMIUM_BUILDOUT_SETUP.sql in Supabase.');
+      } finally {
+        btn.disabled = false; btn.textContent = 'Post';
+      }
+    }
+
+    // ── HELPERS ──
+    function esc(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function formatTimeAgo(iso) {
+      if (!iso) return '';
+      const diff = (Date.now() - new Date(iso).getTime()) / 1000;
+      if (diff < 60) return 'just now';
+      if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+      if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+      return Math.floor(diff / 86400) + 'd ago';
+    }
+
+    // ── INIT ──
+    async function init() {
+      const { data: { session } } = await sb.auth.getSession();
+      if (session?.user) {
+        currentUser = session.user;
+        showMain();
+      } else {
+        document.getElementById('loginView').classList.add('active');
+      }
+      sb.auth.onAuthStateChange((event) => {
+        if (event === 'SIGNED_OUT') {
+          document.getElementById('mainView').classList.remove('active');
+          document.getElementById('loginView').classList.add('active');
+        }
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>

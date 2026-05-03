@@ -32,6 +32,7 @@ const staticHtmlRoutes: Record<string, string> = {
   "/training": "/training.html",
   "/portal": "/portal.html",
   "/coach": "/coach.html",
+  "/community": "/community.html",
 };
 
 function staticHtmlRewritePlugin() {

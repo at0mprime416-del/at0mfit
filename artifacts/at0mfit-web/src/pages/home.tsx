@@ -124,6 +124,18 @@ export default function Home() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email }),
         }).catch(() => {})
+        fetch('/api/notify-coach', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'New Waitlist Signup',
+            client_name: email.split('@')[0],
+            client_email: email,
+            subject: 'New AT0M FIT Waitlist Signup',
+            summary: `${email} joined the AT0M FIT waitlist.`,
+            metadata: { email }
+          })
+        }).catch(() => {})
         setStatus('success')
       } else if (error.code === '23505') {
         setStatus('duplicate')
