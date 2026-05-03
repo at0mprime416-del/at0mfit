@@ -10,598 +10,201 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:           #0B0B0B;
-      --surface:      #111111;
-      --surface2:     #1A1A1A;
-      --border:       #2A2A2A;
-      --gold:         #C9A04A;
-      --gold-bright:  #D4AF37;
-      --gold-glow:    rgba(201, 160, 74, 0.25);
-      --gold-dim:     rgba(201, 160, 74, 0.08);
-      --grey-light:   #B0B0B0;
-      --grey-mid:     #6E6E6E;
-      --text:         #F0EDE8;
-      --text-muted:   #888888;
+      --bg:         #0B0B0B;
+      --surface:    #111111;
+      --surface2:   #1A1A1A;
+      --surface3:   #222222;
+      --border:     #2A2A2A;
+      --gold:       #C9A04A;
+      --gold-bright:#D4AF37;
+      --gold-glow:  rgba(201,160,74,0.25);
+      --gold-dim:   rgba(201,160,74,0.08);
+      --grey-light: #B0B0B0;
+      --grey-mid:   #6E6E6E;
+      --text:       #F0EDE8;
+      --text-muted: #888888;
+      --green:      #4AC97A;
+      --red:        #C94A4A;
     }
 
     html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.6; min-height: 100vh; }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-size: 16px;
-      line-height: 1.6;
-      min-height: 100vh;
-    }
-
-    /* LOGIN STATE */
-    #loginView {
-      display: none;
-      min-height: 100vh;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      background: var(--bg);
-    }
-
+    /* ── LOGIN ── */
+    #loginView { display: none; min-height: 100vh; align-items: center; justify-content: center; padding: 2rem; background: var(--bg); }
     #loginView.active { display: flex; }
-
-    .login-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-top: 2px solid var(--gold);
-      border-radius: 4px;
-      padding: 3rem;
-      width: 100%;
-      max-width: 420px;
-    }
-
-    .login-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2.2rem;
-      letter-spacing: 0.1em;
-      text-align: center;
-      margin-bottom: 0.25rem;
-    }
-
+    .login-card { background: var(--surface); border: 1px solid var(--border); border-top: 2px solid var(--gold); border-radius: 4px; padding: 3rem; width: 100%; max-width: 420px; }
+    .login-logo { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; letter-spacing: 0.1em; text-align: center; margin-bottom: 0.25rem; }
     .login-logo span { color: var(--gold); }
+    .login-sub { text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 2.5rem; }
+    .login-error { color: #e05555; font-size: 0.85rem; margin-top: 0.75rem; display: none; }
 
-    .login-sub {
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      margin-bottom: 2.5rem;
-    }
-
-    .form-group {
-      margin-bottom: 1.25rem;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 0.45rem;
-    }
-
-    .form-input {
-      width: 100%;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 0.9rem 1.2rem;
-      color: var(--text);
-      font-size: 0.95rem;
-      font-family: 'Inter', sans-serif;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .form-input::placeholder { color: var(--text-muted); }
-
-    .form-input:focus {
-      border-color: var(--gold);
-      box-shadow: 0 0 0 3px var(--gold-glow);
-    }
-
-    .btn-primary {
-      width: 100%;
-      padding: 1rem;
-      background: var(--gold);
-      color: #000;
-      font-weight: 800;
-      font-size: 0.95rem;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      transition: background 0.2s, transform 0.2s;
-      margin-top: 0.5rem;
-    }
-
-    .btn-primary:hover {
-      background: var(--gold-bright);
-      transform: translateY(-1px);
-    }
-
-    .btn-primary:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .login-error {
-      color: #e05555;
-      font-size: 0.85rem;
-      margin-top: 0.75rem;
-      display: none;
-    }
-
-    /* DASHBOARD STATE */
-    #dashboardView {
-      display: none;
-    }
-
+    /* ── DASHBOARD ── */
+    #dashboardView { display: none; }
     #dashboardView.active { display: block; }
 
-    /* PORTAL NAV */
-    .portal-nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem 2rem;
-      background: rgba(11, 11, 11, 0.95);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .portal-nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.6rem;
-      letter-spacing: 0.1em;
-      color: var(--text);
-      text-decoration: none;
-    }
-
+    /* ── TOP NAV ── */
+    .portal-nav { position: sticky; top: 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 2rem; background: rgba(11,11,11,0.96); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .portal-nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.1em; color: var(--text); text-decoration: none; }
     .portal-nav-logo span { color: var(--gold); }
+    .portal-nav-right { display: flex; align-items: center; gap: 1.25rem; }
+    .portal-nav-name { font-size: 0.82rem; color: var(--text-muted); }
+    .portal-nav-name strong { color: var(--text); }
 
-    .portal-nav-right {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-    }
+    /* ── TAB NAV ── */
+    .tab-nav { display: flex; gap: 0; overflow-x: auto; background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 2rem; scrollbar-width: none; }
+    .tab-nav::-webkit-scrollbar { display: none; }
+    .tab-btn { flex-shrink: 0; padding: 0.85rem 1.1rem; background: none; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; font-family: 'Inter', sans-serif; transition: color 0.15s, border-color 0.15s; white-space: nowrap; }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
 
-    .portal-nav-name {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
+    /* ── TAB PANELS ── */
+    .tab-panel { display: none; max-width: 1100px; margin: 0 auto; padding: 2rem; }
+    .tab-panel.active { display: block; }
 
-    .portal-nav-name strong {
-      color: var(--text);
-    }
-
-    .btn-logout {
-      background: none;
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 0.4rem 1rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      transition: border-color 0.2s, color 0.2s;
-    }
-
-    .btn-logout:hover {
-      border-color: var(--grey-mid);
-      color: var(--text);
-    }
-
-    /* DASHBOARD LAYOUT */
-    .dashboard {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 2.5rem 2rem;
-    }
-
-    .welcome-bar {
-      margin-bottom: 2.5rem;
-      padding-bottom: 2rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .welcome-eyebrow {
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.3rem;
-    }
-
-    .welcome-heading {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2.5rem;
-      letter-spacing: 0.04em;
-      color: var(--text);
-    }
-
-    /* GRID LAYOUT */
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 1.5rem;
-    }
-
-    .dashboard-main {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    .dashboard-sidebar {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    /* CARDS */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 1.8rem;
-      position: relative;
-    }
-
-    .card-gold {
-      border-top: 2px solid var(--gold);
-    }
-
-    .card-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.4rem;
-      letter-spacing: 0.05em;
-      color: var(--text);
-      margin-bottom: 1.2rem;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
+    /* ── COMMON ELEMENTS ── */
+    .panel-heading { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.04em; margin-bottom: 1.5rem; }
+    .panel-eyebrow { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.3rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1.75rem; margin-bottom: 1.5rem; }
+    .card-gold { border-top: 2px solid var(--gold); }
+    .card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.35rem; letter-spacing: 0.05em; margin-bottom: 1.1rem; display: flex; align-items: center; gap: 0.5rem; }
     .card-title svg { color: var(--gold); }
-
-    .card-eyebrow {
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.3rem;
-    }
-
-    /* WORKOUT CARD */
-    .workout-card-inner {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 1.5rem;
-    }
-
-    .workout-type-badge {
-      display: inline-block;
-      background: var(--gold-dim);
-      border: 1px solid rgba(201, 160, 74, 0.3);
-      color: var(--gold);
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.25rem 0.75rem;
-      border-radius: 2px;
-      margin-bottom: 0.75rem;
-    }
-
-    .workout-name {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.8rem;
-      letter-spacing: 0.04em;
-      color: var(--text);
-      margin-bottom: 0.5rem;
-    }
-
-    .workout-meta {
-      color: var(--text-muted);
-      font-size: 0.88rem;
-      margin-bottom: 1rem;
-    }
-
-    .workout-instructions {
-      color: var(--grey-light);
-      font-size: 0.92rem;
-      line-height: 1.7;
-      white-space: pre-line;
-    }
-
-    .workout-empty {
-      color: var(--text-muted);
-      font-size: 0.92rem;
-      font-style: italic;
-    }
-
-    /* CHECKIN FORM */
-    .checkin-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .rating-group label {
-      display: block;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 0.4rem;
-    }
-
-    .rating-row {
-      display: flex;
-      gap: 0.4rem;
-    }
-
-    .rating-btn {
-      width: 36px;
-      height: 36px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      color: var(--text-muted);
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      transition: all 0.15s;
-    }
-
-    .rating-btn:hover {
-      border-color: rgba(201, 160, 74, 0.4);
-      color: var(--gold);
-    }
-
-    .rating-btn.selected {
-      background: var(--gold);
-      border-color: var(--gold);
-      color: #000;
-    }
-
-    .checkin-notes {
-      margin-bottom: 1.25rem;
-    }
-
-    textarea.form-input {
-      resize: vertical;
-      min-height: 80px;
-    }
-
-    .btn-submit {
-      padding: 0.75rem 1.5rem;
-      background: var(--gold);
-      color: #000;
-      font-weight: 800;
-      font-size: 0.85rem;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      transition: background 0.2s;
-    }
-
+    .card-eyebrow { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.3rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-label { display: block; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem; }
+    .form-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 0.8rem 1rem; color: var(--text); font-size: 0.9rem; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .form-input::placeholder { color: var(--text-muted); }
+    .form-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-glow); }
+    textarea.form-input { resize: vertical; min-height: 80px; }
+    select.form-input { cursor: pointer; }
+    .btn-primary { width: 100%; padding: 0.95rem; background: var(--gold); color: #000; font-weight: 800; font-size: 0.9rem; letter-spacing: 0.07em; text-transform: uppercase; border: none; border-radius: 4px; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.2s; margin-top: 0.5rem; }
+    .btn-primary:hover { background: var(--gold-bright); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-submit { padding: 0.75rem 1.5rem; background: var(--gold); color: #000; font-weight: 800; font-size: 0.82rem; letter-spacing: 0.07em; text-transform: uppercase; border: none; border-radius: 4px; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.2s; }
     .btn-submit:hover { background: var(--gold-bright); }
     .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-logout { background: none; border: 1px solid var(--border); color: var(--text-muted); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.4rem 0.9rem; border-radius: 4px; cursor: pointer; font-family: 'Inter', sans-serif; transition: border-color 0.2s, color 0.2s; }
+    .btn-logout:hover { border-color: var(--grey-mid); color: var(--text); }
+    .btn-outline-sm { padding: 0.4rem 0.9rem; background: transparent; color: var(--gold); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; border: 1px solid rgba(201,160,74,0.35); border-radius: 3px; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.15s; }
+    .btn-outline-sm:hover { background: var(--gold-dim); }
+    .inline-ok { color: var(--gold); font-size: 0.82rem; margin-top: 0.75rem; display: none; }
+    .empty-state { color: var(--text-muted); font-style: italic; font-size: 0.9rem; padding: 1rem 0; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
-    /* PROGRESS SNAPSHOT */
-    .metric-row {
-      display: flex;
-      flex-direction: column;
-      gap: 0.85rem;
-    }
+    /* ── LOADING ── */
+    .loading-state { text-align: center; padding: 4rem 2rem; color: var(--text-muted); }
+    .spinner { width: 30px; height: 30px; border: 2px solid var(--border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 1rem; }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    .metric-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.75rem 0;
-      border-bottom: 1px solid var(--border);
-    }
+    /* ── WORKOUT CARD ── */
+    .workout-card-inner { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 1.4rem; }
+    .workout-type-badge { display: inline-block; background: var(--gold-dim); border: 1px solid rgba(201,160,74,0.3); color: var(--gold); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.2rem 0.7rem; border-radius: 2px; margin-bottom: 0.6rem; }
+    .workout-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: 0.04em; margin-bottom: 0.4rem; }
+    .workout-meta { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.85rem; }
+    .workout-instructions { color: var(--grey-light); font-size: 0.9rem; line-height: 1.7; white-space: pre-line; }
 
-    .metric-item:last-child { border-bottom: none; }
+    /* ── RATINGS ── */
+    .rating-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+    .rating-group label { display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem; }
+    .rating-row { display: flex; gap: 0.35rem; }
+    .rating-btn { width: 34px; height: 34px; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; color: var(--text-muted); font-size: 0.8rem; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; }
+    .rating-btn:hover { border-color: rgba(201,160,74,0.4); color: var(--gold); }
+    .rating-btn.selected { background: var(--gold); border-color: var(--gold); color: #000; }
 
-    .metric-label {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-weight: 600;
-    }
-
-    .metric-value {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.4rem;
-      color: var(--gold);
-      letter-spacing: 0.04em;
-    }
-
-    /* COACH NOTES */
-    .note-item {
-      background: var(--surface2);
-      border-left: 3px solid var(--gold);
-      border-radius: 0 4px 4px 0;
-      padding: 1rem 1.2rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .note-item:last-child { margin-bottom: 0; }
-
-    .note-text {
-      color: var(--grey-light);
-      font-size: 0.92rem;
-      line-height: 1.65;
-    }
-
-    .note-date {
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      margin-top: 0.4rem;
-    }
-
-    .notes-empty {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      font-style: italic;
-    }
-
-    /* MESSAGES */
-    .message-thread {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      max-height: 300px;
-      overflow-y: auto;
-      margin-bottom: 1.2rem;
-      padding-right: 0.25rem;
-    }
-
+    /* ── MESSAGES ── */
+    .message-thread { display: flex; flex-direction: column; gap: 0.7rem; max-height: 340px; overflow-y: auto; margin-bottom: 1rem; padding-right: 0.25rem; }
     .message-thread::-webkit-scrollbar { width: 4px; }
-    .message-thread::-webkit-scrollbar-track { background: var(--surface2); }
     .message-thread::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-    .message-bubble {
-      max-width: 85%;
-      padding: 0.75rem 1rem;
-      border-radius: 4px;
-      font-size: 0.9rem;
-      line-height: 1.55;
-    }
-
-    .message-bubble.coach {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--grey-light);
-      align-self: flex-start;
-    }
-
-    .message-bubble.client {
-      background: var(--gold-dim);
-      border: 1px solid rgba(201, 160, 74, 0.25);
-      color: var(--text);
-      align-self: flex-end;
-    }
-
-    .message-meta {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      margin-top: 0.3rem;
-    }
-
-    .message-input-row {
-      display: flex;
-      gap: 0.75rem;
-    }
-
-    .message-input-row .form-input {
-      flex: 1;
-      padding: 0.75rem 1rem;
-    }
-
-    .btn-send {
-      padding: 0.75rem 1.2rem;
-      background: var(--gold);
-      color: #000;
-      font-weight: 800;
-      font-size: 0.82rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      white-space: nowrap;
-      transition: background 0.2s;
-    }
-
+    .message-bubble { max-width: 82%; padding: 0.7rem 0.95rem; border-radius: 4px; font-size: 0.88rem; line-height: 1.55; }
+    .message-bubble.coach { background: var(--surface2); border: 1px solid var(--border); color: var(--grey-light); align-self: flex-start; }
+    .message-bubble.client { background: var(--gold-dim); border: 1px solid rgba(201,160,74,0.25); color: var(--text); align-self: flex-end; }
+    .message-meta { font-size: 0.68rem; color: var(--text-muted); margin-top: 0.25rem; }
+    .message-input-row { display: flex; gap: 0.75rem; }
+    .message-input-row .form-input { flex: 1; padding: 0.75rem 1rem; }
+    .btn-send { padding: 0.75rem 1.1rem; background: var(--gold); color: #000; font-weight: 800; font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; border: none; border-radius: 4px; cursor: pointer; font-family: 'Inter', sans-serif; white-space: nowrap; transition: background 0.2s; }
     .btn-send:hover { background: var(--gold-bright); }
 
-    /* LOADING STATE */
-    .loading-state {
-      text-align: center;
-      padding: 4rem 2rem;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
+    /* ── METRICS ── */
+    .metric-row { display: flex; flex-direction: column; gap: 0.75rem; }
+    .metric-item { display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0; border-bottom: 1px solid var(--border); }
+    .metric-item:last-child { border-bottom: none; }
+    .metric-label { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+    .metric-value { font-family: 'Bebas Neue', sans-serif; font-size: 1.35rem; color: var(--gold); letter-spacing: 0.04em; }
 
-    .spinner {
-      width: 32px;
-      height: 32px;
-      border: 2px solid var(--border);
-      border-top-color: var(--gold);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      margin: 0 auto 1rem;
-    }
+    /* ── NUTRITION ── */
+    .macro-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.25rem; }
+    .macro-block { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 1rem; text-align: center; }
+    .macro-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem; }
+    .macro-value { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--gold); letter-spacing: 0.03em; }
+    .macro-unit { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.15rem; }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    /* ── CALENDAR ── */
+    .cal-filter-row { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+    .cal-filter-btn { padding: 0.4rem 0.9rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 3px; color: var(--text-muted); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; }
+    .cal-filter-btn:hover { border-color: rgba(201,160,74,0.4); color: var(--text); }
+    .cal-filter-btn.active { background: var(--gold-dim); border-color: rgba(201,160,74,0.5); color: var(--gold); }
+    .cal-week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; }
+    .cal-day { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 0.75rem 0.5rem; min-height: 100px; }
+    .cal-day-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .cal-day-num { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: var(--text); margin-bottom: 0.5rem; }
+    .cal-day.today { border-color: var(--gold); }
+    .cal-day.today .cal-day-num { color: var(--gold); }
+    .cal-item { font-size: 0.7rem; padding: 0.2rem 0.4rem; border-radius: 2px; margin-bottom: 0.25rem; line-height: 1.35; }
+    .cal-item.workout { background: rgba(201,160,74,0.12); border: 1px solid rgba(201,160,74,0.3); color: var(--gold); }
+    .cal-item.nutrition { background: rgba(74,201,122,0.1); border: 1px solid rgba(74,201,122,0.25); color: #4ac97a; }
+    .cal-item.recovery { background: rgba(110,110,110,0.15); border: 1px solid rgba(110,110,110,0.25); color: var(--grey-light); }
 
-    /* FOOTER */
-    .portal-footer {
-      border-top: 1px solid var(--border);
-      padding: 1.5rem 2rem;
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.78rem;
-    }
+    /* ── GOAL TRACKER ── */
+    .phase-track { margin-bottom: 1.5rem; }
+    .phase-bar-wrap { background: var(--surface2); border-radius: 99px; height: 10px; margin-top: 0.5rem; overflow: hidden; }
+    .phase-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-bright)); border-radius: 99px; transition: width 0.6s ease; }
+    .phase-label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem; }
+    .phase-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.05em; color: var(--text); }
+    .phase-pct { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: var(--gold); }
+    .goal-detail-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+    .goal-detail-row:last-child { border-bottom: none; }
+    .goal-detail-label { color: var(--text-muted); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; }
+    .goal-detail-val { color: var(--text); }
 
-    .portal-footer a {
-      color: var(--text-muted);
-      text-decoration: none;
-    }
+    /* ── PHOTOS ── */
+    .photo-type-row { display: flex; gap: 0.75rem; margin-bottom: 1rem; }
+    .photo-type-btn { flex: 1; padding: 0.6rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; color: var(--text-muted); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; font-family: 'Inter', sans-serif; text-align: center; transition: all 0.15s; }
+    .photo-type-btn.selected { background: var(--gold-dim); border-color: rgba(201,160,74,0.5); color: var(--gold); }
+    .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .photo-item { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+    .photo-item img { width: 100%; height: 160px; object-fit: cover; display: block; }
+    .photo-item-meta { padding: 0.5rem 0.75rem; }
+    .photo-item-type { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.15rem; }
+    .photo-item-date { font-size: 0.7rem; color: var(--text-muted); }
+    .photo-item-notes { font-size: 0.72rem; color: var(--grey-light); font-style: italic; margin-top: 0.15rem; line-height: 1.4; }
 
+    /* ── COACH NOTES ── */
+    .note-item { background: var(--surface2); border-left: 3px solid var(--gold); border-radius: 0 4px 4px 0; padding: 0.9rem 1.1rem; margin-bottom: 0.75rem; }
+    .note-text { color: var(--grey-light); font-size: 0.9rem; line-height: 1.65; }
+    .note-date { color: var(--text-muted); font-size: 0.72rem; margin-top: 0.3rem; }
+
+    /* ── FOOTER ── */
+    .portal-footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; text-align: center; color: var(--text-muted); font-size: 0.75rem; }
+    .portal-footer a { color: var(--text-muted); text-decoration: none; }
     .portal-footer a:hover { color: var(--gold); }
 
-    /* RESPONSIVE */
+    /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
-      .portal-nav { padding: 0.85rem 1.25rem; }
-      .dashboard { padding: 1.5rem 1.25rem; }
-      .dashboard-grid { grid-template-columns: 1fr; }
-      .checkin-grid { grid-template-columns: 1fr; }
-      .login-card { padding: 2rem 1.5rem; }
+      .tab-nav { padding: 0 1rem; }
+      .tab-panel { padding: 1.25rem; }
+      .two-col { grid-template-columns: 1fr; }
+      .macro-grid { grid-template-columns: 1fr 1fr; }
+      .cal-week { grid-template-columns: repeat(4, 1fr); }
+      .rating-grid { grid-template-columns: 1fr; }
       .message-input-row { flex-direction: column; }
+      .portal-nav { padding: 0.75rem 1.25rem; }
+    }
+    @media (max-width: 480px) {
+      .cal-week { grid-template-columns: 1fr 1fr; }
+      .macro-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
@@ -624,6 +227,18 @@
       </symbol>
       <symbol id="icon-message" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
         <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+      </symbol>
+      <symbol id="icon-goal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+      </symbol>
+      <symbol id="icon-photo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+      </symbol>
+      <symbol id="icon-nutrition" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>
+      </symbol>
+      <symbol id="icon-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
       </symbol>
     </defs>
   </svg>
@@ -658,192 +273,261 @@
       </div>
     </nav>
 
-    <div id="loadingState" class="loading-state">
+    <nav class="tab-nav" id="tabNav">
+      <button class="tab-btn active" onclick="showTab('today')">Today</button>
+      <button class="tab-btn" onclick="showTab('workouts')">Workouts</button>
+      <button class="tab-btn" onclick="showTab('nutrition')">Nutrition</button>
+      <button class="tab-btn" onclick="showTab('calendar')">Calendar</button>
+      <button class="tab-btn" onclick="showTab('goals')">Goals</button>
+      <button class="tab-btn" onclick="showTab('photos')">Photos</button>
+      <button class="tab-btn" onclick="showTab('messages')">Messages</button>
+      <button class="tab-btn" onclick="showTab('checkin')">Check-In</button>
+    </nav>
+
+    <!-- LOADING -->
+    <div id="loadingState" class="loading-state" style="display:none;">
       <div class="spinner"></div>
       Loading your dashboard...
     </div>
 
-    <div id="dashboardContent" style="display:none;">
-      <div class="dashboard">
-        <!-- WELCOME -->
-        <div class="welcome-bar">
-          <p class="welcome-eyebrow">Client Dashboard</p>
-          <h1 class="welcome-heading">Welcome back, <span id="welcomeName">Athlete</span>.</h1>
-        </div>
+    <!-- ═══ TAB: TODAY ═══ -->
+    <div id="tab-today" class="tab-panel active">
+      <div class="panel-eyebrow">Dashboard</div>
+      <h1 class="panel-heading">Welcome back, <span id="welcomeName" style="color:var(--gold)">Athlete</span>.</h1>
 
-        <div class="dashboard-grid">
-          <!-- MAIN COLUMN -->
-          <div class="dashboard-main">
-
-            <!-- THIS WEEK -->
-            <div class="card card-gold">
-              <div class="card-eyebrow">This Week</div>
-              <div class="card-title">
-                <svg style="width:20px;height:20px"><use href="#icon-workout"/></svg>
-                Assigned Workout
-              </div>
-              <div id="workoutContent">
-                <div class="workout-empty">No workout assigned yet. Check back soon.</div>
-              </div>
-            </div>
-
-            <!-- LOG WORKOUT -->
-            <div class="card">
-              <div class="card-eyebrow">Session Feedback</div>
-              <div class="card-title">
-                <svg style="width:20px;height:20px"><use href="#icon-checkin"/></svg>
-                Log Completed Workout
-              </div>
-              <form id="logWorkoutForm" onsubmit="submitWorkoutLog(event)">
-                <div class="checkin-grid">
-                  <div class="rating-group">
-                    <label class="form-label">RPE (1–10)</label>
-                    <input class="form-input" type="number" id="logRpe" placeholder="e.g. 7" min="1" max="10" />
-                  </div>
-                  <div class="rating-group">
-                    <label class="form-label">Duration (minutes)</label>
-                    <input class="form-input" type="number" id="logDuration" placeholder="e.g. 45" min="1" max="360" />
-                  </div>
-                </div>
-                <div style="margin-top:0.75rem;">
-                  <label class="form-label">Notes</label>
-                  <textarea class="form-input" id="logNotes" placeholder="How did it feel? PRs, struggles, observations..." style="min-height:80px;resize:vertical;"></textarea>
-                </div>
-                <button class="btn-submit" type="submit" id="logWorkoutBtn" style="margin-top:1rem;">Log Workout</button>
-                <div id="logWorkoutMsg" style="margin-top:0.75rem;font-size:0.85rem;color:var(--gold);display:none;"></div>
-              </form>
-            </div>
-
-            <!-- WEEKLY CHECK-IN -->
-            <div class="card">
-              <div class="card-eyebrow">Weekly Report</div>
-              <div class="card-title">
-                <svg style="width:20px;height:20px"><use href="#icon-checkin"/></svg>
-                Weekly Check-in
-              </div>
-              <form id="checkinForm" onsubmit="submitCheckin(event)">
-                <div class="checkin-grid">
-                  <div class="rating-group">
-                    <label>Training Adherence</label>
-                    <div class="rating-row" id="rating-training">
-                      <button type="button" class="rating-btn" data-val="1" onclick="setRating('training',1)">1</button>
-                      <button type="button" class="rating-btn" data-val="2" onclick="setRating('training',2)">2</button>
-                      <button type="button" class="rating-btn" data-val="3" onclick="setRating('training',3)">3</button>
-                      <button type="button" class="rating-btn" data-val="4" onclick="setRating('training',4)">4</button>
-                      <button type="button" class="rating-btn" data-val="5" onclick="setRating('training',5)">5</button>
-                    </div>
-                  </div>
-                  <div class="rating-group">
-                    <label>Sleep Quality</label>
-                    <div class="rating-row" id="rating-sleep">
-                      <button type="button" class="rating-btn" onclick="setRating('sleep',1)">1</button>
-                      <button type="button" class="rating-btn" onclick="setRating('sleep',2)">2</button>
-                      <button type="button" class="rating-btn" onclick="setRating('sleep',3)">3</button>
-                      <button type="button" class="rating-btn" onclick="setRating('sleep',4)">4</button>
-                      <button type="button" class="rating-btn" onclick="setRating('sleep',5)">5</button>
-                    </div>
-                  </div>
-                  <div class="rating-group">
-                    <label>Stress Level</label>
-                    <div class="rating-row" id="rating-stress">
-                      <button type="button" class="rating-btn" onclick="setRating('stress',1)">1</button>
-                      <button type="button" class="rating-btn" onclick="setRating('stress',2)">2</button>
-                      <button type="button" class="rating-btn" onclick="setRating('stress',3)">3</button>
-                      <button type="button" class="rating-btn" onclick="setRating('stress',4)">4</button>
-                      <button type="button" class="rating-btn" onclick="setRating('stress',5)">5</button>
-                    </div>
-                  </div>
-                  <div class="rating-group">
-                    <label>Energy Level</label>
-                    <div class="rating-row" id="rating-energy">
-                      <button type="button" class="rating-btn" onclick="setRating('energy',1)">1</button>
-                      <button type="button" class="rating-btn" onclick="setRating('energy',2)">2</button>
-                      <button type="button" class="rating-btn" onclick="setRating('energy',3)">3</button>
-                      <button type="button" class="rating-btn" onclick="setRating('energy',4)">4</button>
-                      <button type="button" class="rating-btn" onclick="setRating('energy',5)">5</button>
-                    </div>
-                  </div>
-                </div>
-                <div class="checkin-notes">
-                  <label class="form-label">Notes for Coach</label>
-                  <textarea class="form-input" id="checkinNotes" placeholder="Anything notable this week? Injuries, schedule changes, how sessions felt..."></textarea>
-                </div>
-                <button class="btn-submit" type="submit" id="checkinBtn">Submit Check-in</button>
-                <div id="checkinMsg" style="margin-top:0.75rem;font-size:0.85rem;color:var(--gold);display:none;"></div>
-              </form>
-            </div>
-
-            <!-- MESSAGES -->
-            <div class="card">
-              <div class="card-eyebrow">Communication</div>
-              <div class="card-title">
-                <svg style="width:20px;height:20px"><use href="#icon-message"/></svg>
-                Messages
-              </div>
-              <div class="message-thread" id="messageThread">
-                <div style="color:var(--text-muted);font-size:0.88rem;font-style:italic;">No messages yet.</div>
-              </div>
-              <div class="message-input-row">
-                <input class="form-input" type="text" id="messageInput" placeholder="Send a message to your coach..." />
-                <button class="btn-send" onclick="sendMessage()">Send</button>
-              </div>
-            </div>
-
+      <div class="two-col">
+        <div>
+          <!-- ASSIGNED WORKOUT -->
+          <div class="card card-gold">
+            <div class="card-eyebrow">This Week</div>
+            <div class="card-title"><svg style="width:18px;height:18px"><use href="#icon-workout"/></svg> Assigned Workout</div>
+            <div id="workoutContent"><p class="empty-state">No workout assigned yet. Check back soon.</p></div>
           </div>
 
-          <!-- SIDEBAR -->
-          <div class="dashboard-sidebar">
+          <!-- QUICK GOAL SNAPSHOT -->
+          <div class="card">
+            <div class="card-eyebrow">Your Phase</div>
+            <div class="card-title"><svg style="width:18px;height:18px"><use href="#icon-goal"/></svg> Active Goal</div>
+            <div id="todayGoalContent"><p class="empty-state">No active goal assigned yet.</p></div>
+          </div>
+        </div>
 
-            <!-- PROGRESS SNAPSHOT -->
-            <div class="card card-gold">
-              <div class="card-eyebrow">Progress</div>
-              <div class="card-title">
-                <svg style="width:20px;height:20px"><use href="#icon-metrics"/></svg>
-                Snapshot
-              </div>
-              <div class="metric-row" id="progressMetrics">
-                <div class="metric-item">
-                  <span class="metric-label">Current Weight</span>
-                  <span class="metric-value" id="metricWeight">N/A</span>
-                </div>
-                <div class="metric-item">
-                  <span class="metric-label">Last Check-in</span>
-                  <span class="metric-value" id="metricLastCheckin" style="font-size:1rem;">N/A</span>
-                </div>
-                <div class="metric-item">
-                  <span class="metric-label">Sessions This Week</span>
-                  <span class="metric-value" id="metricSessions">0</span>
-                </div>
-              </div>
-              <div style="margin-top:1.5rem;text-align:center;">
-                <img src="./watch-premium.png" alt="AT0M FIT Training Metrics" style="width:100%;max-width:200px;border-radius:4px;opacity:0.85;" />
-              </div>
+        <div>
+          <!-- PROGRESS SNAPSHOT -->
+          <div class="card card-gold">
+            <div class="card-eyebrow">Progress</div>
+            <div class="card-title"><svg style="width:18px;height:18px"><use href="#icon-metrics"/></svg> Snapshot</div>
+            <div class="metric-row">
+              <div class="metric-item"><span class="metric-label">Current Weight</span><span class="metric-value" id="metricWeight">N/A</span></div>
+              <div class="metric-item"><span class="metric-label">Last Check-in</span><span class="metric-value" id="metricLastCheckin" style="font-size:1rem">N/A</span></div>
+              <div class="metric-item"><span class="metric-label">Sessions This Week</span><span class="metric-value" id="metricSessions">0</span></div>
             </div>
+          </div>
 
-            <!-- COACH NOTES -->
-            <div class="card">
-              <div class="card-eyebrow">From Your Coach</div>
-              <div class="card-title">
-                <svg style="width:20px;height:20px"><use href="#icon-notes"/></svg>
-                Coach Notes
-              </div>
-              <div id="coachNotes">
-                <p class="notes-empty">No notes yet. Check back after your first week.</p>
-              </div>
-            </div>
-
+          <!-- COACH NOTES -->
+          <div class="card">
+            <div class="card-eyebrow">From Your Coach</div>
+            <div class="card-title"><svg style="width:18px;height:18px"><use href="#icon-notes"/></svg> Coach Notes</div>
+            <div id="coachNotes"><p class="empty-state">No notes yet. Check back after your first week.</p></div>
           </div>
         </div>
       </div>
-
-      <footer class="portal-footer">
-        <span>&#169; 2025 Levi Operations LLC.</span>
-        &nbsp;&nbsp;
-        <a href="/">AT0M FIT Home</a>
-        &nbsp;&nbsp;
-        <a href="/training">Custom Training</a>
-      </footer>
     </div>
+
+    <!-- ═══ TAB: WORKOUTS ═══ -->
+    <div id="tab-workouts" class="tab-panel">
+      <div class="panel-eyebrow">Training</div>
+      <h2 class="panel-heading">Workouts</h2>
+
+      <!-- ASSIGNED WORKOUT -->
+      <div class="card card-gold">
+        <div class="card-eyebrow">This Week</div>
+        <div class="card-title"><svg style="width:18px;height:18px"><use href="#icon-workout"/></svg> Assigned Workout</div>
+        <div id="workoutContentB"><p class="empty-state">No workout assigned yet. Check back soon.</p></div>
+      </div>
+
+      <!-- LOG WORKOUT -->
+      <div class="card">
+        <div class="card-eyebrow">Session Feedback</div>
+        <div class="card-title"><svg style="width:18px;height:18px"><use href="#icon-checkin"/></svg> Log Completed Workout</div>
+        <form id="logWorkoutForm" onsubmit="submitWorkoutLog(event)">
+          <div class="two-col">
+            <div class="form-group">
+              <label class="form-label">RPE (1–10)</label>
+              <input class="form-input" type="number" id="logRpe" placeholder="e.g. 7" min="1" max="10" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Duration (minutes)</label>
+              <input class="form-input" type="number" id="logDuration" placeholder="e.g. 45" min="1" max="360" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Notes</label>
+            <textarea class="form-input" id="logNotes" placeholder="How did it feel? PRs, struggles, observations..."></textarea>
+          </div>
+          <button class="btn-submit" type="submit" id="logWorkoutBtn">Log Workout</button>
+          <div class="inline-ok" id="logWorkoutMsg">Workout logged. Keep going.</div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ═══ TAB: NUTRITION ═══ -->
+    <div id="tab-nutrition" class="tab-panel">
+      <div class="panel-eyebrow">Fuel</div>
+      <h2 class="panel-heading">Nutrition Plan</h2>
+      <div id="nutritionContent"><p class="empty-state">No nutrition plan assigned yet. Check back after your next coaching session.</p></div>
+    </div>
+
+    <!-- ═══ TAB: CALENDAR ═══ -->
+    <div id="tab-calendar" class="tab-panel">
+      <div class="panel-eyebrow">Schedule</div>
+      <h2 class="panel-heading">Weekly Calendar</h2>
+
+      <div class="cal-filter-row">
+        <button class="cal-filter-btn active" onclick="setCalFilter('all', this)">All</button>
+        <button class="cal-filter-btn" onclick="setCalFilter('workout', this)">Workouts</button>
+        <button class="cal-filter-btn" onclick="setCalFilter('nutrition', this)">Nutrition</button>
+        <button class="cal-filter-btn" onclick="setCalFilter('recovery', this)">Recovery</button>
+      </div>
+
+      <div id="calendarContent">
+        <div class="cal-week" id="calWeek"></div>
+      </div>
+    </div>
+
+    <!-- ═══ TAB: GOALS ═══ -->
+    <div id="tab-goals" class="tab-panel">
+      <div class="panel-eyebrow">Phase Tracker</div>
+      <h2 class="panel-heading">Goal Tracker</h2>
+      <div id="goalContent"><p class="empty-state">No active goal assigned yet. Your coach will set your phase after onboarding.</p></div>
+    </div>
+
+    <!-- ═══ TAB: PHOTOS ═══ -->
+    <div id="tab-photos" class="tab-panel">
+      <div class="panel-eyebrow">Visual Progress</div>
+      <h2 class="panel-heading">Progress Photos</h2>
+
+      <!-- UPLOAD FORM -->
+      <div class="card">
+        <div class="card-eyebrow">New Upload</div>
+        <div class="card-title"><svg style="width:18px;height:18px"><use href="#icon-photo"/></svg> Upload Progress Photo</div>
+
+        <div class="form-group">
+          <label class="form-label">Photo Type</label>
+          <div class="photo-type-row">
+            <button type="button" class="photo-type-btn selected" onclick="selectPhotoType('front', this)">Front</button>
+            <button type="button" class="photo-type-btn" onclick="selectPhotoType('side', this)">Side</button>
+            <button type="button" class="photo-type-btn" onclick="selectPhotoType('back', this)">Back</button>
+            <button type="button" class="photo-type-btn" onclick="selectPhotoType('other', this)">Other</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Photo Date</label>
+          <input class="form-input" type="date" id="photoDate" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Photo File</label>
+          <input class="form-input" type="file" id="photoFile" accept="image/*" style="padding:0.6rem 1rem;" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Notes (optional)</label>
+          <textarea class="form-input" id="photoNotes" placeholder="Any context, weight on this day, how you felt..."></textarea>
+        </div>
+
+        <button class="btn-submit" id="photoUploadBtn" onclick="uploadProgressPhoto()">Upload Photo</button>
+        <div class="inline-ok" id="photoUploadMsg">Photo uploaded successfully.</div>
+        <div id="photoUploadErr" style="color:var(--red);font-size:0.82rem;margin-top:0.75rem;display:none;"></div>
+      </div>
+
+      <!-- PHOTO HISTORY -->
+      <div class="card">
+        <div class="card-eyebrow">History</div>
+        <div class="card-title"><svg style="width:18px;height:18px"><use href="#icon-photo"/></svg> Previous Photos</div>
+        <div id="photoHistory"><p class="empty-state">No progress photos uploaded yet.</p></div>
+      </div>
+    </div>
+
+    <!-- ═══ TAB: MESSAGES ═══ -->
+    <div id="tab-messages" class="tab-panel">
+      <div class="panel-eyebrow">Communication</div>
+      <h2 class="panel-heading">Messages</h2>
+      <div class="card">
+        <div class="message-thread" id="messageThread">
+          <p class="empty-state">No messages yet.</p>
+        </div>
+        <div class="message-input-row">
+          <input class="form-input" type="text" id="messageInput" placeholder="Send a message to your coach..." />
+          <button class="btn-send" onclick="sendMessage()">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ TAB: CHECK-IN ═══ -->
+    <div id="tab-checkin" class="tab-panel">
+      <div class="panel-eyebrow">Weekly Report</div>
+      <h2 class="panel-heading">Weekly Check-In</h2>
+      <div class="card">
+        <form id="checkinForm" onsubmit="submitCheckin(event)">
+          <div class="rating-grid">
+            <div class="rating-group">
+              <label>Training Adherence</label>
+              <div class="rating-row" id="rating-training">
+                <button type="button" class="rating-btn" onclick="setRating('training',1)">1</button>
+                <button type="button" class="rating-btn" onclick="setRating('training',2)">2</button>
+                <button type="button" class="rating-btn" onclick="setRating('training',3)">3</button>
+                <button type="button" class="rating-btn" onclick="setRating('training',4)">4</button>
+                <button type="button" class="rating-btn" onclick="setRating('training',5)">5</button>
+              </div>
+            </div>
+            <div class="rating-group">
+              <label>Sleep Quality</label>
+              <div class="rating-row" id="rating-sleep">
+                <button type="button" class="rating-btn" onclick="setRating('sleep',1)">1</button>
+                <button type="button" class="rating-btn" onclick="setRating('sleep',2)">2</button>
+                <button type="button" class="rating-btn" onclick="setRating('sleep',3)">3</button>
+                <button type="button" class="rating-btn" onclick="setRating('sleep',4)">4</button>
+                <button type="button" class="rating-btn" onclick="setRating('sleep',5)">5</button>
+              </div>
+            </div>
+            <div class="rating-group">
+              <label>Stress Level</label>
+              <div class="rating-row" id="rating-stress">
+                <button type="button" class="rating-btn" onclick="setRating('stress',1)">1</button>
+                <button type="button" class="rating-btn" onclick="setRating('stress',2)">2</button>
+                <button type="button" class="rating-btn" onclick="setRating('stress',3)">3</button>
+                <button type="button" class="rating-btn" onclick="setRating('stress',4)">4</button>
+                <button type="button" class="rating-btn" onclick="setRating('stress',5)">5</button>
+              </div>
+            </div>
+            <div class="rating-group">
+              <label>Energy Level</label>
+              <div class="rating-row" id="rating-energy">
+                <button type="button" class="rating-btn" onclick="setRating('energy',1)">1</button>
+                <button type="button" class="rating-btn" onclick="setRating('energy',2)">2</button>
+                <button type="button" class="rating-btn" onclick="setRating('energy',3)">3</button>
+                <button type="button" class="rating-btn" onclick="setRating('energy',4)">4</button>
+                <button type="button" class="rating-btn" onclick="setRating('energy',5)">5</button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Notes for Coach</label>
+            <textarea class="form-input" id="checkinNotes" placeholder="Anything notable this week? Injuries, schedule changes, how sessions felt..."></textarea>
+          </div>
+          <button class="btn-submit" type="submit" id="checkinBtn">Submit Check-in</button>
+          <div class="inline-ok" id="checkinMsg">Check-in submitted. Your coach will review it.</div>
+        </form>
+      </div>
+    </div>
+
+    <footer class="portal-footer">
+      <span>&copy; 2026 Levi Operations LLC.</span>
+      &nbsp;&nbsp;<a href="/">AT0M FIT Home</a>
+      &nbsp;&nbsp;<a href="/training">Custom Training</a>
+    </footer>
   </div>
 
   <!-- Supabase JS -->
@@ -856,51 +540,45 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtnb3pkZGN1dGF6cHFtZmJ6YWZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzOTMxOTYsImV4cCI6MjA4ODk2OTE5Nn0.aTi5ZXQi5zSTGb-xQyotF07Tcur5yizux3J8oNejRfE'
     );
 
-    // Workout log state
+    // ── STATE ──
+    let currentUser = null;
+    let currentClientName = '';
     let currentAssignedWorkoutId = null;
-
-    // Rating state
+    let selectedPhotoType = 'front';
+    let calFilter = 'all';
+    let weeklyPlanItems = [];
     const ratings = { training: 0, sleep: 0, stress: 0, energy: 0 };
 
-    function setRating(category, val) {
-      ratings[category] = val;
-      const btns = document.querySelectorAll(`#rating-${category} .rating-btn`);
-      btns.forEach(btn => {
-        btn.classList.toggle('selected', parseInt(btn.getAttribute('onclick').match(/\d+/)[0]) === val ||
-          parseInt(btn.textContent) === val);
-      });
-      // simpler approach:
-      document.querySelectorAll(`#rating-${category} .rating-btn`).forEach(btn => {
-        btn.classList.toggle('selected', parseInt(btn.textContent) === val);
-      });
+    // ── TAB NAVIGATION ──
+    function showTab(tab) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      const panel = document.getElementById(`tab-${tab}`);
+      if (panel) panel.classList.add('active');
+      const btns = document.querySelectorAll('.tab-btn');
+      btns.forEach(b => { if (b.getAttribute('onclick')?.includes(`'${tab}'`)) b.classList.add('active'); });
     }
 
-    // LOGIN
+    // ── AUTH ──
     async function handleLogin(e) {
       e.preventDefault();
       const btn = document.getElementById('loginBtn');
       const errEl = document.getElementById('loginError');
-      btn.disabled = true;
-      btn.textContent = 'Signing in...';
+      btn.disabled = true; btn.textContent = 'Signing in...';
       errEl.style.display = 'none';
-
-      const email = document.getElementById('loginEmail').value.trim();
-      const pass = document.getElementById('loginPassword').value;
-
-      const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
-
+      const { data, error } = await sb.auth.signInWithPassword({
+        email: document.getElementById('loginEmail').value.trim(),
+        password: document.getElementById('loginPassword').value
+      });
       if (error) {
         errEl.textContent = 'Invalid email or password. Please try again.';
         errEl.style.display = 'block';
-        btn.disabled = false;
-        btn.textContent = 'Sign In';
+        btn.disabled = false; btn.textContent = 'Sign In';
         return;
       }
-
       showDashboard(data.user);
     }
 
-    // LOGOUT
     async function handleLogout() {
       await sb.auth.signOut();
       document.getElementById('dashboardView').classList.remove('active');
@@ -908,36 +586,54 @@
       document.getElementById('loginForm').reset();
     }
 
-    // SHOW DASHBOARD
     async function showDashboard(user) {
+      currentUser = user;
       document.getElementById('loginView').classList.remove('active');
       document.getElementById('dashboardView').classList.add('active');
       document.getElementById('loadingState').style.display = 'block';
-      document.getElementById('dashboardContent').style.display = 'none';
-
-      await loadDashboardData(user);
-
+      document.querySelectorAll('.tab-panel').forEach(p => p.style.display = 'none');
+      await loadAllData(user);
       document.getElementById('loadingState').style.display = 'none';
-      document.getElementById('dashboardContent').style.display = 'block';
+      document.querySelectorAll('.tab-panel').forEach(p => p.style.display = '');
+      showTab('today');
+      document.getElementById('photoDate').value = new Date().toISOString().split('T')[0];
+      renderCalendar();
     }
 
-    // LOAD DATA
-    async function loadDashboardData(user) {
+    // ── LOAD ALL DATA ──
+    async function loadAllData(user) {
       const uid = user.id;
+      await Promise.all([
+        loadProfile(uid),
+        loadWorkout(uid),
+        loadCheckinMeta(uid),
+        loadSessions(uid),
+        loadWeight(uid),
+        loadCoachNotes(uid),
+        loadMessages(uid),
+        loadNutritionPlan(uid),
+        loadGoal(uid),
+        loadWeeklyPlan(uid),
+        loadPhotoHistory(uid)
+      ]);
+    }
 
-      // Client profile
+    async function loadProfile(uid) {
       try {
-        const { data: clientData } = await sb.from('clients').select('full_name').eq('id', uid).single();
-        const name = clientData?.full_name || user.email.split('@')[0];
+        const { data } = await sb.from('clients').select('full_name').eq('id', uid).single();
+        const name = data?.full_name || currentUser.email.split('@')[0];
+        currentClientName = name;
         document.getElementById('navClientName').textContent = name;
         document.getElementById('welcomeName').textContent = name;
-      } catch (e) {
-        const fallback = user.email.split('@')[0];
-        document.getElementById('navClientName').textContent = fallback;
-        document.getElementById('welcomeName').textContent = fallback;
+      } catch(e) {
+        const fb = currentUser.email.split('@')[0];
+        currentClientName = fb;
+        document.getElementById('navClientName').textContent = fb;
+        document.getElementById('welcomeName').textContent = fb;
       }
+    }
 
-      // This week's workout
+    async function loadWorkout(uid) {
       try {
         const today = new Date().toISOString().split('T')[0];
         const weekStart = getWeekStart(new Date());
@@ -953,239 +649,413 @@
         if (awData && awData.length > 0 && awData[0].workouts) {
           currentAssignedWorkoutId = awData[0].id;
           const w = awData[0].workouts;
-          document.getElementById('workoutContent').innerHTML = `
+          const html = `
             <div class="workout-card-inner">
               <span class="workout-type-badge">${w.type || 'Training'}</span>
-              <div class="workout-name">${w.name}</div>
+              <div class="workout-name">${esc(w.name)}</div>
               <div class="workout-meta">${awData[0].assigned_date}${w.duration_minutes ? ' &middot; ' + w.duration_minutes + ' min' : ''}</div>
-              ${w.instructions ? '<div class="workout-instructions">' + w.instructions + '</div>' : ''}
-            </div>
-          `;
+              ${w.instructions ? '<div class="workout-instructions">' + esc(w.instructions) + '</div>' : ''}
+            </div>`;
+          const elA = document.getElementById('workoutContent');
+          const elB = document.getElementById('workoutContentB');
+          if (elA) elA.innerHTML = html;
+          if (elB) elB.innerHTML = html;
         }
-      } catch (e) { /* no workout found */ }
-
-      // Last check-in
-      try {
-        const { data: ciData } = await sb
-          .from('checkins')
-          .select('submitted_at, week_of')
-          .eq('client_id', uid)
-          .order('created_at', { ascending: false })
-          .limit(1);
-
-        if (ciData && ciData.length > 0) {
-          // submitted_at may be null — fall back to week_of
-          const raw = ciData[0].submitted_at || ciData[0].week_of;
-          if (raw) {
-            const d = new Date(raw);
-            document.getElementById('metricLastCheckin').textContent =
-              d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-          }
-        }
-      } catch (e) { /* no checkins */ }
-
-      // Sessions this week
-      try {
-        const weekStart = getWeekStart(new Date());
-        const { data: sessData } = await sb
-          .from('assigned_workouts')
-          .select('id')
-          .eq('client_id', uid)
-          .eq('completed', true)
-          .gte('assigned_date', weekStart);
-
-        if (sessData) {
-          document.getElementById('metricSessions').textContent = sessData.length;
-        }
-      } catch (e) { /* default 0 */ }
-
-      // Latest weight
-      try {
-        const { data: metData } = await sb
-          .from('progress_metrics')
-          .select('weight_lbs')
-          .eq('client_id', uid)
-          .order('recorded_date', { ascending: false })
-          .limit(1);
-
-        if (metData && metData.length > 0 && metData[0].weight_lbs) {
-          document.getElementById('metricWeight').textContent = metData[0].weight_lbs + ' lbs';
-        }
-      } catch (e) { /* no metrics */ }
-
-      // Coach notes
-      try {
-        const { data: notesData } = await sb
-          .from('coach_notes')
-          .select('note, created_at')
-          .eq('client_id', uid)
-          .eq('is_visible_to_client', true)
-          .order('created_at', { ascending: false })
-          .limit(5);
-
-        if (notesData && notesData.length > 0) {
-          document.getElementById('coachNotes').innerHTML = notesData.map(n => `
-            <div class="note-item">
-              <div class="note-text">${escHtml(n.note)}</div>
-              <div class="note-date">${new Date(n.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
-            </div>
-          `).join('');
-        }
-      } catch (e) { /* no notes */ }
-
-      // Messages
-      await loadMessages(uid);
+      } catch(e) {}
     }
 
-    // MESSAGES
+    async function loadCheckinMeta(uid) {
+      try {
+        const { data } = await sb.from('checkins').select('submitted_at,week_of').eq('client_id', uid).order('created_at', { ascending: false }).limit(1);
+        if (data && data.length > 0) {
+          const raw = data[0].submitted_at || data[0].week_of;
+          if (raw) document.getElementById('metricLastCheckin').textContent = new Date(raw).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+      } catch(e) {}
+    }
+
+    async function loadSessions(uid) {
+      try {
+        const weekStart = getWeekStart(new Date());
+        const { data } = await sb.from('assigned_workouts').select('id').eq('client_id', uid).eq('completed', true).gte('assigned_date', weekStart);
+        if (data) document.getElementById('metricSessions').textContent = data.length;
+      } catch(e) {}
+    }
+
+    async function loadWeight(uid) {
+      try {
+        const { data } = await sb.from('progress_metrics').select('weight_lbs').eq('client_id', uid).order('recorded_date', { ascending: false }).limit(1);
+        if (data && data.length > 0 && data[0].weight_lbs) document.getElementById('metricWeight').textContent = data[0].weight_lbs + ' lbs';
+      } catch(e) {}
+    }
+
+    async function loadCoachNotes(uid) {
+      try {
+        const { data } = await sb.from('coach_notes').select('note,created_at').eq('client_id', uid).eq('is_visible_to_client', true).order('created_at', { ascending: false }).limit(5);
+        if (data && data.length > 0) {
+          document.getElementById('coachNotes').innerHTML = data.map(n => `
+            <div class="note-item">
+              <div class="note-text">${esc(n.note)}</div>
+              <div class="note-date">${new Date(n.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
+            </div>`).join('');
+        }
+      } catch(e) {}
+    }
+
     async function loadMessages(uid) {
       try {
-        const { data: msgs } = await sb
-          .from('messages')
-          .select('sender, content, created_at')
-          .eq('client_id', uid)
-          .order('created_at', { ascending: true })
-          .limit(50);
-
-        if (msgs && msgs.length > 0) {
-          document.getElementById('messageThread').innerHTML = msgs.map(m => `
+        const { data: msgs } = await sb.from('messages').select('sender,content,created_at').eq('client_id', uid).order('created_at', { ascending: true }).limit(50);
+        const thread = document.getElementById('messageThread');
+        if (msgs && msgs.length > 0 && thread) {
+          thread.innerHTML = msgs.map(m => `
             <div>
-              <div class="message-bubble ${m.sender}">${escHtml(m.content)}</div>
+              <div class="message-bubble ${m.sender}">${esc(m.content)}</div>
               <div class="message-meta" style="text-align:${m.sender === 'client' ? 'right' : 'left'}">
                 ${m.sender === 'coach' ? 'Coach' : 'You'} &middot; ${new Date(m.created_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
               </div>
-            </div>
-          `).join('');
-          const thread = document.getElementById('messageThread');
+            </div>`).join('');
           thread.scrollTop = thread.scrollHeight;
         }
-      } catch (e) { /* no messages */ }
+      } catch(e) {}
     }
 
+    // ── NUTRITION ──
+    async function loadNutritionPlan(uid) {
+      try {
+        const { data } = await sb.from('nutrition_plans').select('*').eq('client_id', uid).eq('is_active', true).order('created_at', { ascending: false }).limit(1);
+        const el = document.getElementById('nutritionContent');
+        if (!data || data.length === 0) {
+          el.innerHTML = '<p class="empty-state">No nutrition plan assigned yet. Check back after your next coaching session.</p>';
+          return;
+        }
+        const p = data[0];
+        el.innerHTML = `
+          <div class="card card-gold">
+            <div class="card-eyebrow">Active Plan</div>
+            <div class="card-title"><svg style="width:18px;height:18px"><use href="#icon-nutrition"/></svg> ${esc(p.title)}</div>
+            <div class="macro-grid">
+              <div class="macro-block"><div class="macro-label">Calories</div><div class="macro-value">${p.calories || '—'}</div><div class="macro-unit">kcal/day</div></div>
+              <div class="macro-block"><div class="macro-label">Protein</div><div class="macro-value">${p.protein_g || '—'}</div><div class="macro-unit">g/day</div></div>
+              <div class="macro-block"><div class="macro-label">Carbs</div><div class="macro-value">${p.carbs_g || '—'}</div><div class="macro-unit">g/day</div></div>
+              <div class="macro-block"><div class="macro-label">Fats</div><div class="macro-value">${p.fats_g || '—'}</div><div class="macro-unit">g/day</div></div>
+            </div>
+            ${p.water_oz ? `<div style="margin-bottom:1rem"><span class="form-label">Water Goal</span><span style="color:var(--text);font-weight:700;margin-left:0.5rem">${p.water_oz} oz/day</span></div>` : ''}
+            ${p.meal_notes ? `<div style="margin-bottom:0.75rem"><div class="form-label">Meal Timing Notes</div><div style="color:var(--grey-light);font-size:0.9rem;line-height:1.6;margin-top:0.25rem">${esc(p.meal_notes)}</div></div>` : ''}
+            ${p.coach_notes ? `<div style="background:var(--surface2);border-left:3px solid var(--gold);padding:0.9rem 1rem;border-radius:0 4px 4px 0;margin-top:1rem"><div class="form-label" style="margin-bottom:0.3rem">Coach Notes</div><div style="color:var(--grey-light);font-size:0.88rem;line-height:1.6">${esc(p.coach_notes)}</div></div>` : ''}
+            ${p.start_date ? `<div style="margin-top:1rem;font-size:0.75rem;color:var(--text-muted)">Plan started: ${p.start_date}${p.end_date ? ' &nbsp;&middot;&nbsp; Ends: ' + p.end_date : ''}</div>` : ''}
+          </div>`;
+      } catch(e) {}
+    }
+
+    // ── GOAL TRACKER ──
+    async function loadGoal(uid) {
+      try {
+        const { data } = await sb.from('client_goals').select('*').eq('client_id', uid).eq('status', 'active').order('created_at', { ascending: false }).limit(1);
+        const el = document.getElementById('goalContent');
+        const el2 = document.getElementById('todayGoalContent');
+        if (!data || data.length === 0) {
+          const empty = '<p class="empty-state">No active goal assigned yet. Your coach will set your phase after onboarding.</p>';
+          if (el) el.innerHTML = empty;
+          if (el2) el2.innerHTML = empty;
+          return;
+        }
+        const g = data[0];
+        const pct = g.phase_percent || 0;
+        const html = `
+          <div class="phase-track">
+            <div class="phase-label-row">
+              <span class="phase-name">${esc(g.current_phase || 'Phase 1')}</span>
+              <span class="phase-pct">${pct}%</span>
+            </div>
+            <div class="phase-bar-wrap"><div class="phase-bar-fill" style="width:${pct}%"></div></div>
+          </div>
+          <div class="goal-detail-row"><span class="goal-detail-label">Goal</span><span class="goal-detail-val">${esc(g.goal_title)}</span></div>
+          ${g.goal_type ? `<div class="goal-detail-row"><span class="goal-detail-label">Type</span><span class="goal-detail-val">${esc(g.goal_type)}</span></div>` : ''}
+          ${g.target_date ? `<div class="goal-detail-row"><span class="goal-detail-label">Target Date</span><span class="goal-detail-val">${g.target_date}</span></div>` : ''}
+          ${g.next_milestone ? `<div class="goal-detail-row"><span class="goal-detail-label">Next Milestone</span><span class="goal-detail-val">${esc(g.next_milestone)}</span></div>` : ''}
+          ${g.coach_note ? `<div style="background:var(--surface2);border-left:3px solid var(--gold);padding:0.9rem 1rem;border-radius:0 4px 4px 0;margin-top:1rem"><div class="form-label" style="margin-bottom:0.25rem">Coach Note</div><div style="color:var(--grey-light);font-size:0.88rem">${esc(g.coach_note)}</div></div>` : ''}`;
+        if (el) el.innerHTML = `<div class="card card-gold">${html}</div>`;
+        if (el2) el2.innerHTML = `<div style="background:var(--surface2);border-radius:4px;padding:1.25rem">${html}</div>`;
+      } catch(e) {}
+    }
+
+    // ── WEEKLY CALENDAR ──
+    async function loadWeeklyPlan(uid) {
+      try {
+        const weekStart = getWeekStart(new Date());
+        const weekEnd = getWeekEnd(new Date());
+        const { data } = await sb.from('weekly_plan_items').select('*').eq('client_id', uid).gte('item_date', weekStart).lte('item_date', weekEnd).order('item_date', { ascending: true });
+        weeklyPlanItems = data || [];
+      } catch(e) { weeklyPlanItems = []; }
+    }
+
+    function setCalFilter(type, btn) {
+      calFilter = type;
+      document.querySelectorAll('.cal-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderCalendar();
+    }
+
+    function renderCalendar() {
+      const weekStart = new Date(getWeekStart(new Date()));
+      const todayStr = new Date().toISOString().split('T')[0];
+      const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+      const el = document.getElementById('calWeek');
+      if (!el) return;
+
+      let html = '';
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(weekStart);
+        d.setDate(d.getDate() + i);
+        const dateStr = d.toISOString().split('T')[0];
+        const isToday = dateStr === todayStr;
+        const items = weeklyPlanItems.filter(item => item.item_date === dateStr && (calFilter === 'all' || item.item_type === calFilter));
+
+        html += `<div class="cal-day${isToday ? ' today' : ''}">
+          <div class="cal-day-label">${days[i]}</div>
+          <div class="cal-day-num">${d.getDate()}</div>
+          ${items.length === 0 ? '' : items.map(item => `<div class="cal-item ${item.item_type}">${esc(item.title)}</div>`).join('')}
+        </div>`;
+      }
+      el.innerHTML = html;
+    }
+
+    // ── PROGRESS PHOTOS ──
+    function selectPhotoType(type, btn) {
+      selectedPhotoType = type;
+      document.querySelectorAll('.photo-type-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    }
+
+    async function loadPhotoHistory(uid) {
+      try {
+        const { data } = await sb.from('progress_photos').select('*').eq('client_id', uid).order('taken_at', { ascending: false }).limit(20);
+        const el = document.getElementById('photoHistory');
+        if (!data || data.length === 0) {
+          el.innerHTML = '<p class="empty-state">No progress photos uploaded yet.</p>';
+          return;
+        }
+        el.innerHTML = `<div class="photo-grid">${data.map(p => `
+          <div class="photo-item">
+            <img src="${p.photo_url}" alt="${p.photo_type}" onerror="this.style.display='none'" />
+            <div class="photo-item-meta">
+              <div class="photo-item-type">${p.photo_type}</div>
+              <div class="photo-item-date">${p.taken_at}</div>
+              ${p.notes ? `<div class="photo-item-notes">${esc(p.notes)}</div>` : ''}
+            </div>
+          </div>`).join('')}</div>`;
+      } catch(e) {}
+    }
+
+    async function uploadProgressPhoto() {
+      const btn = document.getElementById('photoUploadBtn');
+      const fileInput = document.getElementById('photoFile');
+      const dateInput = document.getElementById('photoDate');
+      const notesInput = document.getElementById('photoNotes');
+      const okEl = document.getElementById('photoUploadMsg');
+      const errEl = document.getElementById('photoUploadErr');
+
+      if (!fileInput.files || fileInput.files.length === 0) {
+        errEl.textContent = 'Please select a photo file.';
+        errEl.style.display = 'block'; return;
+      }
+
+      errEl.style.display = 'none';
+      btn.disabled = true; btn.textContent = 'Uploading...';
+
+      const file = fileInput.files[0];
+      const uid = currentUser.id;
+      const ext = file.name.split('.').pop();
+      const path = `${uid}/${selectedPhotoType}_${dateInput.value || new Date().toISOString().split('T')[0]}_${Date.now()}.${ext}`;
+
+      try {
+        // Try Supabase Storage upload
+        const { data: uploadData, error: uploadErr } = await sb.storage.from('progress-photos').upload(path, file, { upsert: false });
+
+        let photoUrl = '';
+        if (uploadErr) {
+          // Storage bucket may not exist — store as data URL fallback note
+          errEl.textContent = `Storage upload failed: ${uploadErr.message}. Run AT0M_FIT_FEATURE_EXPANSION.sql and create the progress-photos bucket in Supabase.`;
+          errEl.style.display = 'block';
+          btn.disabled = false; btn.textContent = 'Upload Photo';
+          return;
+        }
+
+        const { data: urlData } = sb.storage.from('progress-photos').getPublicUrl(path);
+        photoUrl = urlData?.publicUrl || '';
+
+        // Insert record into progress_photos
+        const { error: dbErr } = await sb.from('progress_photos').insert([{
+          client_id: uid,
+          photo_url: photoUrl,
+          photo_type: selectedPhotoType,
+          notes: notesInput.value.trim() || null,
+          taken_at: dateInput.value || new Date().toISOString().split('T')[0]
+        }]);
+
+        if (dbErr) throw dbErr;
+
+        okEl.style.display = 'block';
+        fileInput.value = ''; notesInput.value = '';
+        dateInput.value = new Date().toISOString().split('T')[0];
+        setTimeout(() => { okEl.style.display = 'none'; }, 4000);
+
+        // Reload photo history
+        await loadPhotoHistory(uid);
+
+        // Notify coach
+        notifyCoach('New Progress Photos Uploaded', {
+          type: selectedPhotoType,
+          date: dateInput.value
+        });
+
+      } catch(err) {
+        errEl.textContent = 'Upload failed. Please try again.';
+        errEl.style.display = 'block';
+      } finally {
+        btn.disabled = false; btn.textContent = 'Upload Photo';
+      }
+    }
+
+    // ── SEND MESSAGE ──
     async function sendMessage() {
       const input = document.getElementById('messageInput');
       const content = input.value.trim();
       if (!content) return;
-
-      const { data: { user } } = await sb.auth.getUser();
-      if (!user) return;
-
       input.value = '';
       try {
-        await sb.from('messages').insert([{
-          client_id: user.id,
-          sender: 'client',
-          content: content
-        }]);
-        await loadMessages(user.id);
-      } catch (e) {
-        input.value = content;
-        alert('Could not send message. Please try again.');
-      }
+        await sb.from('messages').insert([{ client_id: currentUser.id, sender: 'client', content }]);
+        await loadMessages(currentUser.id);
+        notifyCoach('New Client Message', { preview: content.substring(0, 80) });
+      } catch(e) { input.value = content; alert('Could not send message.'); }
     }
 
-    // WORKOUT LOG SUBMIT
+    // ── WORKOUT LOG ──
     async function submitWorkoutLog(e) {
       e.preventDefault();
       const btn = document.getElementById('logWorkoutBtn');
-      btn.disabled = true;
-      btn.textContent = 'Logging...';
-
-      const { data: { user } } = await sb.auth.getUser();
-      if (!user) { btn.disabled = false; btn.textContent = 'Log Workout'; return; }
+      btn.disabled = true; btn.textContent = 'Logging...';
 
       const rpe = parseInt(document.getElementById('logRpe').value) || null;
       const duration = parseInt(document.getElementById('logDuration').value) || null;
       const notes = document.getElementById('logNotes').value.trim() || null;
-
-      const payload = { client_id: user.id, notes, rpe, duration_actual: duration };
+      const payload = { client_id: currentUser.id, notes, rpe, duration_actual: duration };
       if (currentAssignedWorkoutId) payload.assigned_workout_id = currentAssignedWorkoutId;
 
       try {
         const { error } = await sb.from('workout_logs').insert([payload]);
         if (error) throw error;
 
-        // Mark assigned workout completed
         if (currentAssignedWorkoutId) {
-          await sb.from('assigned_workouts')
-            .update({ completed: true, completed_at: new Date().toISOString() })
-            .eq('id', currentAssignedWorkoutId);
+          await sb.from('assigned_workouts').update({ completed: true, completed_at: new Date().toISOString() }).eq('id', currentAssignedWorkoutId);
         }
 
         const msg = document.getElementById('logWorkoutMsg');
-        msg.textContent = 'Workout logged. Keep going.';
         msg.style.display = 'block';
         document.getElementById('logWorkoutForm').reset();
-
         const sessEl = document.getElementById('metricSessions');
         if (sessEl) sessEl.textContent = (parseInt(sessEl.textContent) || 0) + 1;
-      } catch (err) {
+        setTimeout(() => { msg.style.display = 'none'; }, 4000);
+
+        notifyCoach('New Workout Log', { rpe: rpe || 'Not set', duration: duration ? duration + ' min' : 'Not set', notes: notes || '' });
+      } catch(err) {
         alert('Could not log workout. Please try again.');
       } finally {
-        btn.disabled = false;
-        btn.textContent = 'Log Workout';
+        btn.disabled = false; btn.textContent = 'Log Workout';
       }
     }
 
-    // CHECKIN SUBMIT
+    // ── CHECK-IN ──
+    function setRating(category, val) {
+      ratings[category] = val;
+      document.querySelectorAll(`#rating-${category} .rating-btn`).forEach(btn => {
+        btn.classList.toggle('selected', parseInt(btn.textContent) === val);
+      });
+    }
+
     async function submitCheckin(e) {
       e.preventDefault();
       const btn = document.getElementById('checkinBtn');
-      btn.disabled = true;
-      btn.textContent = 'Submitting...';
-
-      const { data: { user } } = await sb.auth.getUser();
-      if (!user) return;
-
+      btn.disabled = true; btn.textContent = 'Submitting...';
       const weekOf = getWeekStart(new Date());
-
+      const notes = document.getElementById('checkinNotes').value.trim() || null;
       const payload = {
-        client_id: user.id,
+        client_id: currentUser.id,
         week_of: weekOf,
         training_adherence: ratings.training || null,
         sleep_quality: ratings.sleep || null,
         stress_level: ratings.stress || null,
         energy_level: ratings.energy || null,
-        notes: document.getElementById('checkinNotes').value.trim() || null
+        notes
       };
-
       try {
         const { error } = await sb.from('checkins').insert([payload]);
         if (error) throw error;
-
         const msg = document.getElementById('checkinMsg');
-        msg.textContent = 'Check-in submitted. Your coach will review it.';
         msg.style.display = 'block';
         document.getElementById('checkinNotes').value = '';
         Object.keys(ratings).forEach(k => {
           ratings[k] = 0;
           document.querySelectorAll(`#rating-${k} .rating-btn`).forEach(b => b.classList.remove('selected'));
         });
+        document.getElementById('metricLastCheckin').textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        setTimeout(() => { msg.style.display = 'none'; }, 4000);
 
-        const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        document.getElementById('metricLastCheckin').textContent = today;
-      } catch (err) {
+        notifyCoach('New Client Check-In', {
+          week_of: weekOf,
+          training: ratings.training || 'N/A',
+          sleep: ratings.sleep || 'N/A',
+          stress: ratings.stress || 'N/A',
+          energy: ratings.energy || 'N/A'
+        });
+      } catch(err) {
         alert('Could not submit check-in. Please try again.');
       } finally {
-        btn.disabled = false;
-        btn.textContent = 'Submit Check-in';
+        btn.disabled = false; btn.textContent = 'Submit Check-in';
       }
     }
 
-    // HELPERS
+    // ── COACH NOTIFICATIONS (fire-and-forget) ──
+    async function notifyCoach(eventType, metadata = {}) {
+      try {
+        await fetch('/api/notify-coach', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: eventType,
+            client_name: currentClientName,
+            client_email: currentUser?.email || '',
+            subject: `New AT0M FIT ${eventType}`,
+            summary: `${currentClientName} submitted a ${eventType.toLowerCase()}.`,
+            metadata
+          })
+        });
+      } catch(e) {
+        // Silent — notification failure must never break the client flow
+      }
+    }
+
+    // ── HELPERS ──
     function getWeekStart(date) {
       const d = new Date(date);
       const day = d.getDay();
-      const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Monday
+      const diff = d.getDate() - day + (day === 0 ? -6 : 1);
       d.setDate(diff);
       return d.toISOString().split('T')[0];
     }
 
-    function escHtml(str) {
-      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    function getWeekEnd(date) {
+      const d = new Date(getWeekStart(date));
+      d.setDate(d.getDate() + 6);
+      return d.toISOString().split('T')[0];
     }
 
-    // INIT: check session
+    function esc(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ── INIT ──
     async function init() {
       const { data: { session } } = await sb.auth.getSession();
       if (session?.user) {
@@ -1193,9 +1063,7 @@
       } else {
         document.getElementById('loginView').classList.add('active');
       }
-
-      // Listen for auth changes
-      sb.auth.onAuthStateChange((event, session) => {
+      sb.auth.onAuthStateChange((event) => {
         if (event === 'SIGNED_OUT') {
           document.getElementById('dashboardView').classList.remove('active');
           document.getElementById('loginView').classList.add('active');
@@ -1205,12 +1073,8 @@
 
     init();
 
-    // Allow Enter to send message
     document.getElementById('messageInput')?.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-      }
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
     });
   </script>
 

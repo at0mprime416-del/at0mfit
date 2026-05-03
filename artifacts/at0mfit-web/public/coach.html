@@ -1028,23 +1028,31 @@
       const client = clientsData.find(c => c.id === clientId);
       if (!client) return;
 
-      // Parallel fetches
+      // Parallel fetches — including new feature tables (graceful if missing)
       const [
         { data: programs },
         { data: assignedWorkouts },
         { data: checkins },
         { data: logs },
-        { data: messages }
+        { data: messages },
+        { data: nutritionPlans },
+        { data: clientGoals },
+        { data: weeklyItems },
+        { data: progressPhotos }
       ] = await Promise.all([
         sb.from('programs').select('*').eq('client_id', clientId).order('created_at', { ascending: false }),
         sb.from('assigned_workouts').select('*, workouts(name,day_label,type,duration_minutes,instructions)').eq('client_id', clientId).order('assigned_date', { ascending: false }).limit(20),
         sb.from('checkins').select('week_of,training_adherence,sleep_quality,stress_level,energy_level,notes').eq('client_id', clientId).order('created_at', { ascending: false }).limit(5),
         sb.from('workout_logs').select('logged_at,rpe,duration_actual,notes,assigned_workout_id').eq('client_id', clientId).order('logged_at', { ascending: false }).limit(5),
-        sb.from('messages').select('sender,content,created_at').eq('client_id', clientId).order('created_at', { ascending: true }).limit(50)
+        sb.from('messages').select('sender,content,created_at').eq('client_id', clientId).order('created_at', { ascending: true }).limit(50),
+        sb.from('nutrition_plans').select('*').eq('client_id', clientId).order('created_at', { ascending: false }).limit(1).then(r => r).catch(() => ({ data: null })),
+        sb.from('client_goals').select('*').eq('client_id', clientId).eq('status','active').order('created_at', { ascending: false }).limit(1).then(r => r).catch(() => ({ data: null })),
+        sb.from('weekly_plan_items').select('*').eq('client_id', clientId).gte('item_date', getWeekStartCoach()).lte('item_date', getWeekEndCoach()).order('item_date', { ascending: true }).then(r => r).catch(() => ({ data: null })),
+        sb.from('progress_photos').select('*').eq('client_id', clientId).order('taken_at', { ascending: false }).limit(12).then(r => r).catch(() => ({ data: null }))
       ]);
 
       const panel = document.getElementById('detailPanel');
-      panel.innerHTML = buildDetailHTML(client, programs || [], assignedWorkouts || [], checkins || [], logs || [], messages || []);
+      panel.innerHTML = buildDetailHTML(client, programs || [], assignedWorkouts || [], checkins || [], logs || [], messages || [], nutritionPlans || [], clientGoals || [], weeklyItems || [], progressPhotos || []);
 
       // Scroll message thread to bottom
       const thread = document.getElementById(`msgThread-${clientId}`);
@@ -1062,7 +1070,21 @@
       populateProgramDropdown(clientId, programs || []);
     }
 
-    function buildDetailHTML(client, programs, assignedWorkouts, checkins, logs, messages) {
+    function getWeekStartCoach() {
+      const d = new Date();
+      const day = d.getDay();
+      const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+      d.setDate(diff);
+      return d.toISOString().split('T')[0];
+    }
+
+    function getWeekEndCoach() {
+      const d = new Date(getWeekStartCoach());
+      d.setDate(d.getDate() + 6);
+      return d.toISOString().split('T')[0];
+    }
+
+    function buildDetailHTML(client, programs, assignedWorkouts, checkins, logs, messages, nutritionPlans, clientGoals, weeklyItems, progressPhotos) {
       const sub = client.subscription_status || 'inactive';
       const badgeClass = sub === 'active' ? 'status-active' : sub === 'trial' ? 'status-trial' : 'status-inactive';
 
@@ -1278,6 +1300,203 @@
           </div>
           <div class="inline-msg" id="msgErr-${client.id}"></div>
         </div>
+
+        <!-- ── NUTRITION PLAN ── -->
+        <div class="inner-card" style="margin-top:1.5rem;">
+          <div class="inner-card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+            Nutrition Plan
+          </div>
+          ${nutritionPlans && nutritionPlans.length > 0 ? (() => {
+            const p = nutritionPlans[0];
+            return `<div style="background:var(--surface3);border:1px solid var(--border);border-radius:4px;padding:1rem;margin-bottom:1rem">
+              <div style="font-weight:700;color:var(--text);margin-bottom:0.5rem">${esc(p.title)}</div>
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem;margin-bottom:0.75rem">
+                ${p.calories ? `<div style="text-align:center"><div style="font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em">Cal</div><div style="font-weight:700;color:var(--gold)">${p.calories}</div></div>` : ''}
+                ${p.protein_g ? `<div style="text-align:center"><div style="font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em">Protein</div><div style="font-weight:700;color:var(--gold)">${p.protein_g}g</div></div>` : ''}
+                ${p.carbs_g ? `<div style="text-align:center"><div style="font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em">Carbs</div><div style="font-weight:700;color:var(--gold)">${p.carbs_g}g</div></div>` : ''}
+                ${p.fats_g ? `<div style="text-align:center"><div style="font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em">Fats</div><div style="font-weight:700;color:var(--gold)">${p.fats_g}g</div></div>` : ''}
+              </div>
+              ${p.coach_notes ? `<div style="font-size:0.8rem;color:var(--text-muted);font-style:italic">${esc(p.coach_notes)}</div>` : ''}
+            </div>`;
+          })() : '<p class="empty-state">No nutrition plan assigned yet.</p>'}
+          <span class="new-program-toggle" onclick="toggleSection('nutritionForm-${client.id}')">
+            + ${nutritionPlans && nutritionPlans.length > 0 ? 'Update Nutrition Plan' : 'Create Nutrition Plan'}
+          </span>
+          <div class="new-program-form" id="nutritionForm-${client.id}">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem">
+              <div class="form-group" style="margin-bottom:0;grid-column:1/-1">
+                <label class="form-label">Plan Title</label>
+                <input class="form-input" id="nutTitle-${client.id}" placeholder="e.g. Phase 1 Fat Loss" />
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Calories / day</label>
+                <input class="form-input" type="number" id="nutCal-${client.id}" placeholder="2200" />
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Protein (g)</label>
+                <input class="form-input" type="number" id="nutPro-${client.id}" placeholder="180" />
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Carbs (g)</label>
+                <input class="form-input" type="number" id="nutCarb-${client.id}" placeholder="220" />
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Fats (g)</label>
+                <input class="form-input" type="number" id="nutFat-${client.id}" placeholder="70" />
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Water (oz)</label>
+                <input class="form-input" type="number" id="nutWater-${client.id}" placeholder="100" />
+              </div>
+              <div class="form-group" style="margin-bottom:0;grid-column:1/-1">
+                <label class="form-label">Meal Timing Notes</label>
+                <textarea class="form-input" id="nutMealNotes-${client.id}" placeholder="e.g. Protein within 30 min post-workout..."></textarea>
+              </div>
+              <div class="form-group" style="margin-bottom:0;grid-column:1/-1">
+                <label class="form-label">Coach Notes (visible to client)</label>
+                <textarea class="form-input" id="nutCoachNotes-${client.id}" placeholder="e.g. Focus on whole foods, track with Cronometer..."></textarea>
+              </div>
+            </div>
+            <button class="btn-ghost" onclick="saveNutritionPlan('${client.id}')">Save Nutrition Plan</button>
+            <div class="inline-msg" id="nutMsg-${client.id}"></div>
+          </div>
+        </div>
+
+        <!-- ── GOAL TRACKER ── -->
+        <div class="inner-card" style="margin-top:1.5rem;">
+          <div class="inner-card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+            Goal Tracker
+          </div>
+          ${clientGoals && clientGoals.length > 0 ? (() => {
+            const g = clientGoals[0];
+            const pct = g.phase_percent || 0;
+            return `<div style="background:var(--surface3);border:1px solid var(--border);border-radius:4px;padding:1rem;margin-bottom:1rem">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
+                <div style="font-weight:700;color:var(--text)">${esc(g.goal_title)}</div>
+                <span style="color:var(--gold);font-weight:800">${pct}%</span>
+              </div>
+              <div style="background:var(--surface2);border-radius:99px;height:8px;overflow:hidden;margin-bottom:0.75rem">
+                <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--gold),#D4AF37);border-radius:99px"></div>
+              </div>
+              <div style="font-size:0.78rem;color:var(--text-muted)">Phase: ${esc(g.current_phase || '—')}${g.target_date ? '  &middot;  Target: ' + g.target_date : ''}</div>
+              ${g.next_milestone ? `<div style="font-size:0.8rem;color:var(--grey-light);margin-top:0.35rem">Next: ${esc(g.next_milestone)}</div>` : ''}
+            </div>`;
+          })() : '<p class="empty-state">No goal assigned yet.</p>'}
+          <span class="new-program-toggle" onclick="toggleSection('goalForm-${client.id}')">
+            + ${clientGoals && clientGoals.length > 0 ? 'Update Goal' : 'Set Goal'}
+          </span>
+          <div class="new-program-form" id="goalForm-${client.id}">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem">
+              <div class="form-group" style="margin-bottom:0;grid-column:1/-1">
+                <label class="form-label">Goal Title</label>
+                <input class="form-input" id="goalTitle-${client.id}" placeholder="e.g. Lose 20 lbs, Compete in Ironman..." />
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Goal Type</label>
+                <select class="form-input" id="goalType-${client.id}">
+                  <option value="">Select type</option>
+                  <option value="weight_loss">Weight Loss</option>
+                  <option value="muscle_gain">Muscle Gain</option>
+                  <option value="endurance">Endurance</option>
+                  <option value="performance">Performance</option>
+                  <option value="habit">Habit Formation</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Target Date</label>
+                <input class="form-input" type="date" id="goalDate-${client.id}" />
+              </div>
+              <div class="form-group" style="margin-bottom:0;grid-column:1/-1">
+                <label class="form-label">Current Phase</label>
+                <input class="form-input" id="goalPhase-${client.id}" placeholder="e.g. Base Building, Peak, Taper..." />
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Phase Progress (%)</label>
+                <input class="form-input" type="number" id="goalPct-${client.id}" placeholder="0" min="0" max="100" />
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Next Milestone</label>
+                <input class="form-input" id="goalMilestone-${client.id}" placeholder="e.g. 185 lbs by June 1" />
+              </div>
+              <div class="form-group" style="margin-bottom:0;grid-column:1/-1">
+                <label class="form-label">Coach Note (visible to client)</label>
+                <textarea class="form-input" id="goalNote-${client.id}" placeholder="Encouragement, strategy reminder..."></textarea>
+              </div>
+            </div>
+            <button class="btn-ghost" onclick="saveGoal('${client.id}')">Save Goal</button>
+            <div class="inline-msg" id="goalMsg-${client.id}"></div>
+          </div>
+        </div>
+
+        <!-- ── WEEKLY CALENDAR ── -->
+        <div class="inner-card" style="margin-top:1.5rem;">
+          <div class="inner-card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Weekly Calendar
+          </div>
+          ${!weeklyItems || weeklyItems.length === 0 ? '<p class="empty-state">No items scheduled this week.</p>' :
+            `<div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1rem">
+              ${weeklyItems.map(item => `<div style="display:flex;align-items:center;justify-content:space-between;padding:0.55rem 0.85rem;background:var(--surface3);border:1px solid var(--border);border-radius:4px">
+                <div>
+                  <span style="font-size:0.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:${item.item_type==='workout'?'var(--gold)':item.item_type==='nutrition'?'#4ac97a':'var(--grey-light)'};margin-right:0.5rem">${item.item_type}</span>
+                  <span style="font-size:0.85rem;color:var(--text)">${esc(item.title)}</span>
+                </div>
+                <span style="font-size:0.72rem;color:var(--text-muted);white-space:nowrap">${item.item_date}</span>
+              </div>`).join('')}
+            </div>`
+          }
+          <span class="new-program-toggle" onclick="toggleSection('calForm-${client.id}')">+ Add Calendar Item</span>
+          <div class="new-program-form" id="calForm-${client.id}">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem">
+              <div class="form-group" style="margin-bottom:0;grid-column:1/-1">
+                <label class="form-label">Title</label>
+                <input class="form-input" id="calTitle-${client.id}" placeholder="e.g. Long Run Zone 2, Rest Day, Meal Prep..." />
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Type</label>
+                <select class="form-input" id="calType-${client.id}">
+                  <option value="workout">Workout</option>
+                  <option value="nutrition">Nutrition</option>
+                  <option value="recovery">Recovery</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Date</label>
+                <input class="form-input" type="date" id="calDate-${client.id}" value="${new Date().toISOString().split('T')[0]}" />
+              </div>
+              <div class="form-group" style="margin-bottom:0;grid-column:1/-1">
+                <label class="form-label">Description (optional)</label>
+                <textarea class="form-input" id="calDesc-${client.id}" placeholder="Details for this item..."></textarea>
+              </div>
+            </div>
+            <button class="btn-ghost" onclick="saveCalItem('${client.id}')">Add to Calendar</button>
+            <div class="inline-msg" id="calMsg-${client.id}"></div>
+          </div>
+        </div>
+
+        <!-- ── PROGRESS PHOTOS ── -->
+        <div class="inner-card" style="margin-top:1.5rem;">
+          <div class="inner-card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Progress Photos
+          </div>
+          ${!progressPhotos || progressPhotos.length === 0
+            ? '<p class="empty-state">No progress photos uploaded by this client yet.</p>'
+            : `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:0.75rem">
+                ${progressPhotos.map(p => `<div style="background:var(--surface3);border:1px solid var(--border);border-radius:4px;overflow:hidden">
+                  <img src="${p.photo_url}" alt="${p.photo_type}" style="width:100%;height:120px;object-fit:cover;display:block" onerror="this.style.display='none'" />
+                  <div style="padding:0.4rem 0.6rem">
+                    <div style="font-size:0.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)">${p.photo_type}</div>
+                    <div style="font-size:0.68rem;color:var(--text-muted)">${p.taken_at}</div>
+                    ${p.notes ? `<div style="font-size:0.68rem;color:var(--grey-light);font-style:italic;line-height:1.3;margin-top:0.2rem">${esc(p.notes)}</div>` : ''}
+                  </div>
+                </div>`).join('')}
+              </div>`
+          }
+        </div>
       `;
     }
 
@@ -1442,6 +1661,108 @@
           </div>`).join('');
         thread.scrollTop = thread.scrollHeight;
       }
+    }
+
+    // ──────────────────────────────────────────────
+    // TOGGLE COLLAPSIBLE SECTION
+    // ──────────────────────────────────────────────
+
+    function toggleSection(sectionId) {
+      const el = document.getElementById(sectionId);
+      if (el) el.classList.toggle('open');
+    }
+
+    // ──────────────────────────────────────────────
+    // NUTRITION PLAN
+    // ──────────────────────────────────────────────
+
+    async function saveNutritionPlan(clientId) {
+      const title = document.getElementById(`nutTitle-${clientId}`)?.value.trim();
+      const msgEl = document.getElementById(`nutMsg-${clientId}`);
+      if (!title) { showInlineMsg(msgEl, 'Plan title required.', false); return; }
+
+      const payload = {
+        client_id: clientId,
+        title,
+        calories: parseInt(document.getElementById(`nutCal-${clientId}`)?.value) || null,
+        protein_g: parseInt(document.getElementById(`nutPro-${clientId}`)?.value) || null,
+        carbs_g: parseInt(document.getElementById(`nutCarb-${clientId}`)?.value) || null,
+        fats_g: parseInt(document.getElementById(`nutFat-${clientId}`)?.value) || null,
+        water_oz: parseInt(document.getElementById(`nutWater-${clientId}`)?.value) || null,
+        meal_notes: document.getElementById(`nutMealNotes-${clientId}`)?.value.trim() || null,
+        coach_notes: document.getElementById(`nutCoachNotes-${clientId}`)?.value.trim() || null,
+        is_active: true
+      };
+
+      // Mark any existing active plan inactive first
+      await sb.from('nutrition_plans').update({ is_active: false }).eq('client_id', clientId).eq('is_active', true);
+
+      const { error } = await sb.from('nutrition_plans').insert([payload]);
+      if (error) { showInlineMsg(msgEl, `Failed: ${error.message}`, false); return; }
+
+      showInlineMsg(msgEl, 'Nutrition plan saved.', true);
+      setTimeout(() => loadClientDetail(clientId), 900);
+    }
+
+    // ──────────────────────────────────────────────
+    // GOAL TRACKER
+    // ──────────────────────────────────────────────
+
+    async function saveGoal(clientId) {
+      const title = document.getElementById(`goalTitle-${clientId}`)?.value.trim();
+      const msgEl = document.getElementById(`goalMsg-${clientId}`);
+      if (!title) { showInlineMsg(msgEl, 'Goal title required.', false); return; }
+
+      const payload = {
+        client_id: clientId,
+        goal_title: title,
+        goal_type: document.getElementById(`goalType-${clientId}`)?.value || null,
+        target_date: document.getElementById(`goalDate-${clientId}`)?.value || null,
+        current_phase: document.getElementById(`goalPhase-${clientId}`)?.value.trim() || null,
+        phase_percent: parseInt(document.getElementById(`goalPct-${clientId}`)?.value) || 0,
+        next_milestone: document.getElementById(`goalMilestone-${clientId}`)?.value.trim() || null,
+        coach_note: document.getElementById(`goalNote-${clientId}`)?.value.trim() || null,
+        status: 'active'
+      };
+
+      // Archive existing active goals
+      await sb.from('client_goals').update({ status: 'archived' }).eq('client_id', clientId).eq('status', 'active');
+
+      const { error } = await sb.from('client_goals').insert([payload]);
+      if (error) { showInlineMsg(msgEl, `Failed: ${error.message}`, false); return; }
+
+      showInlineMsg(msgEl, 'Goal saved.', true);
+      setTimeout(() => loadClientDetail(clientId), 900);
+    }
+
+    // ──────────────────────────────────────────────
+    // WEEKLY CALENDAR ITEM
+    // ──────────────────────────────────────────────
+
+    async function saveCalItem(clientId) {
+      const title = document.getElementById(`calTitle-${clientId}`)?.value.trim();
+      const msgEl = document.getElementById(`calMsg-${clientId}`);
+      if (!title) { showInlineMsg(msgEl, 'Title required.', false); return; }
+
+      const itemDate = document.getElementById(`calDate-${clientId}`)?.value;
+      if (!itemDate) { showInlineMsg(msgEl, 'Date required.', false); return; }
+
+      const payload = {
+        client_id: clientId,
+        title,
+        item_type: document.getElementById(`calType-${clientId}`)?.value || 'workout',
+        item_date: itemDate,
+        description: document.getElementById(`calDesc-${clientId}`)?.value.trim() || null,
+        completed: false
+      };
+
+      const { error } = await sb.from('weekly_plan_items').insert([payload]);
+      if (error) { showInlineMsg(msgEl, `Failed: ${error.message}`, false); return; }
+
+      showInlineMsg(msgEl, 'Item added to calendar.', true);
+      document.getElementById(`calTitle-${clientId}`).value = '';
+      document.getElementById(`calDesc-${clientId}`).value = '';
+      setTimeout(() => loadClientDetail(clientId), 900);
     }
 
     // ──────────────────────────────────────────────

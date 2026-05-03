@@ -1,0 +1,622 @@
+AT0M FIT — FULL PREMIUM BUILDOUT SPRINT
+
+We are time-boxed. Replit is free until 00:00. Max out useful progress.
+
+Goal:
+Add every premium feature we have discussed and divide the work into specialist agents/workstreams so multiple parts can be built at once.
+
+Important:
+If Replit supports parallel agents/subtasks, create them.
+If Replit does not support true parallel agents, simulate them as separate workstreams and execute in priority order without mixing responsibilities.
+
+DO NOT:
+- move production off Vercel
+- disable Supabase RLS
+- expose secrets
+- use service role key in frontend
+- redesign the whole brand
+- delete working routes
+- break existing pages
+- hardcode API keys
+- build fake flows without documenting them
+- make medical claims
+- allow AI to give dangerous health, injury, medication, supplement, or eating-disorder advice
+
+CURRENT REQUIRED ROUTES:
+- /
+- /blueprint
+- /calculator
+- /training
+- /portal
+- /coach
+- /community
+
+BRAND RULES:
+- black / charcoal / gold / off-white
+- premium tactical fitness feel
+- Bebas Neue for major headings
+- Inter for body copy
+- no emojis in production UI
+- no weak AI graphics
+- no generic fitness app look
+- keep everything clean, strong, and mobile usable
+
+CREATE THESE SPECIALIST WORKSTREAMS:
+
+AGENT 1 — CORE PORTAL
+Owns client portal upgrades.
+
+Build/update /portal with sections:
+- Today
+- Workouts
+- Nutrition
+- Recovery
+- Weekly Calendar
+- Progress Photos
+- Goal Tracker / Phase Meter
+- Readiness Score
+- Streaks / Consistency
+- Badges
+- Resource Vault
+- Community
+- Ask AT0M
+- Messages
+- Check-In
+
+Client portal must support:
+- login
+- session persistence
+- logout
+- assigned workouts
+- workout logging
+- weekly check-in
+- nutrition plan view
+- recovery assignments
+- progress photo upload UI
+- weekly calendar filters
+- goal/phase display
+- readiness score form
+- streaks and badges display
+- community link
+- Ask AT0M section
+- messages
+
+AGENT 2 — COACH COMMAND CENTER
+Owns /coach.
+
+Build/update /coach with tabs:
+- Today
+- Applications
+- Clients
+- Client Profiles
+- Alerts
+- Programming
+- Nutrition
+- Weekly Calendar
+- Progress Photos
+- Goals/Phases
+- Readiness
+- Weekly Reports
+- Exercise Library
+- Resource Vault
+- Community Moderation
+- Ask AT0M Logs
+- Messages
+- Ops
+
+Coach dashboard must support:
+- coach login
+- only jeshua@levioperations.com allowed
+- non-coach denied
+- applications queue
+- client roster
+- client profile view
+- create program
+- create workout
+- assign workout
+- create nutrition plan
+- assign weekly calendar items
+- update goals/phases
+- view progress photos
+- view readiness scores
+- generate/view weekly reports
+- manage resource vault
+- moderate community posts/comments
+- view Ask AT0M logs
+- view/send messages
+- view coach alerts
+
+AGENT 3 — SUPABASE SCHEMA / RLS
+Owns database setup files.
+
+Create one combined SQL file:
+
+FULL_PREMIUM_BUILDOUT_SETUP.sql
+
+Include tables if missing:
+- progress_photos
+- nutrition_plans
+- weekly_plan_items
+- client_goals
+- community_posts
+- community_comments
+- community_reactions
+- ask_atom_logs
+- client_assessments
+- readiness_scores
+- weekly_reports
+- exercise_library
+- client_badges
+- coach_alerts
+- resource_vault
+
+Keep existing tables:
+- clients
+- programs
+- workouts
+- assigned_workouts
+- workout_logs
+- checkins
+- coach_notes
+- messages
+- progress_metrics
+- subscriptions
+- applications
+
+RLS rules:
+- clients can only see their own private data
+- clients can insert/update their own logs, check-ins, readiness, messages, assessments, and progress photos
+- clients can view approved community posts
+- clients can create their own community posts/comments/reactions
+- clients cannot edit other clients’ data
+- coach email jeshua@levioperations.com can read/update coaching data
+- public users can insert applications only
+- public users cannot read private data
+- public users cannot read applications
+- service role key must not be used in frontend
+
+If storage is needed:
+Create setup notes for Supabase Storage bucket:
+- progress-photos
+- private or authenticated access only
+- client can upload own photos
+- coach can view all
+
+AGENT 4 — COMMUNITY
+Owns /community.
+
+Build /community as client-only.
+
+Features:
+- authenticated client access only
+- create post
+- view approved posts
+- filter posts:
+  - All
+  - Progress
+  - Wins
+  - Questions
+  - Accountability
+  - Milestones
+- optional photo on post
+- comments
+- reactions/likes
+- client can delete own post if allowed
+- coach moderation from /coach
+
+Community rules panel:
+- Encourage, don’t tear down.
+- Share only what you want others to see.
+- No medical advice.
+- No spam.
+- Progress over ego.
+
+Privacy:
+- show display name only, not email
+- private check-ins, weight, logs, and personal data stay private unless client intentionally posts it
+- progress photo sharing is opt-in only
+
+AGENT 5 — ASK AT0M AI
+Owns Ask AT0M.
+
+Add Ask AT0M to:
+- /portal
+- /community
+- /coach as AI activity logs
+
+Client features:
+- ask a question
+- receive encouragement/suggestions
+- view recent Ask AT0M responses
+- graceful fallback if AI key missing
+
+Backend route:
+- POST /api/ask-atom
+
+Env var:
+- OPENAI_API_KEY
+
+If missing:
+- save question to ask_atom_logs
+- show: “Ask AT0M is not configured yet. Your question was saved for coach review.”
+- do not crash
+
+AI rules:
+- encouragement only
+- general coaching support
+- no diagnosis
+- no injury treatment
+- no medication advice
+- no extreme dieting
+- no supplement claims
+- no dangerous dehydration/cutting advice
+- refer to coach/medical professional for pain, dizziness, chest pain, fainting, eating disorder concerns, medication issues, or medical concerns
+
+Answer style:
+- short
+- direct
+- motivating
+- 1 to 3 next steps
+- end with encouragement
+
+Coach dashboard:
+- view Ask AT0M logs
+- filter safety flags
+- see client name and timestamp
+- flag risky responses
+- review questions
+
+AGENT 6 — EMAIL NOTIFICATIONS
+Owns all coach email notifications.
+
+Create or update backend route:
+
+POST /api/notify-coach
+
+Env vars:
+- GMAIL_USER
+- GMAIL_APP_PASSWORD
+- NOTIFICATION_TO_EMAIL
+
+If NOTIFICATION_TO_EMAIL missing, default to:
+jeshua@levioperations.com
+
+Email coach when:
+- waitlist form submitted
+- training application submitted
+- calculator lead submitted if email captured
+- weekly check-in submitted
+- workout log submitted
+- client message submitted
+- progress photo uploaded
+- nutrition check/update submitted
+- community post created
+- community comment created
+- Ask AT0M question submitted
+- Ask AT0M safety flag triggered
+
+If Gmail secrets missing:
+- save data normally
+- show user success
+- log: “Email notification skipped — Gmail secrets missing.”
+- do not crash
+
+Email body should include:
+- event type
+- client name
+- client email if available
+- timestamp
+- quick summary
+- instruction to check /coach
+
+AGENT 7 — CALENDAR / NUTRITION / RECOVERY
+Owns weekly calendar and planning system.
+
+Client calendar:
+- weekly view
+- filters:
+  - Workout
+  - Nutrition
+  - Recovery
+  - All
+- each day shows assigned items
+- completion status
+- clean mobile cards
+
+Coach calendar:
+- assign workout item to date
+- assign nutrition item to date
+- assign recovery item to date
+- view full client week
+- edit/delete assignments if possible
+
+Nutrition:
+- calories
+- protein
+- carbs
+- fats
+- water
+- meal notes
+- coach notes
+- active/inactive plan
+- weekly nutrition focus
+
+Recovery:
+- sleep target
+- mobility assignment
+- rest day instruction
+- recovery notes
+- soreness/stress considerations
+
+AGENT 8 — PROGRESS / GOALS / PHASES
+Owns progress tracking.
+
+Progress photos:
+- front
+- side
+- back
+- other
+- date
+- notes
+- client uploads own
+- coach views by client/date
+
+Goal tracker:
+- goal title
+- goal type
+- current phase
+- phase percent
+- target date
+- next milestone
+- coach note
+- status
+
+Phase meter:
+- Foundation
+- Build
+- Intensify
+- Peak
+- Maintain
+
+Readiness score:
+Inputs:
+- sleep quality 1 to 5
+- soreness 1 to 5
+- stress 1 to 5
+- energy 1 to 5
+- motivation 1 to 5
+
+Output:
+- readiness %
+- recommendation:
+  - train as planned
+  - reduce intensity
+  - recovery focus
+  - contact coach
+
+Streaks:
+- workout streak
+- check-in streak
+- nutrition adherence
+- weekly consistency %
+- monthly consistency %
+
+Badges:
+- First Workout Logged
+- First Week Complete
+- 4 Check-ins Straight
+- 10 Workouts Logged
+- Zone 2 Foundation Built
+- Strength Phase Complete
+
+AGENT 9 — RESOURCE VAULT / EXERCISE LIBRARY
+Owns education content.
+
+Resource Vault categories:
+- Zone 2 guide
+- Warm-up guide
+- Recovery guide
+- Grocery list
+- Meal examples
+- Night shift training tips
+- Mobility basics
+- Supplement caution guide
+- Fasting guide
+- HIIT vs Zone 2 guide
+- Functional strength basics
+
+Exercise Library:
+- exercise name
+- category
+- muscle group
+- equipment
+- instructions
+- form cues
+- video_url placeholder
+- coach notes
+
+Client:
+- view exercise instructions inside workouts
+- view resources
+
+Coach:
+- create/edit resources
+- create/edit exercises
+- attach exercises to workouts later if possible
+
+AGENT 10 — QCMD / TESTING / DOCS
+Owns documentation and final gate.
+
+Create/update:
+- REPLIT_TAKEOVER_STATUS.md
+- REPLIT_NEXT_BUILD_PLAN.md
+- REPLIT_RUNBOOK.md
+- QCMD_REPLIT_GATE.md
+- .env.example
+- FULL_PREMIUM_BUILDOUT_SETUP.sql
+- FULL_PREMIUM_BUILDOUT_STATUS.md
+
+.env.example must include names only:
+- VITE_SUPABASE_URL
+- VITE_SUPABASE_ANON_KEY
+- GMAIL_USER
+- GMAIL_APP_PASSWORD
+- NOTIFICATION_TO_EMAIL
+- OPENAI_API_KEY
+- GUMROAD_ACCESS_TOKEN
+- STRIPE_SECRET_KEY
+- STRIPE_WEBHOOK_SECRET
+- DISCORD_WEBHOOK_URL
+- SUPABASE_SERVICE_ROLE_KEY
+
+No values.
+
+TEST REQUIREMENTS:
+
+Routes:
+- /
+- /blueprint
+- /calculator
+- /training
+- /portal
+- /coach
+- /community
+
+Portal:
+- login
+- session persists
+- logout
+- assigned workouts
+- workout log
+- check-in
+- nutrition
+- calendar filters
+- recovery
+- progress photos UI
+- goal tracker
+- readiness
+- streaks
+- badges
+- resource vault
+- Ask AT0M
+- messages
+
+Coach:
+- login
+- non-coach denied
+- applications
+- clients
+- programs
+- workouts
+- assignments
+- nutrition
+- calendar
+- progress photos
+- goals
+- readiness
+- weekly reports
+- exercise library
+- resource vault
+- community moderation
+- Ask AT0M logs
+- messages
+- ops
+
+Community:
+- unauthenticated denied
+- authenticated client access
+- create post
+- comment
+- react
+- coach moderation
+
+Email:
+- notification route exists
+- missing Gmail secrets handled
+- trigger points documented
+
+AI:
+- backend route exists
+- missing AI key handled
+- logs saved
+- key not exposed to frontend
+
+BUILD PRIORITY IF TIME RUNS OUT:
+1. SQL setup file for all premium tables and RLS
+2. /portal section shells
+3. /coach section shells
+4. /community route
+5. Ask AT0M backend route and UI
+6. notify-coach backend route
+7. weekly calendar filters
+8. nutrition section
+9. progress photos UI
+10. readiness/goal tracker/streaks/badges
+11. resource vault/exercise library
+12. documentation and QCmd gate
+
+FINAL REPORT FORMAT:
+
+STATUS
+- portal upgraded:
+- coach upgraded:
+- community route:
+- Ask AT0M:
+- email notifications:
+- progress photos:
+- nutrition:
+- weekly calendar:
+- recovery:
+- goal tracker:
+- readiness score:
+- streaks/badges:
+- resource vault:
+- exercise library:
+- SQL setup file:
+- service key exposed:
+- RLS disabled:
+- Vercel production touched:
+
+AGENT RESULTS
+- Core Portal:
+- Coach Command Center:
+- Supabase/RLS:
+- Community:
+- Ask AT0M:
+- Email Notifications:
+- Calendar/Nutrition/Recovery:
+- Progress/Goals:
+- Resource/Exercise Library:
+- QCmd/Docs:
+
+FILES CREATED
+- list
+
+FILES CHANGED
+- list
+
+SUPABASE TABLES NEEDED
+- list
+
+ENV VARS NEEDED
+- list names only
+
+OWNER ACTIONS
+- SQL to run:
+- secrets needed:
+- storage bucket setup:
+- payment/API actions:
+- anything else:
+
+TEST RESULTS
+- routes:
+- portal:
+- coach:
+- community:
+- AI:
+- email:
+
+QCMD
+- PASS or FAIL for full premium buildout readiness
+
+Execute now. Create specialist workstreams/agents and build as much as possible before 00:00. Prioritize real structure, SQL, safe wiring, and documentation over cosmetic polish.

@@ -1,0 +1,432 @@
+ADD THESE FEATURES NOW — AT0M FIT PORTAL/COACH BUILDOUT
+
+We are still time-boxed before 00:00. Maximize useful progress.
+
+New required features:
+
+1. Progress pictures
+2. Nutrition plan section
+3. Weekly calendar with filter/toggle:
+   - workout
+   - nutrition
+   - recovery
+   - all three
+4. Goal tracker / phase meter
+5. Email notifications to coach whenever anyone submits info
+
+Do not redesign the brand.
+Do not move production off Vercel.
+Do not expose secrets.
+Do not use service role key in frontend.
+Do not disable RLS.
+Do not break existing routes.
+
+CURRENT ROUTES THAT MUST REMAIN:
+- /
+- /blueprint
+- /calculator
+- /training
+- /portal
+- /coach
+
+PRIMARY GOAL:
+Upgrade /portal and /coach from basic client/coach dashboards into a real online training system.
+
+FEATURE 1 — PROGRESS PICTURES
+
+Client portal /portal:
+Add a “Progress Pictures” section.
+
+Client should be able to:
+- upload front photo
+- upload side photo
+- upload back photo
+- select date
+- add optional notes
+- see previous uploads
+- delete only their own upload if allowed by RLS
+
+Coach dashboard /coach:
+Add a “Progress Pictures” section under each client profile.
+
+Coach should be able to:
+- view client progress photos
+- filter by date
+- compare latest vs previous
+- see notes
+
+Implementation:
+- Use Supabase Storage if possible.
+- Suggested bucket: progress-photos
+- If bucket/policies are not set up, create the UI and create a SQL/setup doc named:
+  PROGRESS_PHOTOS_SETUP.sql
+- Do not block the build if storage needs manual Supabase setup.
+- Add graceful empty state: “No progress photos uploaded yet.”
+
+Suggested table if missing:
+progress_photos
+Fields:
+- id uuid primary key
+- client_id uuid references clients(id)
+- photo_url text
+- photo_type text check front/side/back/other
+- notes text
+- taken_at date
+- created_at timestamptz default now()
+
+FEATURE 2 — NUTRITION PLAN SECTION
+
+Client portal /portal:
+Add a “Nutrition” section.
+
+Client should see:
+- current nutrition plan
+- calories target
+- protein target
+- carbs target
+- fats target
+- water goal
+- meal timing notes
+- coach notes
+- daily/weekly nutrition assignments
+
+Coach dashboard /coach:
+Add “Nutrition Plan” controls under each client.
+
+Coach should be able to:
+- create nutrition plan
+- update calories/macros
+- add meal notes
+- assign nutrition focus for the week
+- mark plan active/inactive
+
+Suggested table if missing:
+nutrition_plans
+Fields:
+- id uuid primary key
+- client_id uuid references clients(id)
+- title text
+- calories integer
+- protein_g integer
+- carbs_g integer
+- fats_g integer
+- water_oz integer
+- meal_notes text
+- coach_notes text
+- is_active boolean default true
+- start_date date
+- end_date date
+- created_at timestamptz default now()
+
+If table is missing:
+- create NUTRITION_PLAN_SETUP.sql
+- build UI with graceful empty state:
+  “No nutrition plan assigned yet.”
+
+FEATURE 3 — WEEKLY CALENDAR
+
+Client portal /portal:
+Add a weekly calendar section.
+
+Calendar must allow user to toggle:
+- Workout only
+- Nutrition only
+- Recovery only
+- All
+
+Calendar should show:
+- each day of the week
+- workout assigned
+- nutrition assignment
+- recovery assignment
+- completion status where available
+
+Coach dashboard /coach:
+Add weekly planning section for each client.
+
+Coach should be able to:
+- assign workout item to a date
+- assign nutrition item to a date
+- assign recovery item to a date
+- view all weekly assignments in one calendar
+
+Suggested table if missing:
+weekly_plan_items
+Fields:
+- id uuid primary key
+- client_id uuid references clients(id)
+- item_date date not null
+- item_type text check workout/nutrition/recovery
+- title text not null
+- description text
+- related_workout_id uuid nullable references workouts(id)
+- completed boolean default false
+- created_at timestamptz default now()
+
+If table is missing:
+- create WEEKLY_PLAN_SETUP.sql
+- build UI with demo-safe empty states and Supabase wiring ready.
+
+FEATURE 4 — GOAL TRACKER / PHASE METER
+
+Client portal /portal:
+Add a “Goal Tracker” or “Phase Meter.”
+
+It should show:
+- current goal
+- current phase
+- phase progress %
+- target date
+- current status
+- next milestone
+- coach note
+
+Examples:
+- Phase 1: Foundation
+- Phase 2: Build
+- Phase 3: Intensify
+- Phase 4: Peak
+- Phase 5: Maintain
+
+Coach dashboard /coach:
+Add controls to set/update:
+- client goal
+- current phase
+- progress percent
+- target date
+- next milestone
+- coach note
+
+Suggested table if missing:
+client_goals
+Fields:
+- id uuid primary key
+- client_id uuid references clients(id)
+- goal_title text
+- goal_type text
+- current_phase text
+- phase_percent integer check between 0 and 100
+- target_date date
+- next_milestone text
+- coach_note text
+- status text default 'active'
+- created_at timestamptz default now()
+- updated_at timestamptz default now()
+
+If table is missing:
+- create GOAL_TRACKER_SETUP.sql
+- build UI with graceful empty state:
+  “No active goal assigned yet.”
+
+FEATURE 5 — EMAIL NOTIFICATIONS TO COACH
+
+Any time a person fills out information, I need an email notification.
+
+Create backend notification support through the existing Express API server.
+
+Use env vars:
+- GMAIL_USER
+- GMAIL_APP_PASSWORD
+- NOTIFICATION_TO_EMAIL
+
+If NOTIFICATION_TO_EMAIL is missing, default to:
+jeshua@levioperations.com
+
+Send coach email notification when these happen:
+1. Waitlist form submitted
+2. Training application submitted
+3. Zone calculator lead submitted, if calculator captures email
+4. Client weekly check-in submitted
+5. Client workout log submitted
+6. Client sends a message
+7. Client uploads progress picture
+8. Coach receives any new client-submitted data
+
+Do not crash if Gmail secrets are missing.
+If missing:
+- insert data into Supabase normally
+- show user success
+- log: “Email notification skipped — Gmail secrets missing.”
+
+Create or update backend route:
+POST /api/notify-coach
+
+Payload:
+- type
+- client_name
+- client_email
+- subject
+- summary
+- metadata
+
+Email format:
+Subject examples:
+- “New AT0M FIT Application”
+- “New Client Check-In”
+- “New Workout Log”
+- “New Client Message”
+- “New Progress Photos Uploaded”
+
+Body should include:
+- event type
+- client name
+- client email
+- time submitted
+- quick summary
+- link/instruction to check /coach
+
+Do not expose Gmail credentials to frontend.
+
+PHASE 6 — SQL MIGRATIONS
+
+If any tables are missing, create one combined SQL file:
+
+AT0M_FIT_FEATURE_EXPANSION.sql
+
+It should include:
+- progress_photos
+- nutrition_plans
+- weekly_plan_items
+- client_goals
+- RLS enable statements
+- client policies
+- coach policies
+- storage bucket notes if required
+
+Do not automatically disable existing policies.
+Do not break existing tables.
+
+RLS rules:
+- client can select/insert/update their own rows only
+- coach email jeshua@levioperations.com can select/insert/update all rows needed for coaching
+- public users cannot read private client data
+- applications remain insert-only for public
+
+PHASE 7 — UI PLACEMENT
+
+In /portal, add tabs or sections:
+- Today
+- Workouts
+- Nutrition
+- Recovery
+- Calendar
+- Progress Photos
+- Goal Tracker
+- Messages
+- Check-In
+
+In /coach, add tabs or sections:
+- Today
+- Applications
+- Clients
+- Programming
+- Nutrition
+- Weekly Calendar
+- Progress Photos
+- Goals/Phases
+- Messages
+- Logs/Check-ins
+- Ops
+
+Keep mobile usable.
+
+PHASE 8 — DOCUMENTATION TO UPDATE
+
+Update:
+- REPLIT_TAKEOVER_STATUS.md
+- REPLIT_NEXT_BUILD_PLAN.md
+- REPLIT_RUNBOOK.md
+- QCMD_REPLIT_GATE.md
+- .env.example
+
+Add env vars to .env.example:
+- GMAIL_USER
+- GMAIL_APP_PASSWORD
+- NOTIFICATION_TO_EMAIL
+
+Create:
+- AT0M_FIT_FEATURE_EXPANSION.sql
+- FEATURE_EXPANSION_STATUS.md
+
+PHASE 9 — TESTING
+
+Test or report status for:
+
+Portal:
+- login
+- assigned workouts
+- nutrition plan visible
+- weekly calendar visible
+- calendar filter works: workout/nutrition/recovery/all
+- goal tracker visible
+- progress photo upload UI visible
+- workout log submit
+- check-in submit
+- message send
+
+Coach:
+- login
+- applications visible
+- clients visible
+- create program
+- create workout
+- assign workout
+- create nutrition plan
+- create weekly calendar item
+- update goal tracker
+- view progress pictures
+- view check-ins
+- view workout logs
+- send message
+
+Email:
+- notify route exists
+- missing Gmail secrets handled gracefully
+- notification triggered after application submit
+- notification triggered after check-in submit
+- notification triggered after workout log submit
+- notification triggered after message submit
+- notification triggered after progress photo upload
+
+FINAL REPORT FORMAT
+
+Return only this structure:
+
+STATUS
+- progress pictures:
+- nutrition plan:
+- weekly calendar:
+- calendar filters:
+- goal tracker / phase meter:
+- coach email notifications:
+- Supabase connected:
+- SQL file created:
+- RLS untouched:
+- service key exposed:
+- Vercel production touched:
+
+FILES CHANGED
+- list files and why
+
+FILES CREATED
+- list files and purpose
+
+SUPABASE TABLES NEEDED
+- list tables confirmed existing
+- list tables requiring SQL setup
+
+OWNER ACTIONS
+- secrets needed
+- SQL to run
+- storage bucket setup needed
+- payment link needed
+
+TEST RESULTS
+- portal:
+- coach:
+- email notification:
+
+QCMD
+- PASS/FAIL for feature expansion readiness
+
+Execute now. Prioritize functional structure, Supabase wiring, and documentation over perfect polish.
