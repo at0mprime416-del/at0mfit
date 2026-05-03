@@ -1,51 +1,34 @@
 /**
  * AT0M FIT — Stripe Product Seed Script
- * 
+ *
  * Creates products and prices in Stripe for:
  *   1. AT0M FIT Blueprint — one-time purchase ($27)
- *   2. AT0M FIT Coaching — monthly subscription ($X — set your price)
- * 
- * Run with: pnpm --filter @workspace/scripts exec tsx src/seed-products.ts
- * 
- * Safe to run multiple times (idempotent check by name).
+ *   2. AT0M FIT Coaching  — monthly subscription (set your price below)
+ *
+ * Run with: pnpm --filter @workspace/scripts run seed-products
+ *
+ * Safe to run multiple times (idempotent — checks by name before creating).
+ * Requires: STRIPE_SECRET_KEY in environment secrets.
  */
 
 import Stripe from 'stripe';
 
-async function getStripeCredentials(): Promise<string> {
-  const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
-  const xReplitToken = process.env.REPL_IDENTITY
-    ? "repl " + process.env.REPL_IDENTITY
-    : process.env.WEB_REPL_RENEWAL
-      ? "depl " + process.env.WEB_REPL_RENEWAL
-      : null;
-
-  if (!hostname || !xReplitToken) {
-    throw new Error('Missing Replit env vars. Run this script inside the Replit environment.');
+function getStripeKey(): string {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) {
+    throw new Error(
+      'STRIPE_SECRET_KEY is not set. Add it in the Replit Secrets tab.'
+    );
   }
-
-  const resp = await fetch(
-    `https://${hostname}/api/v2/connection?include_secrets=true&connector_names=stripe`,
-    {
-      headers: { Accept: 'application/json', X_REPLIT_TOKEN: xReplitToken },
-      signal: AbortSignal.timeout(10_000),
-    }
-  );
-
-  if (!resp.ok) throw new Error(`Failed to fetch Stripe credentials: ${resp.status}`);
-  const data = await resp.json();
-  const key = data.items?.[0]?.settings?.secret_key;
-  if (!key) throw new Error('Stripe integration not connected.');
   return key;
 }
 
 async function seedProducts() {
-  const secretKey = await getStripeCredentials();
-  const stripe = new Stripe(secretKey);
+  const stripe = new Stripe(getStripeKey());
 
-  console.log('Seeding AT0M FIT products...\n');
+  console.log('Seeding AT0M FIT products in Stripe...\n');
 
-  // ── BLUEPRINT (one-time) ────────────────────────────────────────────────────
+  // ── BLUEPRINT (one-time) ───────────────────────────────────────────────────
   const existingBlueprint = await stripe.products.search({
     query: "name:'AT0M FIT Blueprint' AND active:'true'"
   });
@@ -57,17 +40,21 @@ async function seedProducts() {
   } else {
     blueprintProduct = await stripe.products.create({
       name: 'AT0M FIT Blueprint',
-      description: 'The complete Zone 2 to Zone 4 training system. Aerobic base, threshold work, and sprint programming for the serious athlete.',
+      description:
+        'The complete Zone 2 to Zone 4 training system. Aerobic base, threshold work, and sprint programming for the serious athlete.',
       metadata: { product_type: 'blueprint' },
     });
     console.log(`Created Blueprint product: ${blueprintProduct.id}`);
   }
 
-  const blueprintPrices = await stripe.prices.list({ product: blueprintProduct.id, active: true });
+  const blueprintPrices = await stripe.prices.list({
+    product: blueprintProduct.id,
+    active: true,
+  });
   if (blueprintPrices.data.length === 0) {
     const price = await stripe.prices.create({
       product: blueprintProduct.id,
-      unit_amount: 2700, // $27.00
+      unit_amount: 2700,
       currency: 'usd',
     });
     console.log(`Created Blueprint price: $27.00 one-time (${price.id})`);
@@ -77,7 +64,7 @@ async function seedProducts() {
 
   console.log('');
 
-  // ── COACHING SUBSCRIPTION (recurring) ──────────────────────────────────────
+  // ── COACHING SUBSCRIPTION (recurring) ─────────────────────────────────────
   const existingCoaching = await stripe.products.search({
     query: "name:'AT0M FIT Coaching' AND active:'true'"
   });
@@ -89,15 +76,19 @@ async function seedProducts() {
   } else {
     coachingProduct = await stripe.products.create({
       name: 'AT0M FIT Coaching',
-      description: 'Custom online training coaching. Personalized programming, weekly check-ins, nutrition guidance, and direct coach access.',
+      description:
+        'Custom online training coaching. Personalized programming, weekly check-ins, nutrition guidance, and direct coach access.',
       metadata: { product_type: 'training' },
     });
     console.log(`Created Coaching product: ${coachingProduct.id}`);
   }
 
-  const coachingPrices = await stripe.prices.list({ product: coachingProduct.id, active: true });
+  const coachingPrices = await stripe.prices.list({
+    product: coachingProduct.id,
+    active: true,
+  });
   if (coachingPrices.data.length === 0) {
-    // SET YOUR COACHING PRICE BELOW
+    // ── SET YOUR COACHING MONTHLY PRICE HERE ──────────────────────────────
     const price = await stripe.prices.create({
       product: coachingProduct.id,
       unit_amount: 19900, // $199.00/month — change to your actual price
@@ -109,7 +100,7 @@ async function seedProducts() {
     console.log(`Coaching price already exists: ${coachingPrices.data[0].id}`);
   }
 
-  console.log('\nDone. Run the API server to sync prices to the database.');
+  console.log('\nDone. Restart the API server workflow to pick up the new products.');
 }
 
 seedProducts().catch((err) => {

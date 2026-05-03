@@ -82,6 +82,16 @@ Full handoff package from original dev is in `handoff/`:
 
 See `OWNER_SETUP_CHECKLIST.md` for full setup instructions including storage bucket and secrets.
 
+## Stripe Integration Note
+
+The Replit Stripe connector was dismissed by the owner. Stripe is wired via direct env secrets instead:
+- `STRIPE_SECRET_KEY` — your Stripe secret key (sk_live_... or sk_test_...)
+- `STRIPE_WEBHOOK_SECRET` — your Stripe webhook signing secret (whsec_...)
+
+`stripeClient.ts` reads these directly from `process.env` (no Replit connector proxy).
+Do NOT use the Replit integrations connector for Stripe on this project — use the secrets tab.
+After setting secrets, run the seed script: `pnpm --filter @workspace/scripts run seed-products`
+
 ## Hard Rules
 
 - Do NOT redesign the brand, disable RLS, expose secrets, or touch production Vercel
