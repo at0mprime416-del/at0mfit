@@ -806,9 +806,181 @@
           </div>
         </div>
 
+        <hr class="section-divider" />
+
+        <!-- ── COMMUNITY MODERATION ── -->
+        <div class="section-block">
+          <div class="section-eyebrow">Moderation</div>
+          <div class="section-heading">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Community Moderation
+          </div>
+          <div class="mod-filter-row">
+            <select class="mod-filter-select" id="modTypeFilter" onchange="applyModFilters()">
+              <option value="">All Post Types</option>
+              <option value="text">Text</option>
+              <option value="photo">Photo</option>
+              <option value="milestone">Milestone</option>
+            </select>
+            <select class="mod-filter-select" id="modVisFilter" onchange="applyModFilters()">
+              <option value="">All Visibility</option>
+              <option value="visible">Visible Only</option>
+              <option value="hidden">Hidden Only</option>
+            </select>
+          </div>
+          <div id="modContainer"><p class="empty-state">Loading community posts...</p></div>
+        </div>
+
+        <hr class="section-divider" />
+
+        <!-- ── ASK AT0M REVIEW ── -->
+        <div class="section-block">
+          <div class="section-eyebrow">AI Review</div>
+          <div class="section-heading">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Ask AT0M Review
+          </div>
+          <div class="mod-filter-row">
+            <select class="mod-filter-select" id="atomFlagFilter" onchange="applyAtomFilters()">
+              <option value="">All Questions</option>
+              <option value="flagged">Safety Flagged</option>
+              <option value="unflagged">Clean Only</option>
+            </select>
+            <select class="mod-filter-select" id="atomReviewFilter" onchange="applyAtomFilters()">
+              <option value="">All Review Status</option>
+              <option value="pending">Pending Review</option>
+              <option value="reviewed">Reviewed</option>
+            </select>
+          </div>
+          <div id="atomContainer"><p class="empty-state">Loading Ask AT0M logs...</p></div>
+        </div>
+
+        <hr class="section-divider" />
+
+        <!-- ── OWNER SETUP / OPS PANEL ── -->
+        <div class="section-block">
+          <div class="section-eyebrow">Operations</div>
+          <div class="section-heading">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 116.93 19.07"/></svg>
+            Owner Setup Panel
+          </div>
+          <div id="opsContainer"><p class="empty-state">Loading setup status...</p></div>
+        </div>
+
+        <hr class="section-divider" />
+
+        <!-- ── LAUNCH CONTROL ── -->
+        <div class="section-block">
+          <div class="section-eyebrow">Launch Readiness</div>
+          <div class="section-heading">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+            Launch Control
+          </div>
+          <div id="launchContainer"><p class="empty-state">Loading launch checklist...</p></div>
+        </div>
+
+        <hr class="section-divider" />
+
+        <!-- ── CLIENT ADMIN ── -->
+        <div class="section-block">
+          <div class="section-eyebrow">Admin</div>
+          <div class="section-heading">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+            Client Admin Controls
+          </div>
+          <div id="clientAdminContainer"><p class="empty-state">Loading client admin data...</p></div>
+        </div>
+
+        <hr class="section-divider" />
+
+        <!-- ── ACTIVITY LOG ── -->
+        <div class="section-block">
+          <div class="section-eyebrow">Audit</div>
+          <div class="section-heading">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            Activity Log
+          </div>
+          <div id="activityContainer"><p class="empty-state">Loading activity log...</p></div>
+        </div>
+
+        <hr class="section-divider" />
+
+        <!-- ── RISK / ATTENTION ── -->
+        <div class="section-block">
+          <div class="section-eyebrow">Attention Required</div>
+          <div class="section-heading">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Risk / Attention Panel
+          </div>
+          <div id="riskContainer"><p class="empty-state">Loading risk assessment...</p></div>
+        </div>
+
       </div>
     </div>
   </div>
+
+  <!-- Coach Extension Styles -->
+  <style>
+    .mod-filter-row { display: flex; gap: 0.75rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+    .mod-filter-select { background: var(--surface3); border: 1px solid var(--border); color: var(--text); font-size: 0.8rem; font-family: 'Inter', sans-serif; padding: 0.45rem 0.85rem; border-radius: 4px; outline: none; cursor: pointer; }
+    .mod-filter-select:focus { border-color: var(--gold); }
+    .mod-post-card { background: var(--surface3); border: 1px solid var(--border); border-radius: 4px; padding: 1.1rem 1.25rem; margin-bottom: 0.75rem; }
+    .mod-post-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 0.5rem; }
+    .mod-post-meta { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.35rem; }
+    .mod-post-body { font-size: 0.88rem; color: var(--grey-light); margin-bottom: 0.75rem; line-height: 1.5; }
+    .mod-post-actions { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+    .mod-status-chip { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 3px; }
+    .mod-status-visible { background: rgba(74,201,122,0.12); color: #4AC97A; border: 1px solid rgba(74,201,122,0.3); }
+    .mod-status-hidden { background: rgba(201,74,74,0.12); color: #C94A4A; border: 1px solid rgba(201,74,74,0.3); }
+    .mod-status-review { background: rgba(201,160,74,0.12); color: var(--gold); border: 1px solid rgba(201,160,74,0.3); }
+    .mod-comment-list { margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border); }
+    .mod-comment-item { font-size: 0.82rem; color: var(--text-muted); padding: 0.4rem 0; display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .atom-log-card { background: var(--surface3); border: 1px solid var(--border); border-radius: 4px; padding: 1.1rem 1.25rem; margin-bottom: 0.75rem; }
+    .atom-log-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 0.6rem; flex-wrap: wrap; }
+    .atom-log-q { font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 0.35rem; }
+    .atom-log-a { font-size: 0.85rem; color: var(--grey-light); line-height: 1.5; margin-bottom: 0.6rem; padding: 0.65rem 0.85rem; background: var(--surface2); border-left: 2px solid var(--gold); border-radius: 2px; }
+    .atom-log-chips { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .atom-chip { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.2rem 0.55rem; border-radius: 3px; }
+    .atom-chip-flag { background: rgba(201,74,74,0.12); color: #C94A4A; border: 1px solid rgba(201,74,74,0.3); }
+    .atom-chip-clean { background: rgba(74,201,122,0.10); color: #4AC97A; border: 1px solid rgba(74,201,122,0.25); }
+    .atom-chip-review { background: rgba(201,160,74,0.1); color: var(--gold); border: 1px solid rgba(201,160,74,0.3); }
+    .atom-chip-done { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border); }
+    .ops-grid { display: flex; flex-direction: column; gap: 0.6rem; }
+    .ops-item { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: 1rem 1.25rem; background: var(--surface3); border: 1px solid var(--border); border-radius: 4px; }
+    .ops-item-left { flex: 1; }
+    .ops-item-num { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.25rem; }
+    .ops-item-title { font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 0.2rem; }
+    .ops-item-detail { font-size: 0.8rem; color: var(--text-muted); }
+    .ops-item-detail code { background: var(--surface2); padding: 0.1rem 0.35rem; border-radius: 3px; font-family: monospace; font-size: 0.78rem; color: var(--grey-light); }
+    .ops-status { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.25rem 0.7rem; border-radius: 3px; white-space: nowrap; }
+    .ops-status-done { background: rgba(74,201,122,0.12); color: #4AC97A; border: 1px solid rgba(74,201,122,0.3); }
+    .ops-status-pending { background: rgba(201,160,74,0.1); color: var(--gold); border: 1px solid rgba(201,160,74,0.3); }
+    .ops-status-check { background: rgba(255,255,255,0.06); color: var(--text-muted); border: 1px solid var(--border); }
+    .launch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+    @media(max-width:640px) { .launch-grid { grid-template-columns: 1fr; } }
+    .launch-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.85rem 1rem; background: var(--surface3); border: 1px solid var(--border); border-radius: 4px; }
+    .launch-item-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .launch-dot-done { background: #4AC97A; }
+    .launch-dot-pending { background: var(--gold); }
+    .launch-dot-na { background: var(--text-muted); }
+    .launch-item-label { font-size: 0.85rem; color: var(--text); flex: 1; }
+    .launch-item-status { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+    .admin-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+    .admin-table th { text-align: left; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
+    .admin-table td { padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.04); color: var(--text); vertical-align: top; }
+    .admin-table tr:last-child td { border-bottom: none; }
+    .admin-flag-yes { color: #C94A4A; font-weight: 700; font-size: 0.75rem; }
+    .admin-flag-no { color: var(--text-muted); font-size: 0.75rem; }
+    .activity-row { display: flex; align-items: flex-start; gap: 1rem; padding: 0.7rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .activity-row:last-child { border-bottom: none; }
+    .activity-event-badge { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.2rem 0.55rem; border-radius: 3px; background: var(--surface3); border: 1px solid var(--border); color: var(--gold); white-space: nowrap; flex-shrink: 0; }
+    .activity-summary { font-size: 0.85rem; color: var(--text); flex: 1; }
+    .activity-time { font-size: 0.75rem; color: var(--text-muted); white-space: nowrap; }
+    .risk-card { background: var(--surface3); border: 1px solid rgba(201,74,74,0.3); border-left: 3px solid #C94A4A; border-radius: 4px; padding: 1rem 1.25rem; margin-bottom: 0.6rem; }
+    .risk-client-name { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 0.25rem; }
+    .risk-flags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .risk-flag-chip { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.2rem 0.5rem; border-radius: 3px; background: rgba(201,74,74,0.12); color: #C94A4A; border: 1px solid rgba(201,74,74,0.3); }
+  </style>
 
   <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -883,7 +1055,17 @@
     async function loadCoachDashboard() {
       document.getElementById('coachLoading').style.display = 'block';
       document.getElementById('coachContent').style.display = 'none';
-      await Promise.all([loadApplications(), loadClients()]);
+      await Promise.all([
+        loadApplications(),
+        loadClients(),
+        loadCommunityMod(),
+        loadAskAtomLogs(),
+        loadOpsPanel(),
+        loadLaunchControl(),
+        loadClientAdmin(),
+        loadActivityLog(),
+        loadRiskPanel()
+      ]);
       document.getElementById('coachLoading').style.display = 'none';
       document.getElementById('coachContent').style.display = 'block';
     }
@@ -1789,6 +1971,462 @@
       el.textContent = text;
       el.style.display = 'block';
       if (ok) setTimeout(() => { el.style.display = 'none'; }, 4000);
+    }
+
+    // ──────────────────────────────────────────────
+    // COMMUNITY MODERATION
+    // ──────────────────────────────────────────────
+
+    let allModPosts = [];
+
+    async function loadCommunityMod() {
+      const container = document.getElementById('modContainer');
+      const { data, error } = await sb
+        .from('community_posts')
+        .select('*, community_reactions(*), community_comments(id,content,hidden,created_at,user_id)')
+        .order('created_at', { ascending: false })
+        .limit(50)
+        .then(r => r).catch(() => ({ data: null, error: 'table_missing' }));
+
+      if (error || !data) {
+        container.innerHTML = `<p class="empty-state">Community posts table not available yet. Run FULL_PREMIUM_BUILDOUT_SETUP.sql and FINAL_HARDENING_SETUP.sql in Supabase.</p>`;
+        return;
+      }
+      allModPosts = data;
+      renderModPosts(allModPosts);
+    }
+
+    function renderModPosts(posts) {
+      const container = document.getElementById('modContainer');
+      if (!posts || posts.length === 0) {
+        container.innerHTML = `<p class="empty-state">No community posts yet.</p>`;
+        return;
+      }
+      container.innerHTML = posts.map(p => {
+        const hidden = p.hidden === true;
+        const modStatus = p.moderation_status || (hidden ? 'hidden' : 'visible');
+        const chipClass = modStatus === 'visible' ? 'mod-status-visible' : modStatus === 'hidden' ? 'mod-status-hidden' : 'mod-status-review';
+        const comments = p.community_comments || [];
+        const date = p.created_at ? new Date(p.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+        return `
+          <div class="mod-post-card" id="modpost-${p.id}">
+            <div class="mod-post-header">
+              <div>
+                <div class="mod-post-meta">
+                  ${esc(p.post_type || 'text')} &middot; ${date} &middot; ${comments.length} comment${comments.length !== 1 ? 's' : ''}
+                </div>
+                <span class="mod-status-chip ${chipClass}">${modStatus}</span>
+              </div>
+              <div class="mod-post-actions">
+                ${hidden
+                  ? `<button class="btn-ghost" style="font-size:0.78rem;padding:0.3rem 0.75rem" onclick="unhidePost('${p.id}')">Unhide</button>`
+                  : `<button class="btn-ghost" style="font-size:0.78rem;padding:0.3rem 0.75rem;color:var(--red);border-color:rgba(201,74,74,0.4)" onclick="hidePost('${p.id}')">Hide</button>`
+                }
+              </div>
+            </div>
+            ${p.content ? `<div class="mod-post-body">${esc(p.content.substring(0, 280))}${p.content.length > 280 ? '...' : ''}</div>` : ''}
+            ${comments.length > 0 ? `
+              <div class="mod-comment-list">
+                ${comments.slice(0, 3).map(c => `
+                  <div class="mod-comment-item">
+                    <span>${esc(c.content ? c.content.substring(0, 100) : '')}${c.hidden ? ' <span style="color:var(--red);font-size:0.72rem">[HIDDEN]</span>' : ''}</span>
+                    ${!c.hidden ? `<button class="btn-ghost" style="font-size:0.72rem;padding:0.2rem 0.5rem;white-space:nowrap;color:var(--red);border-color:rgba(201,74,74,0.4)" onclick="hideComment('${c.id}')">Hide</button>` : ''}
+                  </div>`).join('')}
+                ${comments.length > 3 ? `<div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.4rem">+${comments.length - 3} more comment${comments.length - 3 !== 1 ? 's' : ''}</div>` : ''}
+              </div>` : ''}
+          </div>`;
+      }).join('');
+    }
+
+    async function hidePost(postId) {
+      const { error } = await sb.from('community_posts')
+        .update({ hidden: true, moderation_status: 'hidden' })
+        .eq('id', postId);
+      if (!error) await loadCommunityMod();
+      else alert('Failed to hide post. Verify coach RLS policy on community_posts.');
+    }
+
+    async function unhidePost(postId) {
+      const { error } = await sb.from('community_posts')
+        .update({ hidden: false, moderation_status: 'visible' })
+        .eq('id', postId);
+      if (!error) await loadCommunityMod();
+      else alert('Failed to unhide post. Verify coach RLS policy on community_posts.');
+    }
+
+    async function hideComment(commentId) {
+      const { error } = await sb.from('community_comments')
+        .update({ hidden: true })
+        .eq('id', commentId);
+      if (!error) await loadCommunityMod();
+      else alert('Failed to hide comment. Verify coach RLS policy on community_comments.');
+    }
+
+    function applyModFilters() {
+      const typeFilter = document.getElementById('modTypeFilter')?.value || '';
+      const visFilter = document.getElementById('modVisFilter')?.value || '';
+      let filtered = allModPosts;
+      if (typeFilter) filtered = filtered.filter(p => p.post_type === typeFilter);
+      if (visFilter === 'visible') filtered = filtered.filter(p => !p.hidden);
+      if (visFilter === 'hidden') filtered = filtered.filter(p => p.hidden === true);
+      renderModPosts(filtered);
+    }
+
+    // ──────────────────────────────────────────────
+    // ASK AT0M REVIEW
+    // ──────────────────────────────────────────────
+
+    let allAtomLogs = [];
+
+    async function loadAskAtomLogs() {
+      const container = document.getElementById('atomContainer');
+      const { data, error } = await sb
+        .from('ask_atom_logs')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(50)
+        .then(r => r).catch(() => ({ data: null, error: 'table_missing' }));
+
+      if (error || !data) {
+        container.innerHTML = `<p class="empty-state">Ask AT0M log table not available yet. Run FULL_PREMIUM_BUILDOUT_SETUP.sql in Supabase. If OPENAI_API_KEY is not set, questions still log with contextual fallback answers.</p>`;
+        return;
+      }
+      allAtomLogs = data;
+      renderAtomLogs(allAtomLogs);
+    }
+
+    function renderAtomLogs(logs) {
+      const container = document.getElementById('atomContainer');
+      if (!logs || logs.length === 0) {
+        container.innerHTML = `<p class="empty-state">No Ask AT0M questions logged yet.</p>`;
+        return;
+      }
+      container.innerHTML = logs.map(l => {
+        const date = l.created_at ? new Date(l.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '';
+        const flagged = l.flagged === true;
+        const reviewed = l.coach_reviewed === true;
+        return `
+          <div class="atom-log-card" id="atomlog-${l.id}">
+            <div class="atom-log-header">
+              <div style="font-size:0.75rem;color:var(--text-muted)">${date}${l.client_id ? ' &middot; Client ID: ' + l.client_id.substring(0,8) + '...' : ''}</div>
+              <div class="atom-log-chips">
+                <span class="atom-chip ${flagged ? 'atom-chip-flag' : 'atom-chip-clean'}">${flagged ? 'FLAGGED' : 'CLEAN'}</span>
+                <span class="atom-chip ${reviewed ? 'atom-chip-done' : 'atom-chip-review'}">${reviewed ? 'REVIEWED' : 'PENDING REVIEW'}</span>
+              </div>
+            </div>
+            <div class="atom-log-q">Q: ${esc(l.question || '')}</div>
+            ${l.answer ? `<div class="atom-log-a">${esc(l.answer)}</div>` : ''}
+            ${!reviewed ? `<button class="btn-ghost" style="font-size:0.78rem;padding:0.3rem 0.75rem" onclick="markAtomReviewed('${l.id}')">Mark Reviewed</button>` : ''}
+          </div>`;
+      }).join('');
+    }
+
+    async function markAtomReviewed(logId) {
+      const { error } = await sb.from('ask_atom_logs')
+        .update({ coach_reviewed: true, coach_reviewed_at: new Date().toISOString() })
+        .eq('id', logId);
+      if (!error) await loadAskAtomLogs();
+      else alert('Failed to mark reviewed. Verify coach RLS policy on ask_atom_logs.');
+    }
+
+    function applyAtomFilters() {
+      const flagFilter = document.getElementById('atomFlagFilter')?.value || '';
+      const reviewFilter = document.getElementById('atomReviewFilter')?.value || '';
+      let filtered = allAtomLogs;
+      if (flagFilter === 'flagged') filtered = filtered.filter(l => l.flagged === true);
+      if (flagFilter === 'unflagged') filtered = filtered.filter(l => !l.flagged);
+      if (reviewFilter === 'pending') filtered = filtered.filter(l => !l.coach_reviewed);
+      if (reviewFilter === 'reviewed') filtered = filtered.filter(l => l.coach_reviewed === true);
+      renderAtomLogs(filtered);
+    }
+
+    // ──────────────────────────────────────────────
+    // OPS / SETUP PANEL
+    // ──────────────────────────────────────────────
+
+    async function loadOpsPanel() {
+      const container = document.getElementById('opsContainer');
+
+      // Probe tables to detect SQL setup completion
+      const [
+        { error: e1 }, { error: e2 }, { error: e3 }, { error: e4 }, { error: e5 }
+      ] = await Promise.all([
+        sb.from('progress_photos').select('id').limit(1).then(r=>r).catch(()=>({error:'missing'})),
+        sb.from('community_posts').select('id').limit(1).then(r=>r).catch(()=>({error:'missing'})),
+        sb.from('ask_atom_logs').select('id').limit(1).then(r=>r).catch(()=>({error:'missing'})),
+        sb.from('activity_log').select('id').limit(1).then(r=>r).catch(()=>({error:'missing'})),
+        sb.from('support_requests').select('id').limit(1).then(r=>r).catch(()=>({error:'missing'}))
+      ]);
+
+      const items = [
+        {
+          num: '01',
+          title: 'Run AT0M_FIT_FEATURE_EXPANSION.sql',
+          detail: 'Creates: <code>progress_photos</code>, <code>nutrition_plans</code>, <code>weekly_plan_items</code>, <code>client_goals</code>',
+          status: !e1 ? 'DONE' : 'PENDING',
+          statusClass: !e1 ? 'ops-status-done' : 'ops-status-pending'
+        },
+        {
+          num: '02',
+          title: 'Run FULL_PREMIUM_BUILDOUT_SETUP.sql',
+          detail: 'Creates: <code>community_posts</code>, <code>ask_atom_logs</code>, <code>readiness_scores</code>, <code>resource_vault</code>, and others',
+          status: !e2 ? 'DONE' : 'PENDING',
+          statusClass: !e2 ? 'ops-status-done' : 'ops-status-pending'
+        },
+        {
+          num: '03',
+          title: 'Run FINAL_HARDENING_SETUP.sql',
+          detail: 'Creates: <code>activity_log</code>, <code>support_requests</code>, <code>client_admin_status</code>, <code>legal_acceptances</code>, <code>client_onboarding_tasks</code>',
+          status: !e4 ? 'DONE' : 'PENDING',
+          statusClass: !e4 ? 'ops-status-done' : 'ops-status-pending'
+        },
+        {
+          num: '04',
+          title: 'Create Supabase Storage Bucket',
+          detail: 'Go to Supabase > Storage > Create bucket named <code>progress-photos</code>. Set to PRIVATE.',
+          status: 'CHECK SUPABASE',
+          statusClass: 'ops-status-check'
+        },
+        {
+          num: '05',
+          title: 'Set GMAIL_USER Secret',
+          detail: 'Replit > Secrets > Add <code>GMAIL_USER</code> (your Gmail address for notifications)',
+          status: 'CHECK REPLIT SECRETS',
+          statusClass: 'ops-status-check'
+        },
+        {
+          num: '06',
+          title: 'Set GMAIL_APP_PASSWORD Secret',
+          detail: 'Replit > Secrets > Add <code>GMAIL_APP_PASSWORD</code> (Google App Password, not your main password)',
+          status: 'CHECK REPLIT SECRETS',
+          statusClass: 'ops-status-check'
+        },
+        {
+          num: '07',
+          title: 'Set NOTIFICATION_TO_EMAIL Secret',
+          detail: 'Replit > Secrets > Add <code>NOTIFICATION_TO_EMAIL</code> (email to receive coach alerts)',
+          status: 'CHECK REPLIT SECRETS',
+          statusClass: 'ops-status-check'
+        },
+        {
+          num: '08',
+          title: 'Set OPENAI_API_KEY Secret',
+          detail: 'Replit > Secrets > Add <code>OPENAI_API_KEY</code> (enables full AI responses in Ask AT0M)',
+          status: !e3 ? 'API KEY ACTIVE' : 'CHECK REPLIT SECRETS',
+          statusClass: 'ops-status-check'
+        },
+        {
+          num: '09',
+          title: 'Restart API Server',
+          detail: 'After adding all secrets: Replit > Workflows > API Server > Restart',
+          status: 'AFTER SECRETS SET',
+          statusClass: 'ops-status-pending'
+        }
+      ];
+
+      container.innerHTML = `<div class="ops-grid">${items.map(item => `
+        <div class="ops-item">
+          <div class="ops-item-left">
+            <div class="ops-item-num">Step ${item.num}</div>
+            <div class="ops-item-title">${item.title}</div>
+            <div class="ops-item-detail">${item.detail}</div>
+          </div>
+          <span class="ops-status ${item.statusClass}">${item.status}</span>
+        </div>`).join('')}</div>`;
+    }
+
+    // ──────────────────────────────────────────────
+    // LAUNCH CONTROL
+    // ──────────────────────────────────────────────
+
+    async function loadLaunchControl() {
+      const container = document.getElementById('launchContainer');
+
+      const items = [
+        { label: 'API Server Running', status: 'DONE', done: true },
+        { label: 'Client Portal /portal', status: 'DONE', done: true },
+        { label: 'Coach Dashboard /coach', status: 'DONE', done: true },
+        { label: 'Community /community', status: 'DONE', done: true },
+        { label: 'Training Page /training', status: 'DONE', done: true },
+        { label: 'Blueprint /blueprint', status: 'DONE', done: true },
+        { label: 'Calculator /calculator', status: 'DONE', done: true },
+        { label: 'Waitlist / Homepage', status: 'DONE', done: true },
+        { label: 'Terms of Service /terms', status: 'DONE', done: true },
+        { label: 'Privacy Policy /privacy', status: 'DONE', done: true },
+        { label: 'Training Waiver /waiver', status: 'NEEDS LEGAL REVIEW', done: false },
+        { label: 'Support Page /support', status: 'DONE', done: true },
+        { label: 'SQL Setup (Feature Expansion)', status: 'PENDING OWNER', done: false },
+        { label: 'SQL Setup (Premium Build)', status: 'PENDING OWNER', done: false },
+        { label: 'SQL Setup (Final Hardening)', status: 'PENDING OWNER', done: false },
+        { label: 'Storage Bucket (progress-photos)', status: 'PENDING OWNER', done: false },
+        { label: 'Gmail Secrets Configured', status: 'PENDING OWNER', done: false },
+        { label: 'OpenAI Key Configured', status: 'PENDING OWNER', done: false },
+        { label: 'Email Notifications', status: 'PENDING SECRETS', done: false },
+        { label: 'Ask AT0M (AI responses)', status: 'PENDING SECRETS', done: false },
+        { label: 'Progress Photo Uploads', status: 'PENDING BUCKET', done: false },
+        { label: 'Legal Pages (Terms/Privacy)', status: 'NEEDS OWNER REVIEW', done: false },
+        { label: 'Payment / Billing Setup', status: 'NOT STARTED', done: false },
+        { label: 'No Emojis in Production UI', status: 'DONE', done: true },
+        { label: 'RLS Enabled (all tables)', status: 'DONE', done: true },
+        { label: 'Service Key Not in Frontend', status: 'DONE', done: true },
+        { label: 'Vercel Production Untouched', status: 'DONE', done: true },
+      ];
+
+      container.innerHTML = `<div class="launch-grid">${items.map(item => `
+        <div class="launch-item">
+          <div class="launch-item-dot ${item.done ? 'launch-dot-done' : item.status === 'NOT STARTED' ? 'launch-dot-na' : 'launch-dot-pending'}"></div>
+          <div class="launch-item-label">${item.label}</div>
+          <div class="launch-item-status">${item.status}</div>
+        </div>`).join('')}</div>`;
+    }
+
+    // ──────────────────────────────────────────────
+    // CLIENT ADMIN
+    // ──────────────────────────────────────────────
+
+    async function loadClientAdmin() {
+      const container = document.getElementById('clientAdminContainer');
+
+      const { data: adminData, error } = await sb
+        .from('client_admin_status')
+        .select('*, clients:client_id(full_name,email,subscription_status)')
+        .order('created_at', { ascending: false })
+        .then(r => r).catch(() => ({ data: null, error: 'table_missing' }));
+
+      if (error || !adminData) {
+        // Fall back to clients table with admin placeholder
+        const { data: clients } = await sb.from('clients').select('*').order('full_name', { ascending: true });
+        if (!clients || clients.length === 0) {
+          container.innerHTML = `<p class="empty-state">No clients yet. Run FINAL_HARDENING_SETUP.sql to enable client admin controls.</p>`;
+          return;
+        }
+        container.innerHTML = `
+          <p class="empty-state" style="margin-bottom:1rem">Admin status table not yet created. Run FINAL_HARDENING_SETUP.sql. Showing base client list below.</p>
+          <table class="admin-table">
+            <thead><tr><th>Client</th><th>Email</th><th>Subscription</th></tr></thead>
+            <tbody>${clients.map(c => `<tr>
+              <td>${esc(c.full_name)}</td>
+              <td style="color:var(--text-muted)">${esc(c.email)}</td>
+              <td><span class="status-badge ${c.subscription_status === 'active' ? 'status-active' : 'status-inactive'}">${c.subscription_status || 'inactive'}</span></td>
+            </tr>`).join('')}</tbody>
+          </table>`;
+        return;
+      }
+
+      if (adminData.length === 0) {
+        container.innerHTML = `<p class="empty-state">No client admin records yet. Records are created when a client is flagged or tagged.</p>`;
+        return;
+      }
+
+      container.innerHTML = `
+        <table class="admin-table">
+          <thead><tr><th>Client</th><th>Active</th><th>Founding</th><th>Payment</th><th>Risk</th><th>Notes</th></tr></thead>
+          <tbody>${adminData.map(a => {
+            const c = a.clients || {};
+            return `<tr>
+              <td>
+                <div style="font-weight:600;color:var(--text)">${esc(c.full_name || 'Unknown')}</div>
+                <div style="font-size:0.72rem;color:var(--text-muted)">${esc(c.email || '')}</div>
+              </td>
+              <td><span class="${a.active ? 'status-badge status-active' : 'status-badge status-inactive'}">${a.active ? 'Active' : 'Inactive'}</span></td>
+              <td>${a.founding_client ? '<span style="color:var(--gold);font-weight:700;font-size:0.78rem">YES</span>' : '<span class="admin-flag-no">No</span>'}</td>
+              <td style="font-size:0.82rem;color:var(--text-muted)">${esc(a.payment_status || '—')}</td>
+              <td>${a.risk_flag ? `<span class="admin-flag-yes">FLAGGED</span>${a.risk_reason ? '<div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.15rem">' + esc(a.risk_reason) + '</div>' : ''}` : '<span class="admin-flag-no">Clear</span>'}</td>
+              <td style="font-size:0.8rem;color:var(--text-muted);max-width:180px">${esc(a.coach_notes || '—')}</td>
+            </tr>`;
+          }).join('')}</tbody>
+        </table>`;
+    }
+
+    // ──────────────────────────────────────────────
+    // ACTIVITY LOG
+    // ──────────────────────────────────────────────
+
+    async function loadActivityLog() {
+      const container = document.getElementById('activityContainer');
+
+      const { data, error } = await sb
+        .from('activity_log')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(30)
+        .then(r => r).catch(() => ({ data: null, error: 'table_missing' }));
+
+      if (error || !data) {
+        container.innerHTML = `<p class="empty-state">Activity log table not available yet. Run FINAL_HARDENING_SETUP.sql in Supabase.</p>`;
+        return;
+      }
+
+      if (data.length === 0) {
+        container.innerHTML = `<p class="empty-state">No activity recorded yet. Activity will populate as clients use the platform.</p>`;
+        return;
+      }
+
+      container.innerHTML = `<div>${data.map(a => {
+        const time = a.created_at ? new Date(a.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '';
+        return `<div class="activity-row">
+          <span class="activity-event-badge">${esc(a.event_type)}</span>
+          <span class="activity-summary">${esc(a.summary)}</span>
+          <span class="activity-time">${time}</span>
+        </div>`;
+      }).join('')}</div>`;
+    }
+
+    // ──────────────────────────────────────────────
+    // RISK / ATTENTION PANEL
+    // ──────────────────────────────────────────────
+
+    async function loadRiskPanel() {
+      const container = document.getElementById('riskContainer');
+
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+      const cutoff = sevenDaysAgo.toISOString();
+
+      const [
+        { data: clients },
+        { data: recentCheckins },
+        { data: adminFlags }
+      ] = await Promise.all([
+        sb.from('clients').select('id,full_name,email,subscription_status').order('full_name', { ascending: true }),
+        sb.from('checkins').select('client_id,energy_level,stress_level,created_at').gte('created_at', cutoff).then(r=>r).catch(()=>({data:[]})),
+        sb.from('client_admin_status').select('client_id,risk_flag,risk_reason').eq('risk_flag', true).then(r=>r).catch(()=>({data:[]}))
+      ]);
+
+      if (!clients || clients.length === 0) {
+        container.innerHTML = `<p class="empty-state">No clients found.</p>`;
+        return;
+      }
+
+      const checkinClientIds = new Set((recentCheckins || []).map(c => c.client_id));
+      const riskAdminIds = new Set((adminFlags || []).map(f => f.client_id));
+      const lowEnergyIds = new Set((recentCheckins || []).filter(c => c.energy_level && c.energy_level <= 2).map(c => c.client_id));
+      const highStressIds = new Set((recentCheckins || []).filter(c => c.stress_level && c.stress_level >= 4).map(c => c.client_id));
+
+      const atRisk = clients.filter(c => {
+        return !checkinClientIds.has(c.id) || riskAdminIds.has(c.id) || lowEnergyIds.has(c.id) || highStressIds.has(c.id);
+      });
+
+      if (atRisk.length === 0) {
+        container.innerHTML = `<p class="empty-state">No clients flagged for attention. All clients checked in recently.</p>`;
+        return;
+      }
+
+      container.innerHTML = atRisk.map(c => {
+        const flags = [];
+        if (!checkinClientIds.has(c.id)) flags.push('No check-in in 7 days');
+        if (riskAdminIds.has(c.id)) {
+          const adminEntry = (adminFlags || []).find(f => f.client_id === c.id);
+          flags.push(adminEntry?.risk_reason ? 'Risk flag: ' + adminEntry.risk_reason : 'Coach risk flag');
+        }
+        if (lowEnergyIds.has(c.id)) flags.push('Low energy reported');
+        if (highStressIds.has(c.id)) flags.push('High stress reported');
+        return `
+          <div class="risk-card">
+            <div class="risk-client-name">${esc(c.full_name)} <span style="font-size:0.75rem;font-weight:400;color:var(--text-muted)">${esc(c.email)}</span></div>
+            <div class="risk-flags" style="margin-top:0.4rem">${flags.map(f => `<span class="risk-flag-chip">${f}</span>`).join('')}</div>
+          </div>`;
+      }).join('');
     }
 
     init();

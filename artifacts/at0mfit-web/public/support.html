@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Support | AT0M FIT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg:#0B0B0B; --surface:#111; --surface2:#1A1A1A; --border:#2A2A2A; --gold:#C9A04A; --gold-dim:rgba(201,160,74,0.08); --gold-glow:rgba(201,160,74,0.25); --text:#F0EDE8; --text-muted:#888; --green:#4AC97A; --red:#C94A4A; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.6; min-height: 100vh; }
+    nav { display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; border-bottom: 1px solid var(--border); background: rgba(11,11,11,0.96); position: sticky; top: 0; z-index: 50; }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.1em; text-decoration: none; color: var(--text); }
+    .nav-logo span { color: var(--gold); }
+    .nav-back { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); text-decoration: none; border: 1px solid var(--border); padding: 0.4rem 0.9rem; border-radius: 4px; }
+    .nav-back:hover { color: var(--text); border-color: #444; }
+    .page { max-width: 680px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+    .page-eyebrow { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+    h1 { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; letter-spacing: 0.04em; margin-bottom: 0.5rem; }
+    .page-sub { color: var(--text-muted); margin-bottom: 2.5rem; }
+    .safety-block { background: #1a0000; border: 1px solid rgba(201,74,74,0.4); border-left: 3px solid var(--red); border-radius: 4px; padding: 1.25rem 1.5rem; margin-bottom: 2rem; }
+    .safety-block strong { color: var(--red); display: block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
+    .safety-block p { margin: 0 0 0.4rem; font-size: 0.88rem; color: #F0EDE8; }
+    .safety-block p:last-child { margin: 0; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 2rem; margin-bottom: 1.5rem; }
+    .card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.35rem; letter-spacing: 0.05em; margin-bottom: 1.25rem; color: var(--text); }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-label { display: block; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem; }
+    .form-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 0.8rem 1rem; color: var(--text); font-size: 0.9rem; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .form-input::placeholder { color: var(--text-muted); }
+    .form-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-glow); }
+    select.form-input { cursor: pointer; }
+    textarea.form-input { resize: vertical; min-height: 120px; }
+    .btn-submit { width: 100%; padding: 0.95rem; background: var(--gold); color: #000; font-weight: 800; font-size: 0.88rem; letter-spacing: 0.07em; text-transform: uppercase; border: none; border-radius: 4px; cursor: pointer; font-family: 'Inter', sans-serif; transition: opacity 0.2s; margin-top: 0.5rem; }
+    .btn-submit:hover { opacity: 0.9; }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    .success-msg { display: none; background: rgba(74,201,122,0.08); border: 1px solid rgba(74,201,122,0.3); border-radius: 4px; padding: 1rem 1.25rem; color: var(--green); font-size: 0.9rem; margin-top: 1rem; }
+    .error-msg { display: none; color: var(--red); font-size: 0.85rem; margin-top: 0.75rem; }
+    .info-block { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    .info-block h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.05em; margin-bottom: 0.75rem; }
+    .info-block p { color: var(--text-muted); font-size: 0.88rem; margin: 0; }
+    .info-block a { color: var(--gold); text-decoration: none; }
+    footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; font-size: 0.8rem; color: var(--text-muted); }
+    footer a { color: var(--gold); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a class="nav-logo" href="/">AT<span>0</span>M FIT</a>
+    <a class="nav-back" href="/">Back to Home</a>
+  </nav>
+
+  <div class="page">
+    <div class="page-eyebrow">Client Support</div>
+    <h1>Support</h1>
+    <p class="page-sub">Submit a request and your coach will respond as soon as possible.</p>
+
+    <div class="safety-block">
+      <strong>Medical and Safety Notice</strong>
+      <p>For medical emergencies, call emergency services (911) immediately.</p>
+      <p>For pain, injury, dizziness, chest pain, or any serious symptoms — stop training and contact a qualified medical professional.</p>
+      <p>This form is for general support inquiries only and is not monitored for medical emergencies.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Submit a Support Request</div>
+      <form id="supportForm" onsubmit="handleSupport(event)">
+        <div class="form-group">
+          <label class="form-label" for="sName">Your Name</label>
+          <input class="form-input" type="text" id="sName" placeholder="Full name" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="sEmail">Email Address</label>
+          <input class="form-input" type="email" id="sEmail" placeholder="your@email.com" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="sType">Issue Type</label>
+          <select class="form-input" id="sType" required>
+            <option value="">Select issue type</option>
+            <option value="billing">Billing / Subscription</option>
+            <option value="technical">Technical Issue</option>
+            <option value="coaching">Coaching Question</option>
+            <option value="account">Account Access</option>
+            <option value="feedback">Feedback / Suggestion</option>
+            <option value="cancellation">Cancellation Request</option>
+            <option value="data_privacy">Data / Privacy Request</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="sMessage">Message</label>
+          <textarea class="form-input" id="sMessage" placeholder="Describe your issue or question in detail..." required></textarea>
+        </div>
+        <button class="btn-submit" type="submit" id="submitBtn">Send Request</button>
+        <div class="success-msg" id="successMsg">Request submitted. Your coach will follow up at the email you provided.</div>
+        <div class="error-msg" id="errorMsg">Something went wrong. Email us directly at the address below.</div>
+      </form>
+    </div>
+
+    <div class="info-block">
+      <h3>Direct Contact</h3>
+      <p>You can also reach your coach directly at: <a href="mailto:jeshua@levioperations.com">jeshua@levioperations.com</a></p>
+    </div>
+
+    <div class="info-block">
+      <h3>Response Time</h3>
+      <p>Support requests are typically reviewed within 1 business day. Coaching questions are addressed during regular coaching check-in windows.</p>
+    </div>
+  </div>
+
+  <footer>
+    <a href="/">AT0M FIT</a> &nbsp;&middot;&nbsp;
+    <a href="/terms">Terms of Service</a> &nbsp;&middot;&nbsp;
+    <a href="/privacy">Privacy Policy</a> &nbsp;&middot;&nbsp;
+    <a href="/waiver">Training Waiver</a>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    const { createClient } = supabase;
+    const sb = createClient(
+      'https://kgozddcutazpqmfbzafa.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtnb3pkZGN1dGF6cHFtZmJ6YWZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzOTMxOTYsImV4cCI6MjA4ODk2OTE5Nn0.aTi5ZXQi5zSTGb-xQyotF07Tcur5yizux3J8oNejRfE'
+    );
+
+    async function handleSupport(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      const successMsg = document.getElementById('successMsg');
+      const errorMsg = document.getElementById('errorMsg');
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+      successMsg.style.display = 'none';
+      errorMsg.style.display = 'none';
+
+      const name = document.getElementById('sName').value.trim();
+      const email = document.getElementById('sEmail').value.trim();
+      const issueType = document.getElementById('sType').value;
+      const message = document.getElementById('sMessage').value.trim();
+
+      try {
+        // Try to insert into support_requests table (graceful if table missing)
+        const { error: dbErr } = await sb.from('support_requests').insert([{
+          name, email, issue_type: issueType, message, status: 'open'
+        }]);
+
+        // Notify coach via API
+        await fetch('/api/notify-coach', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'Support Request',
+            client_name: name,
+            client_email: email,
+            subject: `Support Request — ${issueType} from ${name}`,
+            summary: `${name} (${email}) submitted a support request.\n\nType: ${issueType}\n\nMessage: ${message}`,
+            metadata: { name, email, issueType, message }
+          })
+        }).catch(() => {});
+
+        successMsg.style.display = 'block';
+        document.getElementById('supportForm').reset();
+      } catch (err) {
+        errorMsg.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Send Request';
+        return;
+      }
+
+      btn.textContent = 'Sent';
+    }
+  </script>
+</body>
+</html>

@@ -33,6 +33,11 @@ const staticHtmlRoutes: Record<string, string> = {
   "/portal": "/portal.html",
   "/coach": "/coach.html",
   "/community": "/community.html",
+  "/terms": "/terms.html",
+  "/privacy": "/privacy.html",
+  "/waiver": "/waiver.html",
+  "/support": "/support.html",
+  "/launch-checklist": "/launch-checklist.html",
 };
 
 function staticHtmlRewritePlugin() {

@@ -293,6 +293,8 @@
       <button class="tab-btn" onclick="showTab('resources')">Resources</button>
       <button class="tab-btn" onclick="showTab('community')">Community</button>
       <button class="tab-btn" onclick="showTab('askatom')">Ask AT0M</button>
+      <button class="tab-btn" onclick="showTab('help')">Help</button>
+      <button class="tab-btn" onclick="showTab('account')">Account</button>
     </nav>
 
     <!-- LOADING -->
@@ -342,6 +344,21 @@
             <div id="coachNotes"><p class="empty-state">No notes yet. Check back after your first week.</p></div>
           </div>
         </div>
+      </div>
+
+      <!-- SAFETY NOTICE -->
+      <div class="card" style="border-left:3px solid var(--red);margin-top:1.5rem">
+        <div class="card-eyebrow" style="color:var(--red)">Safety Reminder</div>
+        <div class="card-title" style="font-size:1.1rem">Training Safety</div>
+        <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:0.5rem">Stop training immediately and contact a medical professional if you experience chest pain, severe shortness of breath, dizziness, or any serious symptom. This platform is not a medical service.</p>
+        <a href="/support" style="font-size:0.8rem;color:var(--gold);font-weight:600;letter-spacing:0.06em;text-transform:uppercase">Contact Support</a>
+      </div>
+
+      <!-- WELCOME CHECKLIST -->
+      <div class="card" id="welcomeChecklistCard" style="margin-top:1.5rem;display:none">
+        <div class="card-eyebrow">Getting Started</div>
+        <div class="card-title">Welcome Checklist</div>
+        <div id="welcomeChecklist" style="display:flex;flex-direction:column;gap:0.5rem"></div>
       </div>
     </div>
 
@@ -678,11 +695,152 @@
       </div>
     </div>
 
+    <!-- ═══ TAB: HELP ═══ -->
+    <div id="tab-help" class="tab-panel">
+      <div class="panel-eyebrow">Support</div>
+      <h2 class="panel-heading">Help Center</h2>
+
+      <!-- SAFETY FIRST -->
+      <div class="card" style="border-left:3px solid var(--red);margin-bottom:1.5rem">
+        <div class="card-eyebrow" style="color:var(--red)">Medical and Safety Notice</div>
+        <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:0.4rem">For medical emergencies, call emergency services (911) immediately.</p>
+        <p style="font-size:0.88rem;color:var(--text-muted)">For chest pain, dizziness, difficulty breathing, or serious symptoms — stop all activity and seek medical attention immediately. This platform is not a medical service.</p>
+      </div>
+
+      <div class="card card-gold">
+        <div class="card-title">Submit a Support Request</div>
+        <div class="form-group">
+          <label class="form-label">Issue Type</label>
+          <select class="form-input" id="helpType">
+            <option value="">Select type</option>
+            <option value="technical">Technical Issue</option>
+            <option value="coaching">Coaching Question</option>
+            <option value="billing">Billing / Subscription</option>
+            <option value="account">Account Access</option>
+            <option value="feedback">Feedback</option>
+            <option value="cancellation">Cancellation Request</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea class="form-input" id="helpMessage" placeholder="Describe your issue or question..." rows="4"></textarea>
+        </div>
+        <button class="btn-submit" id="helpBtn" onclick="submitHelp()">Send Request</button>
+        <div class="inline-ok" id="helpOk">Request submitted. Your coach will follow up within 1 business day.</div>
+        <p style="color:var(--red);font-size:0.82rem;margin-top:0.75rem;display:none" id="helpErr">Unable to submit. Email us directly at jeshua@levioperations.com</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Quick Answers</div>
+        <div style="display:flex;flex-direction:column;gap:0.75rem">
+          <div style="padding:0.85rem;background:var(--surface2);border-radius:4px">
+            <div style="font-size:0.82rem;font-weight:700;color:var(--text);margin-bottom:0.3rem">When does my coach respond?</div>
+            <div style="font-size:0.82rem;color:var(--text-muted)">Typically within 1 business day. Check your Messages tab for updates.</div>
+          </div>
+          <div style="padding:0.85rem;background:var(--surface2);border-radius:4px">
+            <div style="font-size:0.82rem;font-weight:700;color:var(--text);margin-bottom:0.3rem">How do I update my weight?</div>
+            <div style="font-size:0.82rem;color:var(--text-muted)">Use the Check-In tab to log your weekly weigh-in and recovery data.</div>
+          </div>
+          <div style="padding:0.85rem;background:var(--surface2);border-radius:4px">
+            <div style="font-size:0.82rem;font-weight:700;color:var(--text);margin-bottom:0.3rem">How do I upload progress photos?</div>
+            <div style="font-size:0.82rem;color:var(--text-muted)">Go to the Photos tab and select a photo type (front, back, side), then upload.</div>
+          </div>
+          <div style="padding:0.85rem;background:var(--surface2);border-radius:4px">
+            <div style="font-size:0.82rem;font-weight:700;color:var(--text);margin-bottom:0.3rem">What is Ask AT0M?</div>
+            <div style="font-size:0.82rem;color:var(--text-muted)">An AI coaching assistant for training and lifestyle questions. Not a medical service. For medical questions, consult a physician.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Legal</div>
+        <div style="display:flex;flex-direction:column;gap:0.5rem">
+          <a href="/terms" style="color:var(--gold);font-size:0.88rem;text-decoration:none">Terms of Service</a>
+          <a href="/privacy" style="color:var(--gold);font-size:0.88rem;text-decoration:none">Privacy Policy</a>
+          <a href="/waiver" style="color:var(--gold);font-size:0.88rem;text-decoration:none">Training Waiver</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ TAB: ACCOUNT ═══ -->
+    <div id="tab-account" class="tab-panel">
+      <div class="panel-eyebrow">Your Account</div>
+      <h2 class="panel-heading">Account</h2>
+
+      <div class="card card-gold">
+        <div class="card-eyebrow">Profile</div>
+        <div class="card-title">Account Info</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+          <div>
+            <div class="form-label">Name</div>
+            <div style="font-size:0.95rem;color:var(--text);font-weight:600" id="acctName">Loading...</div>
+          </div>
+          <div>
+            <div class="form-label">Email</div>
+            <div style="font-size:0.88rem;color:var(--text-muted)" id="acctEmail">Loading...</div>
+          </div>
+          <div>
+            <div class="form-label">Subscription</div>
+            <div style="font-size:0.88rem;color:var(--text)" id="acctSub">Loading...</div>
+          </div>
+          <div>
+            <div class="form-label">Member Since</div>
+            <div style="font-size:0.88rem;color:var(--text-muted)" id="acctSince">Loading...</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Security</div>
+        <div class="form-group">
+          <label class="form-label">New Password</label>
+          <input class="form-input" type="password" id="newPw" placeholder="New password (min 8 characters)" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Confirm Password</label>
+          <input class="form-input" type="password" id="confirmPw" placeholder="Repeat new password" />
+        </div>
+        <button class="btn-submit" id="changePwBtn" onclick="changePassword()">Update Password</button>
+        <div class="inline-ok" id="pwOk">Password updated.</div>
+        <p style="color:var(--red);font-size:0.82rem;margin-top:0.5rem;display:none" id="pwErr"></p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Legal Agreements</div>
+        <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem">Review the documents that govern your use of AT0M FIT.</p>
+        <div style="display:flex;flex-direction:column;gap:0.6rem">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:0.75rem;background:var(--surface2);border-radius:4px">
+            <span style="font-size:0.88rem;color:var(--text)">Terms of Service</span>
+            <a href="/terms" style="font-size:0.78rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--gold);text-decoration:none">View</a>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:0.75rem;background:var(--surface2);border-radius:4px">
+            <span style="font-size:0.88rem;color:var(--text)">Privacy Policy</span>
+            <a href="/privacy" style="font-size:0.78rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--gold);text-decoration:none">View</a>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:0.75rem;background:var(--surface2);border-radius:4px">
+            <span style="font-size:0.88rem;color:var(--text)">Training Waiver</span>
+            <a href="/waiver" style="font-size:0.78rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--gold);text-decoration:none">View</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="border:1px solid rgba(201,74,74,0.25)">
+        <div class="card-title" style="color:var(--red)">Cancel or Sign Out</div>
+        <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem">To cancel your membership or request account deletion, contact your coach directly or submit a support request in the Help tab.</p>
+        <button class="btn-logout" onclick="handleLogout()" style="margin-right:0.75rem">Sign Out</button>
+        <a href="/support" style="font-size:0.8rem;color:var(--text-muted);text-decoration:none;border-bottom:1px solid var(--border)">Contact Support</a>
+      </div>
+    </div>
+
     <footer class="portal-footer">
       <span>&copy; 2026 Levi Operations LLC.</span>
       &nbsp;&nbsp;<a href="/">AT0M FIT Home</a>
       &nbsp;&nbsp;<a href="/community">Community</a>
       &nbsp;&nbsp;<a href="/training">Custom Training</a>
+      &nbsp;&nbsp;<a href="/terms">Terms</a>
+      &nbsp;&nbsp;<a href="/privacy">Privacy</a>
+      &nbsp;&nbsp;<a href="/support">Support</a>
     </footer>
   </div>
 
@@ -772,7 +930,9 @@
         loadGoal(uid),
         loadWeeklyPlan(uid),
         loadPhotoHistory(uid),
-        loadReadinessHistory(uid)
+        loadReadinessHistory(uid),
+        loadAccountInfo(user),
+        loadWelcomeChecklist(uid)
       ]);
     }
 
@@ -1345,6 +1505,111 @@
     function esc(str) {
       if (!str) return '';
       return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ── HELP TAB ──
+    async function submitHelp() {
+      const btn = document.getElementById('helpBtn');
+      const ok = document.getElementById('helpOk');
+      const err = document.getElementById('helpErr');
+      const type = document.getElementById('helpType')?.value;
+      const msg = document.getElementById('helpMessage')?.value.trim();
+      if (!type || !msg) { err.style.display = 'block'; err.textContent = 'Please select an issue type and write a message.'; return; }
+      btn.disabled = true; btn.textContent = 'Sending...';
+      ok.style.display = 'none'; err.style.display = 'none';
+      try {
+        await sb.from('support_requests').insert([{
+          client_id: currentUser?.id || null,
+          name: currentClientName || currentUser?.email || 'Client',
+          email: currentUser?.email || '',
+          issue_type: type,
+          message: msg,
+          status: 'open'
+        }]).then(r => r).catch(() => ({}));
+        await fetch('/api/notify-coach', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'Portal Support Request',
+            client_name: currentClientName,
+            client_email: currentUser?.email,
+            subject: `Portal Support — ${type}`,
+            summary: `${currentClientName} submitted a support request.\nType: ${type}\nMessage: ${msg}`
+          })
+        }).catch(() => {});
+        ok.style.display = 'block';
+        document.getElementById('helpType').value = '';
+        document.getElementById('helpMessage').value = '';
+      } catch (e) {
+        err.textContent = 'Unable to submit. Email us directly at jeshua@levioperations.com';
+        err.style.display = 'block';
+      }
+      btn.disabled = false; btn.textContent = 'Send Request';
+    }
+
+    // ── ACCOUNT TAB ──
+    async function loadAccountInfo(user) {
+      const nameEl = document.getElementById('acctName');
+      const emailEl = document.getElementById('acctEmail');
+      const subEl = document.getElementById('acctSub');
+      const sinceEl = document.getElementById('acctSince');
+      if (emailEl) emailEl.textContent = user.email || '—';
+      const since = user.created_at ? new Date(user.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : '—';
+      if (sinceEl) sinceEl.textContent = since;
+      const { data: profile } = await sb.from('clients').select('full_name,subscription_status').eq('id', user.id).single().catch(() => ({ data: null }));
+      if (nameEl) nameEl.textContent = profile?.full_name || user.email?.split('@')[0] || '—';
+      if (subEl) {
+        const sub = profile?.subscription_status || 'inactive';
+        subEl.innerHTML = `<span style="color:${sub === 'active' ? 'var(--green)' : 'var(--text-muted)'}; font-weight:700;text-transform:capitalize">${sub}</span>`;
+      }
+    }
+
+    async function changePassword() {
+      const btn = document.getElementById('changePwBtn');
+      const ok = document.getElementById('pwOk');
+      const errEl = document.getElementById('pwErr');
+      const pw = document.getElementById('newPw')?.value;
+      const confirm = document.getElementById('confirmPw')?.value;
+      ok.style.display = 'none'; errEl.style.display = 'none';
+      if (!pw || pw.length < 8) { errEl.textContent = 'Password must be at least 8 characters.'; errEl.style.display = 'block'; return; }
+      if (pw !== confirm) { errEl.textContent = 'Passwords do not match.'; errEl.style.display = 'block'; return; }
+      btn.disabled = true; btn.textContent = 'Updating...';
+      const { error } = await sb.auth.updateUser({ password: pw });
+      if (error) { errEl.textContent = error.message || 'Failed to update password.'; errEl.style.display = 'block'; }
+      else { ok.style.display = 'block'; document.getElementById('newPw').value = ''; document.getElementById('confirmPw').value = ''; }
+      btn.disabled = false; btn.textContent = 'Update Password';
+    }
+
+    // ── WELCOME CHECKLIST ──
+    async function loadWelcomeChecklist(uid) {
+      const card = document.getElementById('welcomeChecklistCard');
+      const container = document.getElementById('welcomeChecklist');
+      if (!card || !container) return;
+
+      const { data: profile } = await sb.from('clients').select('full_name,subscription_status,created_at').eq('id', uid).single().catch(() => ({ data: null }));
+      const { data: workout } = await sb.from('assigned_workouts').select('id').eq('client_id', uid).limit(1).then(r=>r).catch(()=>({data:null}));
+      const { data: checkin } = await sb.from('checkins').select('id').eq('client_id', uid).limit(1).then(r=>r).catch(()=>({data:null}));
+      const { data: goal } = await sb.from('client_goals').select('id').eq('client_id', uid).eq('status', 'active').limit(1).then(r=>r).catch(()=>({data:null}));
+
+      const items = [
+        { label: 'Profile set up', done: !!profile?.full_name },
+        { label: 'First workout assigned', done: !!(workout && workout.length > 0) },
+        { label: 'First check-in completed', done: !!(checkin && checkin.length > 0) },
+        { label: 'Active goal set', done: !!(goal && goal.length > 0) },
+      ];
+
+      const allDone = items.every(i => i.done);
+      if (allDone) { card.style.display = 'none'; return; }
+
+      card.style.display = 'block';
+      container.innerHTML = items.map(item => `
+        <div style="display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0.75rem;background:var(--surface2);border-radius:4px">
+          <div style="width:16px;height:16px;border-radius:50%;border:2px solid ${item.done ? 'var(--green)' : 'var(--border)'};background:${item.done ? 'var(--green)' : 'transparent'};display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            ${item.done ? '<svg width="8" height="8" viewBox="0 0 8 8"><polyline points="1 4 3 6 7 2" fill="none" stroke="#000" stroke-width="1.5"/></svg>' : ''}
+          </div>
+          <span style="font-size:0.85rem;color:${item.done ? 'var(--text-muted)' : 'var(--text)'};${item.done ? 'text-decoration:line-through' : ''}">${item.label}</span>
+          ${!item.done ? '<span style="font-size:0.7rem;font-weight:700;letter-spacing:0.08em;color:var(--gold);text-transform:uppercase;margin-left:auto">Pending</span>' : ''}
+        </div>`).join('');
     }
 
     // ── INIT ──

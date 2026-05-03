@@ -2,14 +2,14 @@
 
 **Date:** 2026-05-03
 **Project:** AT0M FIT
-**Sprint:** Full Premium Buildout
+**Sprint:** Final Hardening — COMPLETE
 
 ---
 
 ## Gate Status: PASS
 
-7 routes live. Full premium feature set built. All data flows wired through Supabase RLS.
-No service key exposed. No RLS disabled. Vercel untouched. Brand intact.
+12 routes live. Full premium feature set + 7 new coach sections + 4 legal/support pages + portal Account/Help tabs.
+No service key exposed. No RLS disabled. Vercel untouched. Brand intact. No emojis.
 
 ---
 
@@ -24,6 +24,11 @@ No service key exposed. No RLS disabled. Vercel untouched. Brand intact.
 | `/portal` | Supabase email/password | PASS — 12-tab client dashboard |
 | `/coach` | Supabase email/password + email gate | PASS — full coach command center |
 | `/community` | Supabase email/password | PASS — client community, auth wall |
+| `/terms` | None | PASS — draft legal page |
+| `/privacy` | None | PASS — draft legal page |
+| `/waiver` | None | PASS — draft legal page |
+| `/support` | None | PASS — functional support form |
+| `/launch-checklist` | None | PASS — internal status page |
 
 ---
 
@@ -43,6 +48,8 @@ No service key exposed. No RLS disabled. Vercel untouched. Brand intact.
 | Resources | PASS — 8 guide cards |
 | Community | PASS — link to /community |
 | Ask AT0M | PASS — question form, AI response, history |
+| Help | PASS — support form, FAQ, legal links |
+| Account | PASS — profile info, password change, legal agreements |
 
 ---
 
@@ -59,6 +66,13 @@ No service key exposed. No RLS disabled. Vercel untouched. Brand intact.
 | Progress photos view | PASS |
 | Check-ins + workout logs view | PASS |
 | Messages send/view | PASS |
+| Community Moderation | PASS — hide/unhide posts + comments, filters |
+| Ask AT0M Review | PASS — flag/review filters, mark reviewed |
+| Owner Setup Panel | PASS — 9-step ops checklist, live table probes |
+| Launch Control | PASS — 27-item checklist, dot-coded status |
+| Client Admin Controls | PASS — graceful fallback to clients table |
+| Activity Log | PASS — graceful empty state |
+| Risk / Attention Panel | PASS — auto-detects 7d no check-in, low energy, high stress, admin flag |
 
 ---
 
@@ -136,6 +150,7 @@ No service key exposed. No RLS disabled. Vercel untouched. Brand intact.
 |------|--------|--------|
 | `AT0M_FIT_FEATURE_EXPANSION.sql` | progress_photos, nutrition_plans, weekly_plan_items, client_goals | READY — run in Supabase |
 | `FULL_PREMIUM_BUILDOUT_SETUP.sql` | community_posts, community_comments, community_reactions, ask_atom_logs, readiness_scores, client_badges, resource_vault, exercise_library, coach_alerts, weekly_reports | READY — run in Supabase |
+| `FINAL_HARDENING_SETUP.sql` | client_onboarding_tasks, support_requests, client_admin_status, activity_log, legal_acceptances | READY — run in Supabase |
 
 ---
 
@@ -143,10 +158,13 @@ No service key exposed. No RLS disabled. Vercel untouched. Brand intact.
 
 1. Run `AT0M_FIT_FEATURE_EXPANSION.sql` in Supabase SQL editor
 2. Run `FULL_PREMIUM_BUILDOUT_SETUP.sql` in Supabase SQL editor
-3. Create `progress-photos` storage bucket in Supabase (private)
-4. Set `GMAIL_USER` + `GMAIL_APP_PASSWORD` + `NOTIFICATION_TO_EMAIL` in Replit Secrets
-5. Set `OPENAI_API_KEY` in Replit Secrets
-6. Restart API Server workflow after secrets are set
+3. Run `FINAL_HARDENING_SETUP.sql` in Supabase SQL editor
+4. Create `progress-photos` storage bucket in Supabase (private)
+5. Set `GMAIL_USER` + `GMAIL_APP_PASSWORD` + `NOTIFICATION_TO_EMAIL` in Replit Secrets
+6. Set `OPENAI_API_KEY` in Replit Secrets
+7. Restart API Server workflow after secrets are set
+8. Have legal counsel review `/terms`, `/privacy`, `/waiver` — remove draft banners after approval
+Full detail: `OWNER_SETUP_CHECKLIST.md`
 
 ---
 
@@ -162,6 +180,12 @@ No service key exposed. No RLS disabled. Vercel untouched. Brand intact.
 | `FULL_PREMIUM_BUILDOUT_SETUP.sql` | PASS |
 | `FULL_PREMIUM_BUILDOUT_STATUS.md` | PASS |
 | `.env.example` | PASS — OPENAI_API_KEY added |
+| `FINAL_HARDENING_SETUP.sql` | PASS |
+| `OWNER_SETUP_CHECKLIST.md` | PASS |
+| `IMAGE_ASSET_MANIFEST.md` | PASS |
+| `LEGAL_PAGES_STATUS.md` | PASS |
+| `SECURITY_AND_RLS_CHECKLIST.md` | PASS |
+| `CLIENT_SUPPORT_RUNBOOK.md` | PASS |
 
 ---
 
@@ -171,13 +195,16 @@ No service key exposed. No RLS disabled. Vercel untouched. Brand intact.
 QCMD: PASS
 AT0M FIT Full Premium Buildout COMPLETE.
 
-Routes: 7/7 live
-Portal tabs: 12/12 built
+Routes: 12/12 live
+Portal tabs: 14/14 built (12 original + Help + Account)
+Coach sections: 9 total (2 original + 7 new)
 Coach notification triggers: 9/9 wired
 API routes: 4/4 live
-SQL files: 2 ready to run
+SQL files: 3 ready to run
 Security: all constraints satisfied
+Image assets: 16 files in /assets/, all paths updated
+Legal pages: 3 draft pages live, 1 functional support page
 
-Owner actions remaining: run SQL, set secrets, create storage bucket.
+Owner actions remaining: run SQL, set secrets, create storage bucket, legal review.
 No code changes required to unblock any of the above.
 ```

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Launch Checklist | AT0M FIT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg:#0B0B0B; --surface:#111; --surface2:#1A1A1A; --border:#2A2A2A; --gold:#C9A04A; --text:#F0EDE8; --text-muted:#888; --green:#4AC97A; --red:#C94A4A; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.6; min-height: 100vh; }
+    nav { display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; border-bottom: 1px solid var(--border); background: rgba(11,11,11,0.96); position: sticky; top: 0; z-index: 50; }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.1em; text-decoration: none; color: var(--text); }
+    .nav-logo span { color: var(--gold); }
+    .nav-back { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); text-decoration: none; border: 1px solid var(--border); padding: 0.4rem 0.9rem; border-radius: 4px; }
+    .internal-banner { background: #0a0f1a; border-bottom: 1px solid rgba(201,160,74,0.2); padding: 0.75rem 2rem; font-size: 0.8rem; color: var(--text-muted); text-align: center; }
+    .page { max-width: 900px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+    h1 { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; letter-spacing: 0.04em; margin-bottom: 0.4rem; }
+    .page-sub { color: var(--text-muted); margin-bottom: 2.5rem; }
+    h2 { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 0.06em; color: var(--gold); margin: 2.5rem 0 1rem; }
+    .check-grid { display: flex; flex-direction: column; gap: 0.5rem; }
+    .check-item { display: flex; align-items: center; gap: 0.85rem; padding: 0.85rem 1.1rem; border: 1px solid var(--border); border-radius: 4px; background: var(--surface); }
+    .check-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .dot-done { background: var(--green); }
+    .dot-pending { background: var(--gold); }
+    .dot-na { background: var(--text-muted); }
+    .check-label { flex: 1; font-size: 0.88rem; color: var(--text); }
+    .check-status { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); white-space: nowrap; }
+    .check-status.done { color: var(--green); }
+    .check-status.pending { color: var(--gold); }
+  </style>
+</head>
+<body>
+  <nav>
+    <a class="nav-logo" href="/">AT<span>0</span>M FIT</a>
+    <a class="nav-back" href="/coach">Coach Dashboard</a>
+  </nav>
+  <div class="internal-banner">Internal — Launch Readiness Document. Not for public distribution.</div>
+  <div class="page">
+    <h1>Launch Checklist</h1>
+    <p class="page-sub">AT0M FIT launch readiness status. Update manually as items are completed.</p>
+
+    <h2>Infrastructure</h2>
+    <div class="check-grid">
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">Replit workspace active</div><div class="check-status done">DONE</div></div>
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">API server running (port 8080)</div><div class="check-status done">DONE</div></div>
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">Web frontend running (Vite)</div><div class="check-status done">DONE</div></div>
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">Supabase project connected</div><div class="check-status done">DONE</div></div>
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">RLS enabled on all tables</div><div class="check-status done">DONE</div></div>
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">Service role key not in frontend</div><div class="check-status done">DONE</div></div>
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">Vercel production untouched</div><div class="check-status done">DONE</div></div>
+    </div>
+
+    <h2>Database Setup</h2>
+    <div class="check-grid">
+      <div class="check-item"><div class="check-dot dot-pending"></div><div class="check-label">Run AT0M_FIT_FEATURE_EXPANSION.sql</div><div class="check-status pending">PENDING OWNER</div></div>
+      <div class="check-item"><div class="check-dot dot-pending"></div><div class="check-label">Run FULL_PREMIUM_BUILDOUT_SETUP.sql</div><div class="check-status pending">PENDING OWNER</div></div>
+      <div class="check-item"><div class="check-dot dot-pending"></div><div class="check-label">Run FINAL_HARDENING_SETUP.sql</div><div class="check-status pending">PENDING OWNER</div></div>
+      <div class="check-item"><div class="check-dot dot-pending"></div><div class="check-label">Create progress-photos storage bucket (private)</div><div class="check-status pending">PENDING OWNER</div></div>
+    </div>
+
+    <h2>Secrets / API Keys</h2>
+    <div class="check-grid">
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">VITE_SUPABASE_URL</div><div class="check-status done">CONFIGURED</div></div>
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">VITE_SUPABASE_ANON_KEY</div><div class="check-status done">CONFIGURED</div></div>
+      <div class="check-item"><div class="check-dot dot-pending"></div><div class="check-label">GMAIL_USER</div><div class="check-status pending">PENDING OWNER</div></div>
+      <div class="check-item"><div class="check-dot dot-pending"></div><div class="check-label">GMAIL_APP_PASSWORD</div><div class="check-status pending">PENDING OWNER</div></div>
+      <div class="check-item"><div class="check-dot dot-pending"></div><div class="check-label">NOTIFICATION_TO_EMAIL</div><div class="check-status pending">PENDING OWNER</div></div>
+      <div class="check-item"><div class="check-dot dot-pending"></div><div class="check-label">OPENAI_API_KEY</div><div class="check-status pending">PENDING OWNER</div></div>
+    </div>
+
+    <h2>Routes and Pages</h2>
+    <div class="check-grid">
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">/ (Homepage / Waitlist)</div><div class="check-status done">LIVE</div></div>
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">/blueprint</div><div class="check-status done">LIVE</div></div>
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">/calculator</div><div class="check-status done">LIVE</div></div>
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">/training</div><div class="check-status done">LIVE</div></div>
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">/portal</div><div class="check-status done">LIVE</div></div>
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">/coach</div><div class="check-status done">LIVE</div></div>
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">/community</div><div class="check-status done">LIVE</div></div>
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">/terms</div><div class="check-status done">LIVE (DRAFT)</div></div>
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">/privacy</div><div class="check-status done">LIVE (DRAFT)</div></div>
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">/waiver</div><div class="check-status done">LIVE (DRAFT)</div></div>
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">/support</div><div class="check-status done">LIVE</div></div>
+    </div>
+
+    <h2>Legal</h2>
+    <div class="check-grid">
+      <div class="check-item"><div class="check-dot dot-pending"></div><div class="check-label">Terms of Service reviewed by legal counsel</div><div class="check-status pending">NEEDS LEGAL REVIEW</div></div>
+      <div class="check-item"><div class="check-dot dot-pending"></div><div class="check-label">Privacy Policy reviewed by legal counsel</div><div class="check-status pending">NEEDS LEGAL REVIEW</div></div>
+      <div class="check-item"><div class="check-dot dot-pending"></div><div class="check-label">Training Waiver reviewed by legal counsel</div><div class="check-status pending">NEEDS LEGAL REVIEW</div></div>
+      <div class="check-item"><div class="check-dot dot-na"></div><div class="check-label">Payment terms finalized</div><div class="check-status">NOT STARTED</div></div>
+    </div>
+
+    <h2>Quality / Brand</h2>
+    <div class="check-grid">
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">No emojis in production UI</div><div class="check-status done">DONE</div></div>
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">Brand consistent (Bebas Neue / Inter / black/gold)</div><div class="check-status done">DONE</div></div>
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">All images in /assets/ folder</div><div class="check-status done">DONE</div></div>
+      <div class="check-item"><div class="check-dot dot-done"></div><div class="check-label">Image fallbacks (onerror handlers)</div><div class="check-status done">DONE</div></div>
+    </div>
+  </div>
+</body>
+</html>
