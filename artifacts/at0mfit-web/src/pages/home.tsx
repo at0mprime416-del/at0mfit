@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 
 const FEATURES = [
   {
@@ -113,6 +113,10 @@ export default function Home() {
     if (!email || status === 'loading' || status === 'success') return
     setStatus('loading')
     try {
+      if (!isSupabaseConfigured || !supabase) {
+        setStatus('error')
+        return
+      }
       const { error } = await supabase.from('waitlist').insert({ email })
       if (!error) {
         fetch('/api/waitlist-confirm', {
