@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "routes": [
+    { "src": "/blueprint", "dest": "/blueprint.html" },
+    { "src": "/calculator", "dest": "/calculator.html" },
+    { "src": "/training", "dest": "/training.html" },
+    { "src": "/portal", "dest": "/portal.html" },
+    { "src": "/coach", "dest": "/coach.html" },
+    { "src": "/(.*)", "dest": "/$1" }
+  ]
+}

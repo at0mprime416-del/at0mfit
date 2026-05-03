@@ -1,0 +1,8 @@
+{
+  "name": "at0mfit",
+  "version": "1.0.0",
+  "description": "AT0M FIT — static site",
+  "scripts": {
+    "vercel-build": "echo 'static site, no build needed'"
+  }
+}

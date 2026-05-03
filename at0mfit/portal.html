@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client Portal | AT0M FIT</title>
+  <meta name="description" content="AT0M FIT Client Portal. Your custom training dashboard." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg:           #0B0B0B;
+      --surface:      #111111;
+      --surface2:     #1A1A1A;
+      --border:       #2A2A2A;
+      --gold:         #C9A04A;
+      --gold-bright:  #D4AF37;
+      --gold-glow:    rgba(201, 160, 74, 0.25);
+      --gold-dim:     rgba(201, 160, 74, 0.08);
+      --grey-light:   #B0B0B0;
+      --grey-mid:     #6E6E6E;
+      --text:         #F0EDE8;
+      --text-muted:   #888888;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* LOGIN STATE */
+    #loginView {
+      display: none;
+      min-height: 100vh;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: var(--bg);
+    }
+
+    #loginView.active { display: flex; }
+
+    .login-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 2px solid var(--gold);
+      border-radius: 4px;
+      padding: 3rem;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .login-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.2rem;
+      letter-spacing: 0.1em;
+      text-align: center;
+      margin-bottom: 0.25rem;
+    }
+
+    .login-logo span { color: var(--gold); }
+
+    .login-sub {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.45rem;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.9rem 1.2rem;
+      color: var(--text);
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-input::placeholder { color: var(--text-muted); }
+
+    .form-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px var(--gold-glow);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 1rem;
+      background: var(--gold);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.95rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.2s, transform 0.2s;
+      margin-top: 0.5rem;
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-bright);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .login-error {
+      color: #e05555;
+      font-size: 0.85rem;
+      margin-top: 0.75rem;
+      display: none;
+    }
+
+    /* DASHBOARD STATE */
+    #dashboardView {
+      display: none;
+    }
+
+    #dashboardView.active { display: block; }
+
+    /* PORTAL NAV */
+    .portal-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: rgba(11, 11, 11, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .portal-nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.1em;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .portal-nav-logo span { color: var(--gold); }
+
+    .portal-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .portal-nav-name {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .portal-nav-name strong {
+      color: var(--text);
+    }
+
+    .btn-logout {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-logout:hover {
+      border-color: var(--grey-mid);
+      color: var(--text);
+    }
+
+    /* DASHBOARD LAYOUT */
+    .dashboard {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem;
+    }
+
+    .welcome-bar {
+      margin-bottom: 2.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .welcome-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.3rem;
+    }
+
+    .welcome-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      letter-spacing: 0.04em;
+      color: var(--text);
+    }
+
+    /* GRID LAYOUT */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .dashboard-main {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .dashboard-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* CARDS */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.8rem;
+      position: relative;
+    }
+
+    .card-gold {
+      border-top: 2px solid var(--gold);
+    }
+
+    .card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.05em;
+      color: var(--text);
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .card-title svg { color: var(--gold); }
+
+    .card-eyebrow {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.3rem;
+    }
+
+    /* WORKOUT CARD */
+    .workout-card-inner {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.5rem;
+    }
+
+    .workout-type-badge {
+      display: inline-block;
+      background: var(--gold-dim);
+      border: 1px solid rgba(201, 160, 74, 0.3);
+      color: var(--gold);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.75rem;
+      border-radius: 2px;
+      margin-bottom: 0.75rem;
+    }
+
+    .workout-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .workout-meta {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      margin-bottom: 1rem;
+    }
+
+    .workout-instructions {
+      color: var(--grey-light);
+      font-size: 0.92rem;
+      line-height: 1.7;
+      white-space: pre-line;
+    }
+
+    .workout-empty {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      font-style: italic;
+    }
+
+    /* CHECKIN FORM */
+    .checkin-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .rating-group label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .rating-row {
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    .rating-btn {
+      width: 36px;
+      height: 36px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.15s;
+    }
+
+    .rating-btn:hover {
+      border-color: rgba(201, 160, 74, 0.4);
+      color: var(--gold);
+    }
+
+    .rating-btn.selected {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #000;
+    }
+
+    .checkin-notes {
+      margin-bottom: 1.25rem;
+    }
+
+    textarea.form-input {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .btn-submit {
+      padding: 0.75rem 1.5rem;
+      background: var(--gold);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.85rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.2s;
+    }
+
+    .btn-submit:hover { background: var(--gold-bright); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* PROGRESS SNAPSHOT */
+    .metric-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .metric-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .metric-item:last-child { border-bottom: none; }
+
+    .metric-label {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+
+    .metric-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      color: var(--gold);
+      letter-spacing: 0.04em;
+    }
+
+    /* COACH NOTES */
+    .note-item {
+      background: var(--surface2);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 4px 4px 0;
+      padding: 1rem 1.2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .note-item:last-child { margin-bottom: 0; }
+
+    .note-text {
+      color: var(--grey-light);
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+
+    .note-date {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-top: 0.4rem;
+    }
+
+    .notes-empty {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+
+    /* MESSAGES */
+    .message-thread {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      max-height: 300px;
+      overflow-y: auto;
+      margin-bottom: 1.2rem;
+      padding-right: 0.25rem;
+    }
+
+    .message-thread::-webkit-scrollbar { width: 4px; }
+    .message-thread::-webkit-scrollbar-track { background: var(--surface2); }
+    .message-thread::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .message-bubble {
+      max-width: 85%;
+      padding: 0.75rem 1rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+
+    .message-bubble.coach {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--grey-light);
+      align-self: flex-start;
+    }
+
+    .message-bubble.client {
+      background: var(--gold-dim);
+      border: 1px solid rgba(201, 160, 74, 0.25);
+      color: var(--text);
+      align-self: flex-end;
+    }
+
+    .message-meta {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+    }
+
+    .message-input-row {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .message-input-row .form-input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+    }
+
+    .btn-send {
+      padding: 0.75rem 1.2rem;
+      background: var(--gold);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+
+    .btn-send:hover { background: var(--gold-bright); }
+
+    /* LOADING STATE */
+    .loading-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 2px solid var(--border);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* FOOTER */
+    .portal-footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+    }
+
+    .portal-footer a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    .portal-footer a:hover { color: var(--gold); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .portal-nav { padding: 0.85rem 1.25rem; }
+      .dashboard { padding: 1.5rem 1.25rem; }
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .checkin-grid { grid-template-columns: 1fr; }
+      .login-card { padding: 2rem 1.5rem; }
+      .message-input-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SVG ICONS -->
+  <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <symbol id="icon-workout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M6.5 6.5h11M12 6.5V18M8 18h8"/>
+      </symbol>
+      <symbol id="icon-checkin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+      </symbol>
+      <symbol id="icon-metrics" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </symbol>
+      <symbol id="icon-notes" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/>
+      </symbol>
+      <symbol id="icon-message" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- LOGIN VIEW -->
+  <div id="loginView" class="active">
+    <div class="login-card">
+      <div class="login-logo">AT<span>0</span>M FIT</div>
+      <p class="login-sub">Client Portal</p>
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label class="form-label" for="loginEmail">Email</label>
+          <input class="form-input" type="email" id="loginEmail" placeholder="your@email.com" required autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="loginPassword">Password</label>
+          <input class="form-input" type="password" id="loginPassword" placeholder="Password" required autocomplete="current-password" />
+        </div>
+        <button class="btn-primary" type="submit" id="loginBtn">Sign In</button>
+        <div class="login-error" id="loginError"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- DASHBOARD VIEW -->
+  <div id="dashboardView">
+    <nav class="portal-nav">
+      <a class="portal-nav-logo" href="/">AT<span>0</span>M FIT</a>
+      <div class="portal-nav-right">
+        <span class="portal-nav-name">Welcome, <strong id="navClientName">Client</strong></span>
+        <button class="btn-logout" onclick="handleLogout()">Sign Out</button>
+      </div>
+    </nav>
+
+    <div id="loadingState" class="loading-state">
+      <div class="spinner"></div>
+      Loading your dashboard...
+    </div>
+
+    <div id="dashboardContent" style="display:none;">
+      <div class="dashboard">
+        <!-- WELCOME -->
+        <div class="welcome-bar">
+          <p class="welcome-eyebrow">Client Dashboard</p>
+          <h1 class="welcome-heading">Welcome back, <span id="welcomeName">Athlete</span>.</h1>
+        </div>
+
+        <div class="dashboard-grid">
+          <!-- MAIN COLUMN -->
+          <div class="dashboard-main">
+
+            <!-- THIS WEEK -->
+            <div class="card card-gold">
+              <div class="card-eyebrow">This Week</div>
+              <div class="card-title">
+                <svg style="width:20px;height:20px"><use href="#icon-workout"/></svg>
+                Assigned Workout
+              </div>
+              <div id="workoutContent">
+                <div class="workout-empty">No workout assigned yet. Check back soon.</div>
+              </div>
+            </div>
+
+            <!-- WEEKLY CHECK-IN -->
+            <div class="card">
+              <div class="card-eyebrow">Weekly Report</div>
+              <div class="card-title">
+                <svg style="width:20px;height:20px"><use href="#icon-checkin"/></svg>
+                Weekly Check-in
+              </div>
+              <form id="checkinForm" onsubmit="submitCheckin(event)">
+                <div class="checkin-grid">
+                  <div class="rating-group">
+                    <label>Training Adherence</label>
+                    <div class="rating-row" id="rating-training">
+                      <button type="button" class="rating-btn" data-val="1" onclick="setRating('training',1)">1</button>
+                      <button type="button" class="rating-btn" data-val="2" onclick="setRating('training',2)">2</button>
+                      <button type="button" class="rating-btn" data-val="3" onclick="setRating('training',3)">3</button>
+                      <button type="button" class="rating-btn" data-val="4" onclick="setRating('training',4)">4</button>
+                      <button type="button" class="rating-btn" data-val="5" onclick="setRating('training',5)">5</button>
+                    </div>
+                  </div>
+                  <div class="rating-group">
+                    <label>Sleep Quality</label>
+                    <div class="rating-row" id="rating-sleep">
+                      <button type="button" class="rating-btn" onclick="setRating('sleep',1)">1</button>
+                      <button type="button" class="rating-btn" onclick="setRating('sleep',2)">2</button>
+                      <button type="button" class="rating-btn" onclick="setRating('sleep',3)">3</button>
+                      <button type="button" class="rating-btn" onclick="setRating('sleep',4)">4</button>
+                      <button type="button" class="rating-btn" onclick="setRating('sleep',5)">5</button>
+                    </div>
+                  </div>
+                  <div class="rating-group">
+                    <label>Stress Level</label>
+                    <div class="rating-row" id="rating-stress">
+                      <button type="button" class="rating-btn" onclick="setRating('stress',1)">1</button>
+                      <button type="button" class="rating-btn" onclick="setRating('stress',2)">2</button>
+                      <button type="button" class="rating-btn" onclick="setRating('stress',3)">3</button>
+                      <button type="button" class="rating-btn" onclick="setRating('stress',4)">4</button>
+                      <button type="button" class="rating-btn" onclick="setRating('stress',5)">5</button>
+                    </div>
+                  </div>
+                  <div class="rating-group">
+                    <label>Energy Level</label>
+                    <div class="rating-row" id="rating-energy">
+                      <button type="button" class="rating-btn" onclick="setRating('energy',1)">1</button>
+                      <button type="button" class="rating-btn" onclick="setRating('energy',2)">2</button>
+                      <button type="button" class="rating-btn" onclick="setRating('energy',3)">3</button>
+                      <button type="button" class="rating-btn" onclick="setRating('energy',4)">4</button>
+                      <button type="button" class="rating-btn" onclick="setRating('energy',5)">5</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="checkin-notes">
+                  <label class="form-label">Notes for Coach</label>
+                  <textarea class="form-input" id="checkinNotes" placeholder="Anything notable this week? Injuries, schedule changes, how sessions felt..."></textarea>
+                </div>
+                <button class="btn-submit" type="submit" id="checkinBtn">Submit Check-in</button>
+                <div id="checkinMsg" style="margin-top:0.75rem;font-size:0.85rem;color:var(--gold);display:none;"></div>
+              </form>
+            </div>
+
+            <!-- MESSAGES -->
+            <div class="card">
+              <div class="card-eyebrow">Communication</div>
+              <div class="card-title">
+                <svg style="width:20px;height:20px"><use href="#icon-message"/></svg>
+                Messages
+              </div>
+              <div class="message-thread" id="messageThread">
+                <div style="color:var(--text-muted);font-size:0.88rem;font-style:italic;">No messages yet.</div>
+              </div>
+              <div class="message-input-row">
+                <input class="form-input" type="text" id="messageInput" placeholder="Send a message to your coach..." />
+                <button class="btn-send" onclick="sendMessage()">Send</button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- SIDEBAR -->
+          <div class="dashboard-sidebar">
+
+            <!-- PROGRESS SNAPSHOT -->
+            <div class="card card-gold">
+              <div class="card-eyebrow">Progress</div>
+              <div class="card-title">
+                <svg style="width:20px;height:20px"><use href="#icon-metrics"/></svg>
+                Snapshot
+              </div>
+              <div class="metric-row" id="progressMetrics">
+                <div class="metric-item">
+                  <span class="metric-label">Current Weight</span>
+                  <span class="metric-value" id="metricWeight">N/A</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-label">Last Check-in</span>
+                  <span class="metric-value" id="metricLastCheckin" style="font-size:1rem;">N/A</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-label">Sessions This Week</span>
+                  <span class="metric-value" id="metricSessions">0</span>
+                </div>
+              </div>
+              <div style="margin-top:1.5rem;text-align:center;">
+                <img src="./watch-premium.png" alt="AT0M FIT Training Metrics" style="width:100%;max-width:200px;border-radius:4px;opacity:0.85;" />
+              </div>
+            </div>
+
+            <!-- COACH NOTES -->
+            <div class="card">
+              <div class="card-eyebrow">From Your Coach</div>
+              <div class="card-title">
+                <svg style="width:20px;height:20px"><use href="#icon-notes"/></svg>
+                Coach Notes
+              </div>
+              <div id="coachNotes">
+                <p class="notes-empty">No notes yet. Check back after your first week.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <footer class="portal-footer">
+        <span>&#169; 2025 Levi Operations LLC.</span>
+        &nbsp;&nbsp;
+        <a href="/">AT0M FIT Home</a>
+        &nbsp;&nbsp;
+        <a href="/training">Custom Training</a>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+  <script>
+    const { createClient } = supabase;
+    const sb = createClient(
+      'https://kgozddcutazpqmfbzafa.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtnb3pkZGN1dGF6cHFtZmJ6YWZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzOTMxOTYsImV4cCI6MjA4ODk2OTE5Nn0.aTi5ZXQi5zSTGb-xQyotF07Tcur5yizux3J8oNejRfE'
+    );
+
+    // Rating state
+    const ratings = { training: 0, sleep: 0, stress: 0, energy: 0 };
+
+    function setRating(category, val) {
+      ratings[category] = val;
+      const btns = document.querySelectorAll(`#rating-${category} .rating-btn`);
+      btns.forEach(btn => {
+        btn.classList.toggle('selected', parseInt(btn.getAttribute('onclick').match(/\d+/)[0]) === val ||
+          parseInt(btn.textContent) === val);
+      });
+      // simpler approach:
+      document.querySelectorAll(`#rating-${category} .rating-btn`).forEach(btn => {
+        btn.classList.toggle('selected', parseInt(btn.textContent) === val);
+      });
+    }
+
+    // LOGIN
+    async function handleLogin(e) {
+      e.preventDefault();
+      const btn = document.getElementById('loginBtn');
+      const errEl = document.getElementById('loginError');
+      btn.disabled = true;
+      btn.textContent = 'Signing in...';
+      errEl.style.display = 'none';
+
+      const email = document.getElementById('loginEmail').value.trim();
+      const pass = document.getElementById('loginPassword').value;
+
+      const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+
+      if (error) {
+        errEl.textContent = 'Invalid email or password. Please try again.';
+        errEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Sign In';
+        return;
+      }
+
+      showDashboard(data.user);
+    }
+
+    // LOGOUT
+    async function handleLogout() {
+      await sb.auth.signOut();
+      document.getElementById('dashboardView').classList.remove('active');
+      document.getElementById('loginView').classList.add('active');
+      document.getElementById('loginForm').reset();
+    }
+
+    // SHOW DASHBOARD
+    async function showDashboard(user) {
+      document.getElementById('loginView').classList.remove('active');
+      document.getElementById('dashboardView').classList.add('active');
+      document.getElementById('loadingState').style.display = 'block';
+      document.getElementById('dashboardContent').style.display = 'none';
+
+      await loadDashboardData(user);
+
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('dashboardContent').style.display = 'block';
+    }
+
+    // LOAD DATA
+    async function loadDashboardData(user) {
+      const uid = user.id;
+
+      // Client profile
+      try {
+        const { data: clientData } = await sb.from('clients').select('full_name').eq('id', uid).single();
+        const name = clientData?.full_name || user.email.split('@')[0];
+        document.getElementById('navClientName').textContent = name;
+        document.getElementById('welcomeName').textContent = name;
+      } catch (e) {
+        const fallback = user.email.split('@')[0];
+        document.getElementById('navClientName').textContent = fallback;
+        document.getElementById('welcomeName').textContent = fallback;
+      }
+
+      // This week's workout
+      try {
+        const today = new Date().toISOString().split('T')[0];
+        const weekStart = getWeekStart(new Date());
+        const { data: awData } = await sb
+          .from('assigned_workouts')
+          .select('*, workouts(*)')
+          .eq('client_id', uid)
+          .gte('assigned_date', weekStart)
+          .lte('assigned_date', today)
+          .order('assigned_date', { ascending: false })
+          .limit(1);
+
+        if (awData && awData.length > 0 && awData[0].workouts) {
+          const w = awData[0].workouts;
+          document.getElementById('workoutContent').innerHTML = `
+            <div class="workout-card-inner">
+              <span class="workout-type-badge">${w.type || 'Training'}</span>
+              <div class="workout-name">${w.name}</div>
+              <div class="workout-meta">${awData[0].assigned_date}${w.duration_minutes ? ' &middot; ' + w.duration_minutes + ' min' : ''}</div>
+              ${w.instructions ? '<div class="workout-instructions">' + w.instructions + '</div>' : ''}
+            </div>
+          `;
+        }
+      } catch (e) { /* no workout found */ }
+
+      // Last check-in
+      try {
+        const { data: ciData } = await sb
+          .from('checkins')
+          .select('submitted_at, week_of')
+          .eq('client_id', uid)
+          .order('created_at', { ascending: false })
+          .limit(1);
+
+        if (ciData && ciData.length > 0) {
+          // submitted_at may be null — fall back to week_of
+          const raw = ciData[0].submitted_at || ciData[0].week_of;
+          if (raw) {
+            const d = new Date(raw);
+            document.getElementById('metricLastCheckin').textContent =
+              d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+          }
+        }
+      } catch (e) { /* no checkins */ }
+
+      // Sessions this week
+      try {
+        const weekStart = getWeekStart(new Date());
+        const { data: sessData } = await sb
+          .from('assigned_workouts')
+          .select('id')
+          .eq('client_id', uid)
+          .eq('completed', true)
+          .gte('assigned_date', weekStart);
+
+        if (sessData) {
+          document.getElementById('metricSessions').textContent = sessData.length;
+        }
+      } catch (e) { /* default 0 */ }
+
+      // Latest weight
+      try {
+        const { data: metData } = await sb
+          .from('progress_metrics')
+          .select('weight_lbs')
+          .eq('client_id', uid)
+          .order('recorded_date', { ascending: false })
+          .limit(1);
+
+        if (metData && metData.length > 0 && metData[0].weight_lbs) {
+          document.getElementById('metricWeight').textContent = metData[0].weight_lbs + ' lbs';
+        }
+      } catch (e) { /* no metrics */ }
+
+      // Coach notes
+      try {
+        const { data: notesData } = await sb
+          .from('coach_notes')
+          .select('note, created_at')
+          .eq('client_id', uid)
+          .eq('is_visible_to_client', true)
+          .order('created_at', { ascending: false })
+          .limit(5);
+
+        if (notesData && notesData.length > 0) {
+          document.getElementById('coachNotes').innerHTML = notesData.map(n => `
+            <div class="note-item">
+              <div class="note-text">${escHtml(n.note)}</div>
+              <div class="note-date">${new Date(n.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
+            </div>
+          `).join('');
+        }
+      } catch (e) { /* no notes */ }
+
+      // Messages
+      await loadMessages(uid);
+    }
+
+    // MESSAGES
+    async function loadMessages(uid) {
+      try {
+        const { data: msgs } = await sb
+          .from('messages')
+          .select('sender, content, created_at')
+          .eq('client_id', uid)
+          .order('created_at', { ascending: true })
+          .limit(50);
+
+        if (msgs && msgs.length > 0) {
+          document.getElementById('messageThread').innerHTML = msgs.map(m => `
+            <div>
+              <div class="message-bubble ${m.sender}">${escHtml(m.content)}</div>
+              <div class="message-meta" style="text-align:${m.sender === 'client' ? 'right' : 'left'}">
+                ${m.sender === 'coach' ? 'Coach' : 'You'} &middot; ${new Date(m.created_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+              </div>
+            </div>
+          `).join('');
+          const thread = document.getElementById('messageThread');
+          thread.scrollTop = thread.scrollHeight;
+        }
+      } catch (e) { /* no messages */ }
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('messageInput');
+      const content = input.value.trim();
+      if (!content) return;
+
+      const { data: { user } } = await sb.auth.getUser();
+      if (!user) return;
+
+      input.value = '';
+      try {
+        await sb.from('messages').insert([{
+          client_id: user.id,
+          sender: 'client',
+          content: content
+        }]);
+        await loadMessages(user.id);
+      } catch (e) {
+        input.value = content;
+        alert('Could not send message. Please try again.');
+      }
+    }
+
+    // CHECKIN SUBMIT
+    async function submitCheckin(e) {
+      e.preventDefault();
+      const btn = document.getElementById('checkinBtn');
+      btn.disabled = true;
+      btn.textContent = 'Submitting...';
+
+      const { data: { user } } = await sb.auth.getUser();
+      if (!user) return;
+
+      const weekOf = getWeekStart(new Date());
+
+      const payload = {
+        client_id: user.id,
+        week_of: weekOf,
+        training_adherence: ratings.training || null,
+        sleep_quality: ratings.sleep || null,
+        stress_level: ratings.stress || null,
+        energy_level: ratings.energy || null,
+        notes: document.getElementById('checkinNotes').value.trim() || null
+      };
+
+      try {
+        const { error } = await sb.from('checkins').insert([payload]);
+        if (error) throw error;
+
+        const msg = document.getElementById('checkinMsg');
+        msg.textContent = 'Check-in submitted. Your coach will review it.';
+        msg.style.display = 'block';
+        document.getElementById('checkinNotes').value = '';
+        Object.keys(ratings).forEach(k => {
+          ratings[k] = 0;
+          document.querySelectorAll(`#rating-${k} .rating-btn`).forEach(b => b.classList.remove('selected'));
+        });
+
+        const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        document.getElementById('metricLastCheckin').textContent = today;
+      } catch (err) {
+        alert('Could not submit check-in. Please try again.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Submit Check-in';
+      }
+    }
+
+    // HELPERS
+    function getWeekStart(date) {
+      const d = new Date(date);
+      const day = d.getDay();
+      const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Monday
+      d.setDate(diff);
+      return d.toISOString().split('T')[0];
+    }
+
+    function escHtml(str) {
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // INIT: check session
+    async function init() {
+      const { data: { session } } = await sb.auth.getSession();
+      if (session?.user) {
+        showDashboard(session.user);
+      } else {
+        document.getElementById('loginView').classList.add('active');
+      }
+
+      // Listen for auth changes
+      sb.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_OUT') {
+          document.getElementById('dashboardView').classList.remove('active');
+          document.getElementById('loginView').classList.add('active');
+        }
+      });
+    }
+
+    init();
+
+    // Allow Enter to send message
+    document.getElementById('messageInput')?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+  </script>
+
+</body>
+</html>

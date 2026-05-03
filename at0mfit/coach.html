@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coach Dashboard | AT0M FIT</title>
+  <meta name="description" content="AT0M FIT Coach Dashboard. Manage clients, programs, and workouts." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0B0B0B;
+      --surface:     #111111;
+      --surface2:    #1A1A1A;
+      --surface3:    #222222;
+      --border:      #2A2A2A;
+      --gold:        #C9A04A;
+      --gold-bright: #D4AF37;
+      --gold-glow:   rgba(201,160,74,0.25);
+      --gold-dim:    rgba(201,160,74,0.08);
+      --grey-light:  #B0B0B0;
+      --grey-mid:    #6E6E6E;
+      --text:        #F0EDE8;
+      --text-muted:  #888888;
+      --red:         #C94A4A;
+      --green:       #4AC97A;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── LOGIN ── */
+    #loginView {
+      display: none;
+      min-height: 100vh;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    #loginView.active { display: flex; }
+
+    .login-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 2px solid var(--gold);
+      border-radius: 4px;
+      padding: 3rem;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .login-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.2rem;
+      letter-spacing: 0.1em;
+      text-align: center;
+      margin-bottom: 0.25rem;
+    }
+    .login-logo span { color: var(--gold); }
+    .login-sub {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── RESTRICTED ── */
+    #restrictedView {
+      display: none;
+      min-height: 100vh;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 2rem;
+      text-align: center;
+    }
+    #restrictedView.active { display: flex; }
+    .restricted-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.06em;
+      color: var(--red);
+    }
+    .restricted-sub { color: var(--text-muted); font-size: 0.9rem; }
+
+    /* ── DASHBOARD ── */
+    #dashboardView { display: none; }
+    #dashboardView.active { display: block; }
+
+    /* NAV */
+    .coach-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: rgba(11,11,11,0.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .coach-nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.1em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .coach-nav-logo span { color: var(--gold); }
+    .coach-nav-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: var(--gold-dim);
+      border: 1px solid rgba(201,160,74,0.3);
+      padding: 0.2rem 0.6rem;
+      border-radius: 2px;
+      margin-left: 0.75rem;
+    }
+    .coach-nav-right { display: flex; align-items: center; gap: 1rem; }
+
+    /* SHARED FORM ELEMENTS */
+    .form-group { margin-bottom: 1.1rem; }
+    .form-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+    .form-input {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.75rem 1rem;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-input::placeholder { color: var(--text-muted); }
+    .form-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px var(--gold-glow);
+    }
+    textarea.form-input { resize: vertical; min-height: 75px; }
+    select.form-input { cursor: pointer; }
+
+    /* BUTTONS */
+    .btn-primary {
+      display: inline-block;
+      padding: 0.85rem 1.5rem;
+      background: var(--gold);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.88rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { background: var(--gold-bright); transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .btn-primary-full { width: 100%; }
+
+    .btn-outline {
+      display: inline-block;
+      padding: 0.5rem 1.1rem;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--grey-mid); color: var(--text); }
+
+    .btn-ghost {
+      display: inline-block;
+      padding: 0.4rem 0.9rem;
+      background: transparent;
+      color: var(--gold);
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 1px solid rgba(201,160,74,0.35);
+      border-radius: 3px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.15s;
+    }
+    .btn-ghost:hover { background: var(--gold-dim); }
+    .btn-ghost:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .login-error {
+      color: #e05555;
+      font-size: 0.85rem;
+      margin-top: 0.75rem;
+      display: none;
+    }
+
+    /* ── MAIN LAYOUT ── */
+    .coach-main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 2rem 4rem;
+    }
+
+    /* ── SECTION HEADERS ── */
+    .section-eyebrow {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.3rem;
+    }
+    .section-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .section-heading svg { color: var(--gold); }
+    .section-block { margin-bottom: 3.5rem; }
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 3rem 0;
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.5rem;
+      position: relative;
+    }
+    .card-gold { border-top: 2px solid var(--gold); }
+    .card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.25rem;
+      letter-spacing: 0.05em;
+      color: var(--text);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card-title svg { color: var(--gold); }
+
+    /* ── APPLICATIONS ── */
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.25rem;
+    }
+    .app-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.4rem;
+      position: relative;
+    }
+    .app-card-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.2rem;
+    }
+    .app-card-email {
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      margin-bottom: 1rem;
+    }
+    .app-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .app-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.65rem;
+      border-radius: 2px;
+    }
+    .app-tag-gold {
+      background: var(--gold-dim);
+      border: 1px solid rgba(201,160,74,0.3);
+      color: var(--gold);
+    }
+    .app-tag-grey {
+      background: rgba(110,110,110,0.12);
+      border: 1px solid rgba(110,110,110,0.25);
+      color: var(--grey-mid);
+    }
+    .app-goal {
+      color: var(--grey-light);
+      font-size: 0.88rem;
+      margin-bottom: 0.6rem;
+      line-height: 1.55;
+    }
+    .app-notes {
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-style: italic;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+    .app-date {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .app-empty {
+      color: var(--text-muted);
+      font-style: italic;
+      font-size: 0.9rem;
+      padding: 2rem;
+      text-align: center;
+      border: 1px dashed var(--border);
+      border-radius: 4px;
+    }
+
+    /* ── CLIENT LIST ── */
+    .client-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .client-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.25rem 1.4rem;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+    .client-card:hover { border-color: rgba(201,160,74,0.4); background: var(--surface2); }
+    .client-card.active {
+      border-color: var(--gold);
+      background: var(--surface2);
+    }
+    .client-card-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.2rem;
+    }
+    .client-card-email { color: var(--text-muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .client-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .status-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+      border-radius: 2px;
+    }
+    .status-active {
+      background: rgba(74,201,122,0.12);
+      border: 1px solid rgba(74,201,122,0.3);
+      color: var(--green);
+    }
+    .status-inactive {
+      background: rgba(110,110,110,0.1);
+      border: 1px solid rgba(110,110,110,0.25);
+      color: var(--grey-mid);
+    }
+    .status-trial {
+      background: var(--gold-dim);
+      border: 1px solid rgba(201,160,74,0.3);
+      color: var(--gold);
+    }
+    .client-days {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+    }
+
+    /* ── DETAIL PANEL ── */
+    #detailPanel {
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--gold);
+      border-radius: 4px;
+      padding: 2rem;
+      margin-top: 1.5rem;
+    }
+    #detailPanel.open { display: block; }
+
+    .detail-client-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .detail-client-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.2rem;
+    }
+    .detail-client-meta { color: var(--text-muted); font-size: 0.85rem; }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* INNER CARDS */
+    .inner-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.25rem;
+    }
+    .inner-card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.05em;
+      color: var(--text);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .inner-card-title svg { color: var(--gold); }
+
+    /* PROGRAMS LIST */
+    .program-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .program-item:last-child { border-bottom: none; }
+    .program-name { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+    .program-dates { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem; }
+    .badge-active {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.5rem;
+      border-radius: 2px;
+      background: rgba(74,201,122,0.12);
+      border: 1px solid rgba(74,201,122,0.3);
+      color: var(--green);
+    }
+    .badge-inactive {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.5rem;
+      border-radius: 2px;
+      background: rgba(110,110,110,0.1);
+      border: 1px solid rgba(110,110,110,0.25);
+      color: var(--grey-mid);
+    }
+
+    /* ASSIGNED WORKOUTS TABLE */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+    .data-table th {
+      text-align: left;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 0 0.5rem 0.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table td {
+      padding: 0.55rem 0.5rem;
+      border-bottom: 1px solid rgba(42,42,42,0.5);
+      color: var(--grey-light);
+      vertical-align: top;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .type-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.5rem;
+      border-radius: 2px;
+      background: var(--gold-dim);
+      border: 1px solid rgba(201,160,74,0.25);
+      color: var(--gold);
+      white-space: nowrap;
+    }
+
+    /* ASSIGN FORM */
+    .assign-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+    }
+    .assign-form-full { grid-column: 1 / -1; }
+    .assign-form-two { grid-column: span 2; }
+
+    /* CHECKIN / LOGS TABLE */
+    .metric-label-sm {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .rpe-chip {
+      display: inline-block;
+      width: 28px;
+      height: 28px;
+      line-height: 28px;
+      text-align: center;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: var(--surface3);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    /* MESSAGES */
+    .message-thread {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      max-height: 320px;
+      overflow-y: auto;
+      margin-bottom: 1.1rem;
+      padding-right: 0.25rem;
+    }
+    .message-thread::-webkit-scrollbar { width: 4px; }
+    .message-thread::-webkit-scrollbar-track { background: var(--surface2); }
+    .message-thread::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    .message-bubble {
+      max-width: 80%;
+      padding: 0.7rem 1rem;
+      border-radius: 4px;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+    .message-bubble.coach {
+      background: var(--gold-dim);
+      border: 1px solid rgba(201,160,74,0.25);
+      color: var(--text);
+      align-self: flex-end;
+    }
+    .message-bubble.client {
+      background: var(--surface3);
+      border: 1px solid var(--border);
+      color: var(--grey-light);
+      align-self: flex-start;
+    }
+    .message-meta {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+    .message-input-row { display: flex; gap: 0.75rem; }
+    .message-input-row .form-input { flex: 1; padding: 0.65rem 1rem; }
+
+    /* SUCCESS / ERROR INLINE */
+    .inline-msg {
+      font-size: 0.82rem;
+      margin-top: 0.6rem;
+      display: none;
+    }
+    .inline-msg.ok { color: var(--green); }
+    .inline-msg.err { color: var(--red); }
+
+    /* EMPTY STATE */
+    .empty-state {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-style: italic;
+      padding: 1.25rem 0;
+    }
+
+    /* SPINNER */
+    .spinner {
+      width: 28px;
+      height: 28px;
+      border: 2px solid var(--border);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto 0.75rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-block { text-align: center; padding: 3rem; color: var(--text-muted); font-size: 0.9rem; }
+
+    /* COLLAPSIBLE SECTION WITHIN DETAIL */
+    .detail-subsection { margin-bottom: 2rem; }
+    .detail-subsection:last-child { margin-bottom: 0; }
+
+    /* NEW PROGRAM TOGGLE */
+    .new-program-toggle {
+      font-size: 0.78rem;
+      color: var(--gold);
+      cursor: pointer;
+      text-decoration: underline;
+      text-decoration-style: dotted;
+      margin-top: 0.5rem;
+      display: inline-block;
+    }
+    .new-program-form {
+      display: none;
+      background: var(--surface3);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.1rem;
+      margin-top: 0.75rem;
+    }
+    .new-program-form.open { display: block; }
+    .new-program-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .detail-grid { grid-template-columns: 1fr; }
+      .assign-form-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .coach-main { padding: 1.25rem; }
+      .app-grid, .client-grid { grid-template-columns: 1fr; }
+      .assign-form-grid { grid-template-columns: 1fr; }
+      .assign-form-two { grid-column: span 1; }
+      .message-input-row { flex-direction: column; }
+      .detail-client-header { flex-direction: column; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SVG ICONS (hidden sprite) -->
+  <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <symbol id="ic-apps" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+      </symbol>
+      <symbol id="ic-clients" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/>
+        <path d="M16 3.13a4 4 0 010 7.75"/><path d="M21 21v-2a4 4 0 00-3-3.87"/>
+      </symbol>
+      <symbol id="ic-program" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M4 4h16v16H4z"/><path d="M8 2v4M16 2v4M4 10h16"/>
+      </symbol>
+      <symbol id="ic-workout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+        <line x1="4" y1="22" x2="4" y2="15"/>
+      </symbol>
+      <symbol id="ic-checkin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+      </symbol>
+      <symbol id="ic-log" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </symbol>
+      <symbol id="ic-msg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+      </symbol>
+      <symbol id="ic-add" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- ═══════════════ LOGIN VIEW ═══════════════ -->
+  <div id="loginView" class="active">
+    <div class="login-card">
+      <div class="login-logo">AT<span>0</span>M FIT</div>
+      <p class="login-sub">Coach Dashboard</p>
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label class="form-label" for="loginEmail">Email</label>
+          <input class="form-input" type="email" id="loginEmail" placeholder="your@email.com" required autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="loginPassword">Password</label>
+          <input class="form-input" type="password" id="loginPassword" placeholder="Password" required autocomplete="current-password" />
+        </div>
+        <button class="btn-primary btn-primary-full" type="submit" id="loginBtn">Sign In</button>
+        <div class="login-error" id="loginError"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══════════════ RESTRICTED VIEW ═══════════════ -->
+  <div id="restrictedView">
+    <div>
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C94A4A" stroke-width="1.5" style="margin-bottom:1rem">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <div class="restricted-heading">Access Restricted</div>
+      <p class="restricted-sub">This dashboard is for authorized coaches only.</p>
+      <button class="btn-outline" style="margin-top:1.5rem" onclick="handleLogout()">Return to Login</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ DASHBOARD VIEW ═══════════════ -->
+  <div id="dashboardView">
+
+    <nav class="coach-nav">
+      <div style="display:flex;align-items:center;">
+        <a class="coach-nav-logo" href="/">AT<span>0</span>M FIT</a>
+        <span class="coach-nav-badge">Coach</span>
+      </div>
+      <div class="coach-nav-right">
+        <button class="btn-outline" onclick="handleLogout()">Sign Out</button>
+      </div>
+    </nav>
+
+    <div id="coachLoading" class="loading-block">
+      <div class="spinner"></div>
+      Loading dashboard...
+    </div>
+
+    <div id="coachContent" style="display:none;">
+      <div class="coach-main">
+
+        <!-- ── APPLICATIONS ── -->
+        <div class="section-block">
+          <div class="section-eyebrow">Incoming</div>
+          <div class="section-heading">
+            <svg width="22" height="22"><use href="#ic-apps"/></svg>
+            Applications Queue
+          </div>
+          <div id="appsContainer"><p class="empty-state">Loading applications...</p></div>
+        </div>
+
+        <hr class="section-divider" />
+
+        <!-- ── CLIENTS ── -->
+        <div class="section-block">
+          <div class="section-eyebrow">Roster</div>
+          <div class="section-heading">
+            <svg width="22" height="22"><use href="#ic-clients"/></svg>
+            Clients
+          </div>
+          <div id="clientsContainer"><p class="empty-state">Loading clients...</p></div>
+
+          <!-- DETAIL PANEL (shown on client select) -->
+          <div id="detailPanel">
+            <!-- dynamically populated -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+  <script>
+    const { createClient } = supabase;
+    const sb = createClient(
+      'https://kgozddcutazpqmfbzafa.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtnb3pkZGN1dGF6cHFtZmJ6YWZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzOTMxOTYsImV4cCI6MjA4ODk2OTE5Nn0.aTi5ZXQi5zSTGb-xQyotF07Tcur5yizux3J8oNejRfE'
+    );
+
+    const COACH_EMAIL = 'jeshua@levioperations.com';
+    let selectedClientId = null;
+
+    // ──────────────────────────────────────────────
+    // AUTH
+    // ──────────────────────────────────────────────
+
+    async function init() {
+      const { data: { session } } = await sb.auth.getSession();
+      if (session?.user) {
+        await checkEmailGate(session.user);
+      } else {
+        show('loginView');
+      }
+      sb.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_OUT') show('loginView');
+      });
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const btn = document.getElementById('loginBtn');
+      const errEl = document.getElementById('loginError');
+      btn.disabled = true; btn.textContent = 'Signing in...';
+      errEl.style.display = 'none';
+
+      const { data, error } = await sb.auth.signInWithPassword({
+        email: document.getElementById('loginEmail').value.trim(),
+        password: document.getElementById('loginPassword').value
+      });
+
+      if (error) {
+        errEl.textContent = 'Invalid email or password.';
+        errEl.style.display = 'block';
+        btn.disabled = false; btn.textContent = 'Sign In';
+        return;
+      }
+      await checkEmailGate(data.user);
+    }
+
+    async function checkEmailGate(user) {
+      if (user.email !== COACH_EMAIL) {
+        await sb.auth.signOut();
+        show('restrictedView');
+        return;
+      }
+      show('dashboardView');
+      await loadCoachDashboard();
+    }
+
+    async function handleLogout() {
+      await sb.auth.signOut();
+      show('loginView');
+      document.getElementById('loginForm').reset();
+    }
+
+    // ──────────────────────────────────────────────
+    // LOAD DASHBOARD
+    // ──────────────────────────────────────────────
+
+    async function loadCoachDashboard() {
+      document.getElementById('coachLoading').style.display = 'block';
+      document.getElementById('coachContent').style.display = 'none';
+      await Promise.all([loadApplications(), loadClients()]);
+      document.getElementById('coachLoading').style.display = 'none';
+      document.getElementById('coachContent').style.display = 'block';
+    }
+
+    // ──────────────────────────────────────────────
+    // APPLICATIONS
+    // ──────────────────────────────────────────────
+
+    async function loadApplications() {
+      const { data, error } = await sb
+        .from('applications')
+        .select('*')
+        .eq('status', 'pending')
+        .order('created_at', { ascending: false });
+
+      const container = document.getElementById('appsContainer');
+
+      if (error) {
+        container.innerHTML = `<p class="empty-state">Could not load applications. Verify RLS policy is applied.</p>`;
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        container.innerHTML = `<p class="empty-state">No pending applications. All caught up.</p>`;
+        return;
+      }
+
+      container.innerHTML = `<div class="app-grid">${data.map(a => renderAppCard(a)).join('')}</div>`;
+    }
+
+    function renderAppCard(a) {
+      const date = a.created_at ? new Date(a.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+      return `
+        <div class="app-card" id="app-${a.id}">
+          <div class="app-card-name">${esc(a.full_name)}</div>
+          <div class="app-card-email">${esc(a.email)}</div>
+          <div class="app-meta">
+            <span class="app-tag app-tag-gold">${esc(a.primary_goal || '')}</span>
+            <span class="app-tag app-tag-grey">${a.days_per_week || '?'} days/wk</span>
+            ${a.training_background ? `<span class="app-tag app-tag-grey">${esc(a.training_background)}</span>` : ''}
+          </div>
+          ${a.additional_notes ? `<div class="app-notes">"${esc(a.additional_notes)}"</div>` : ''}
+          ${date ? `<div class="app-date">Applied ${date}</div>` : ''}
+          <button class="btn-ghost" id="reviewBtn-${a.id}" onclick="markReviewed('${a.id}')">Mark Reviewed</button>
+        </div>`;
+    }
+
+    async function markReviewed(appId) {
+      const btn = document.getElementById(`reviewBtn-${appId}`);
+      if (!btn) return;
+      btn.disabled = true; btn.textContent = 'Updating...';
+
+      const { error } = await sb
+        .from('applications')
+        .update({ status: 'reviewed' })
+        .eq('id', appId);
+
+      if (error) {
+        btn.disabled = false; btn.textContent = 'Mark Reviewed';
+        alert('Update failed. Check RLS policy.');
+        return;
+      }
+
+      const card = document.getElementById(`app-${appId}`);
+      if (card) card.style.opacity = '0.35';
+      btn.textContent = 'Reviewed';
+    }
+
+    // ──────────────────────────────────────────────
+    // CLIENTS
+    // ──────────────────────────────────────────────
+
+    let clientsData = [];
+
+    async function loadClients() {
+      const { data, error } = await sb
+        .from('clients')
+        .select('*')
+        .order('full_name', { ascending: true });
+
+      const container = document.getElementById('clientsContainer');
+
+      if (error) {
+        container.innerHTML = `<p class="empty-state">Could not load clients. Verify RLS policy is applied.</p>`;
+        return;
+      }
+
+      clientsData = data || [];
+
+      if (clientsData.length === 0) {
+        container.innerHTML = `<p class="empty-state">No clients yet.</p>`;
+        return;
+      }
+
+      const grid = `<div class="client-grid">
+        ${clientsData.map(c => renderClientCard(c)).join('')}
+      </div>`;
+      container.innerHTML = grid;
+    }
+
+    function renderClientCard(c) {
+      const sub = c.subscription_status || 'inactive';
+      const badgeClass = sub === 'active' ? 'status-active' : sub === 'trial' ? 'status-trial' : 'status-inactive';
+      return `
+        <div class="client-card" id="cc-${c.id}" onclick="selectClient('${c.id}')">
+          <div class="client-card-name">${esc(c.full_name)}</div>
+          <div class="client-card-email">${esc(c.email)}</div>
+          <div class="client-meta">
+            <span class="status-badge ${badgeClass}">${sub}</span>
+            ${c.days_per_week ? `<span class="client-days">${c.days_per_week} days/wk</span>` : ''}
+          </div>
+        </div>`;
+    }
+
+    async function selectClient(clientId) {
+      // Toggle: if already selected, close panel
+      if (selectedClientId === clientId) {
+        selectedClientId = null;
+        document.querySelectorAll('.client-card').forEach(el => el.classList.remove('active'));
+        document.getElementById('detailPanel').classList.remove('open');
+        return;
+      }
+
+      selectedClientId = clientId;
+      document.querySelectorAll('.client-card').forEach(el => el.classList.remove('active'));
+      const card = document.getElementById(`cc-${clientId}`);
+      if (card) card.classList.add('active');
+
+      const panel = document.getElementById('detailPanel');
+      panel.classList.add('open');
+      panel.innerHTML = `<div class="loading-block"><div class="spinner"></div>Loading client data...</div>`;
+      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      await loadClientDetail(clientId);
+    }
+
+    // ──────────────────────────────────────────────
+    // CLIENT DETAIL
+    // ──────────────────────────────────────────────
+
+    async function loadClientDetail(clientId) {
+      const client = clientsData.find(c => c.id === clientId);
+      if (!client) return;
+
+      // Parallel fetches
+      const [
+        { data: programs },
+        { data: assignedWorkouts },
+        { data: checkins },
+        { data: logs },
+        { data: messages }
+      ] = await Promise.all([
+        sb.from('programs').select('*').eq('client_id', clientId).order('created_at', { ascending: false }),
+        sb.from('assigned_workouts').select('*, workouts(name,day_label,type,duration_minutes,instructions)').eq('client_id', clientId).order('assigned_date', { ascending: false }).limit(20),
+        sb.from('checkins').select('week_of,training_adherence,sleep_quality,stress_level,energy_level,notes').eq('client_id', clientId).order('created_at', { ascending: false }).limit(5),
+        sb.from('workout_logs').select('logged_at,rpe,duration_actual,notes,assigned_workout_id').eq('client_id', clientId).order('logged_at', { ascending: false }).limit(5),
+        sb.from('messages').select('sender,content,created_at').eq('client_id', clientId).order('created_at', { ascending: true }).limit(50)
+      ]);
+
+      const panel = document.getElementById('detailPanel');
+      panel.innerHTML = buildDetailHTML(client, programs || [], assignedWorkouts || [], checkins || [], logs || [], messages || []);
+
+      // Scroll message thread to bottom
+      const thread = document.getElementById(`msgThread-${clientId}`);
+      if (thread) thread.scrollTop = thread.scrollHeight;
+
+      // Allow Enter to send message
+      const msgInput = document.getElementById(`msgInput-${clientId}`);
+      if (msgInput) {
+        msgInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendCoachMessage(clientId); }
+        });
+      }
+
+      // Program dropdown population
+      populateProgramDropdown(clientId, programs || []);
+    }
+
+    function buildDetailHTML(client, programs, assignedWorkouts, checkins, logs, messages) {
+      const sub = client.subscription_status || 'inactive';
+      const badgeClass = sub === 'active' ? 'status-active' : sub === 'trial' ? 'status-trial' : 'status-inactive';
+
+      return `
+        <!-- HEADER -->
+        <div class="detail-client-header">
+          <div>
+            <div class="detail-client-name">${esc(client.full_name)}</div>
+            <div class="detail-client-meta">
+              ${esc(client.email)}
+              ${client.goal ? ' &nbsp;&middot;&nbsp; ' + esc(client.goal) : ''}
+              ${client.training_background ? ' &nbsp;&middot;&nbsp; ' + esc(client.training_background) : ''}
+            </div>
+          </div>
+          <span class="status-badge ${badgeClass}" style="font-size:0.78rem;padding:0.3rem 0.8rem;">${sub}</span>
+        </div>
+
+        <!-- ROW 1: PROGRAMS + ASSIGNED WORKOUTS -->
+        <div class="detail-grid">
+          <!-- PROGRAMS -->
+          <div class="inner-card">
+            <div class="inner-card-title">
+              <svg width="16" height="16"><use href="#ic-program"/></svg>
+              Programs
+            </div>
+            ${programs.length === 0 ? '<p class="empty-state">No programs yet.</p>' :
+              programs.map(p => `
+                <div class="program-item">
+                  <div>
+                    <div class="program-name">${esc(p.name)}</div>
+                    <div class="program-dates">${p.start_date || ''} ${p.end_date ? 'to ' + p.end_date : ''}</div>
+                  </div>
+                  <span class="${p.is_active ? 'badge-active' : 'badge-inactive'}">${p.is_active ? 'Active' : 'Inactive'}</span>
+                </div>`).join('')
+            }
+            <!-- CREATE PROGRAM -->
+            <div style="margin-top:1rem;">
+              <span class="new-program-toggle" onclick="toggleNewProgram('${client.id}')">
+                + Create Program
+              </span>
+              <div class="new-program-form" id="newProgramForm-${client.id}">
+                <div class="new-program-grid">
+                  <div class="form-group" style="margin-bottom:0.75rem">
+                    <label class="form-label">Program Name</label>
+                    <input class="form-input" id="pName-${client.id}" placeholder="e.g. Phase 1 Base Build" />
+                  </div>
+                  <div class="form-group" style="margin-bottom:0.75rem">
+                    <label class="form-label">Start Date</label>
+                    <input class="form-input" type="date" id="pStart-${client.id}" />
+                  </div>
+                  <div class="form-group" style="margin-bottom:0.75rem; grid-column:1/-1;">
+                    <label class="form-label">Description (optional)</label>
+                    <input class="form-input" id="pDesc-${client.id}" placeholder="Program overview..." />
+                  </div>
+                </div>
+                <button class="btn-ghost" onclick="createProgram('${client.id}')">Create Program</button>
+                <div class="inline-msg" id="pMsg-${client.id}"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ASSIGNED WORKOUTS -->
+          <div class="inner-card">
+            <div class="inner-card-title">
+              <svg width="16" height="16"><use href="#ic-workout"/></svg>
+              Assigned Workouts
+            </div>
+            ${assignedWorkouts.length === 0 ? '<p class="empty-state">No workouts assigned yet.</p>' : `
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Workout</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${assignedWorkouts.map(aw => {
+                    const w = aw.workouts || {};
+                    return `<tr>
+                      <td>
+                        <div style="font-weight:600;color:var(--text)">${esc(w.name || 'Untitled')}</div>
+                        ${w.day_label ? `<div style="font-size:0.72rem;color:var(--text-muted)">${esc(w.day_label)}</div>` : ''}
+                      </td>
+                      <td><span class="type-badge">${esc(w.type || '')}</span></td>
+                      <td style="color:var(--text-muted);font-size:0.8rem;white-space:nowrap">${aw.assigned_date || ''}</td>
+                    </tr>`;
+                  }).join('')}
+                </tbody>
+              </table>`
+            }
+          </div>
+        </div>
+
+        <!-- ASSIGN WORKOUT FORM -->
+        <div class="inner-card" style="margin-bottom:1.5rem;">
+          <div class="inner-card-title">
+            <svg width="16" height="16"><use href="#ic-add"/></svg>
+            Assign Workout
+          </div>
+          <div class="assign-form-grid">
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Program</label>
+              <select class="form-input" id="awProgram-${client.id}">
+                <option value="">Loading programs...</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Workout Name</label>
+              <input class="form-input" id="awName-${client.id}" placeholder="e.g. Long Run Zone 2" />
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Day Label</label>
+              <input class="form-input" id="awDayLabel-${client.id}" placeholder="e.g. Monday / Day 1" />
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Type</label>
+              <select class="form-input" id="awType-${client.id}">
+                <option value="zone2">Zone 2</option>
+                <option value="zone3">Zone 3</option>
+                <option value="zone4">Zone 4</option>
+                <option value="strength">Strength</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Duration (minutes)</label>
+              <input class="form-input" type="number" id="awDuration-${client.id}" placeholder="60" min="1" max="360" />
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Assigned Date</label>
+              <input class="form-input" type="date" id="awDate-${client.id}" value="${new Date().toISOString().split('T')[0]}" />
+            </div>
+            <div class="form-group assign-form-full" style="margin-bottom:0;">
+              <label class="form-label">Instructions</label>
+              <textarea class="form-input" id="awInstructions-${client.id}" placeholder="Detailed workout instructions..."></textarea>
+            </div>
+            <div class="assign-form-full">
+              <button class="btn-primary" onclick="assignWorkout('${client.id}')">Assign Workout</button>
+              <div class="inline-msg" id="awMsg-${client.id}"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ROW 2: CHECK-INS + WORKOUT LOGS -->
+        <div class="detail-grid">
+          <!-- CHECK-INS -->
+          <div class="inner-card">
+            <div class="inner-card-title">
+              <svg width="16" height="16"><use href="#ic-checkin"/></svg>
+              Recent Check Ins
+            </div>
+            ${checkins.length === 0 ? '<p class="empty-state">No check ins submitted yet.</p>' :
+              checkins.map(ci => `
+                <div style="padding:0.75rem 0;border-bottom:1px solid var(--border);">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
+                    <span style="font-size:0.82rem;font-weight:600;color:var(--text)">${ci.week_of || ''}</span>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.3rem 1rem;margin-bottom:0.4rem;">
+                    ${renderRatingRow('Training', ci.training_adherence)}
+                    ${renderRatingRow('Sleep', ci.sleep_quality)}
+                    ${renderRatingRow('Stress', ci.stress_level)}
+                    ${renderRatingRow('Energy', ci.energy_level)}
+                  </div>
+                  ${ci.notes ? `<div style="font-size:0.8rem;color:var(--text-muted);font-style:italic;margin-top:0.3rem">"${esc(ci.notes)}"</div>` : ''}
+                </div>`).join('')
+            }
+          </div>
+
+          <!-- WORKOUT LOGS -->
+          <div class="inner-card">
+            <div class="inner-card-title">
+              <svg width="16" height="16"><use href="#ic-log"/></svg>
+              Workout Logs
+            </div>
+            ${logs.length === 0 ? '<p class="empty-state">No workout logs yet.</p>' :
+              logs.map(l => `
+                <div style="padding:0.7rem 0;border-bottom:1px solid var(--border);">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.3rem;">
+                    <span style="font-size:0.8rem;color:var(--text-muted)">${l.logged_at ? new Date(l.logged_at).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}) : ''}</span>
+                    <div style="display:flex;gap:0.5rem;align-items:center;">
+                      ${l.rpe != null ? `<span class="rpe-chip">RPE ${l.rpe}</span>` : ''}
+                      ${l.duration_actual ? `<span style="font-size:0.75rem;color:var(--text-muted)">${l.duration_actual} min</span>` : ''}
+                    </div>
+                  </div>
+                  ${l.notes ? `<div style="font-size:0.8rem;color:var(--text-muted);font-style:italic">"${esc(l.notes)}"</div>` : ''}
+                </div>`).join('')
+            }
+          </div>
+        </div>
+
+        <!-- MESSAGES -->
+        <div class="inner-card" style="margin-top:1.5rem;">
+          <div class="inner-card-title">
+            <svg width="16" height="16"><use href="#ic-msg"/></svg>
+            Messages
+          </div>
+          <div class="message-thread" id="msgThread-${client.id}">
+            ${messages.length === 0
+              ? '<p class="empty-state" style="padding:0">No messages yet.</p>'
+              : messages.map(m => `
+                  <div>
+                    <div class="message-bubble ${m.sender}">${esc(m.content)}</div>
+                    <div class="message-meta" style="text-align:${m.sender === 'coach' ? 'right' : 'left'}">
+                      ${m.sender === 'coach' ? 'You (Coach)' : esc(client.full_name)} &middot;
+                      ${m.created_at ? new Date(m.created_at).toLocaleTimeString('en-US', {hour:'numeric',minute:'2-digit'}) : ''}
+                    </div>
+                  </div>`).join('')
+            }
+          </div>
+          <div class="message-input-row">
+            <input class="form-input" type="text" id="msgInput-${client.id}" placeholder="Send a message as coach..." />
+            <button class="btn-ghost" onclick="sendCoachMessage('${client.id}')">Send</button>
+          </div>
+          <div class="inline-msg" id="msgErr-${client.id}"></div>
+        </div>
+      `;
+    }
+
+    function renderRatingRow(label, val) {
+      return `<div style="display:flex;justify-content:space-between;align-items:center;">
+        <span class="metric-label-sm">${label}</span>
+        <span style="font-weight:700;color:${val >= 4 ? 'var(--green)' : val <= 2 ? 'var(--red)' : 'var(--text)'};font-size:0.85rem;">${val != null ? val + '/5' : 'N/A'}</span>
+      </div>`;
+    }
+
+    // ──────────────────────────────────────────────
+    // CREATE PROGRAM
+    // ──────────────────────────────────────────────
+
+    function toggleNewProgram(clientId) {
+      const form = document.getElementById(`newProgramForm-${clientId}`);
+      if (form) form.classList.toggle('open');
+    }
+
+    async function createProgram(clientId) {
+      const name = document.getElementById(`pName-${clientId}`)?.value.trim();
+      const desc = document.getElementById(`pDesc-${clientId}`)?.value.trim();
+      const start = document.getElementById(`pStart-${clientId}`)?.value;
+      const msgEl = document.getElementById(`pMsg-${clientId}`);
+
+      if (!name) { showInlineMsg(msgEl, 'Program name required.', false); return; }
+
+      const { data, error } = await sb.from('programs').insert([{
+        client_id: clientId,
+        name,
+        description: desc || null,
+        start_date: start || null,
+        is_active: true
+      }]).select().single();
+
+      if (error) { showInlineMsg(msgEl, 'Failed to create program. Check RLS policy.', false); return; }
+
+      showInlineMsg(msgEl, 'Program created.', true);
+
+      // Reload client detail to refresh programs list and dropdown
+      setTimeout(() => loadClientDetail(clientId), 800);
+    }
+
+    // ──────────────────────────────────────────────
+    // PROGRAM DROPDOWN
+    // ──────────────────────────────────────────────
+
+    function populateProgramDropdown(clientId, programs) {
+      const sel = document.getElementById(`awProgram-${clientId}`);
+      if (!sel) return;
+      if (programs.length === 0) {
+        sel.innerHTML = '<option value="">No programs. Create one above first.</option>';
+        return;
+      }
+      sel.innerHTML = programs.map(p =>
+        `<option value="${p.id}">${esc(p.name)}${p.is_active ? ' (Active)' : ''}</option>`
+      ).join('');
+    }
+
+    // ──────────────────────────────────────────────
+    // ASSIGN WORKOUT
+    // ──────────────────────────────────────────────
+
+    async function assignWorkout(clientId) {
+      const programId = document.getElementById(`awProgram-${clientId}`)?.value;
+      const name = document.getElementById(`awName-${clientId}`)?.value.trim();
+      const dayLabel = document.getElementById(`awDayLabel-${clientId}`)?.value.trim();
+      const type = document.getElementById(`awType-${clientId}`)?.value;
+      const duration = document.getElementById(`awDuration-${clientId}`)?.value;
+      const assignedDate = document.getElementById(`awDate-${clientId}`)?.value;
+      const instructions = document.getElementById(`awInstructions-${clientId}`)?.value.trim();
+      const msgEl = document.getElementById(`awMsg-${clientId}`);
+
+      if (!programId) { showInlineMsg(msgEl, 'Select a program first.', false); return; }
+      if (!name) { showInlineMsg(msgEl, 'Workout name required.', false); return; }
+      if (!assignedDate) { showInlineMsg(msgEl, 'Assigned date required.', false); return; }
+
+      // Step 1: Insert into workouts (user_id = client's auth UUID — NOT the coach)
+      const { data: wData, error: wErr } = await sb.from('workouts').insert([{
+        user_id: clientId,          // CRITICAL: must be client.id, the athlete's auth UUID
+        program_id: programId,
+        name,
+        day_label: dayLabel || null,
+        type: type || null,
+        instructions: instructions || null,
+        duration_minutes: duration ? parseInt(duration) : null,
+        date: assignedDate
+      }]).select().single();
+
+      if (wErr) {
+        showInlineMsg(msgEl, `Failed to create workout: ${wErr.message}`, false);
+        return;
+      }
+
+      // Step 2: Insert into assigned_workouts
+      const { error: awErr } = await sb.from('assigned_workouts').insert([{
+        client_id: clientId,
+        workout_id: wData.id,
+        assigned_date: assignedDate,
+        completed: false
+      }]);
+
+      if (awErr) {
+        showInlineMsg(msgEl, `Workout created but assignment failed: ${awErr.message}`, false);
+        return;
+      }
+
+      showInlineMsg(msgEl, 'Workout assigned successfully.', true);
+
+      // Clear form fields
+      ['awName','awDayLabel','awInstructions','awDuration'].forEach(id => {
+        const el = document.getElementById(`${id}-${clientId}`);
+        if (el) el.value = '';
+      });
+
+      // Reload detail to show updated assigned workouts
+      setTimeout(() => loadClientDetail(clientId), 900);
+    }
+
+    // ──────────────────────────────────────────────
+    // MESSAGES
+    // ──────────────────────────────────────────────
+
+    async function sendCoachMessage(clientId) {
+      const input = document.getElementById(`msgInput-${clientId}`);
+      const msgErr = document.getElementById(`msgErr-${clientId}`);
+      const content = input?.value.trim();
+      if (!content) return;
+
+      input.value = '';
+
+      const { error } = await sb.from('messages').insert([{
+        client_id: clientId,
+        sender: 'coach',
+        content
+      }]);
+
+      if (error) {
+        input.value = content;
+        showInlineMsg(msgErr, 'Failed to send. Check RLS policy.', false);
+        return;
+      }
+
+      // Refresh messages
+      const { data: messages } = await sb
+        .from('messages')
+        .select('sender,content,created_at')
+        .eq('client_id', clientId)
+        .order('created_at', { ascending: true })
+        .limit(50);
+
+      const client = clientsData.find(c => c.id === clientId);
+      const thread = document.getElementById(`msgThread-${clientId}`);
+      if (thread && messages) {
+        thread.innerHTML = messages.map(m => `
+          <div>
+            <div class="message-bubble ${m.sender}">${esc(m.content)}</div>
+            <div class="message-meta" style="text-align:${m.sender === 'coach' ? 'right' : 'left'}">
+              ${m.sender === 'coach' ? 'You (Coach)' : esc(client?.full_name || 'Client')} &middot;
+              ${m.created_at ? new Date(m.created_at).toLocaleTimeString('en-US', {hour:'numeric',minute:'2-digit'}) : ''}
+            </div>
+          </div>`).join('');
+        thread.scrollTop = thread.scrollHeight;
+      }
+    }
+
+    // ──────────────────────────────────────────────
+    // HELPERS
+    // ──────────────────────────────────────────────
+
+    function show(viewId) {
+      ['loginView','restrictedView','dashboardView'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (id === viewId) el.classList.add('active');
+        else el.classList.remove('active');
+      });
+    }
+
+    function esc(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function showInlineMsg(el, text, ok) {
+      if (!el) return;
+      el.className = `inline-msg ${ok ? 'ok' : 'err'}`;
+      el.textContent = text;
+      el.style.display = 'block';
+      if (ok) setTimeout(() => { el.style.display = 'none'; }, 4000);
+    }
+
+    init();
+  </script>
+
+  <!--
+  ══════════════════════════════════════════════════════════════════
+  COACH RLS SQL — Run once in Supabase SQL editor to enable coach dashboard
+  ══════════════════════════════════════════════════════════════════
+
+  CREATE POLICY "Coach reads all clients" ON public.clients
+    FOR SELECT USING (auth.jwt() ->> 'email' = 'jeshua@levioperations.com');
+
+  CREATE POLICY "Coach reads all applications" ON public.applications
+    FOR SELECT USING (auth.jwt() ->> 'email' = 'jeshua@levioperations.com');
+
+  CREATE POLICY "Coach updates applications" ON public.applications
+    FOR UPDATE USING (auth.jwt() ->> 'email' = 'jeshua@levioperations.com');
+
+  CREATE POLICY "Coach reads all messages" ON public.messages
+    FOR SELECT USING (auth.jwt() ->> 'email' = 'jeshua@levioperations.com');
+
+  CREATE POLICY "Coach sends messages" ON public.messages
+    FOR INSERT WITH CHECK (auth.jwt() ->> 'email' = 'jeshua@levioperations.com');
+
+  CREATE POLICY "Coach reads all checkins" ON public.checkins
+    FOR SELECT USING (auth.jwt() ->> 'email' = 'jeshua@levioperations.com');
+
+  CREATE POLICY "Coach reads all workout logs" ON public.workout_logs
+    FOR SELECT USING (auth.jwt() ->> 'email' = 'jeshua@levioperations.com');
+
+  CREATE POLICY "Coach reads all assigned workouts" ON public.assigned_workouts
+    FOR SELECT USING (auth.jwt() ->> 'email' = 'jeshua@levioperations.com');
+
+  CREATE POLICY "Coach assigns workouts" ON public.assigned_workouts
+    FOR INSERT WITH CHECK (auth.jwt() ->> 'email' = 'jeshua@levioperations.com');
+
+  CREATE POLICY "Coach inserts workouts" ON public.workouts
+    FOR INSERT WITH CHECK (auth.jwt() ->> 'email' = 'jeshua@levioperations.com');
+
+  CREATE POLICY "Coach inserts programs" ON public.programs
+    FOR INSERT WITH CHECK (auth.jwt() ->> 'email' = 'jeshua@levioperations.com');
+
+  CREATE POLICY "Coach manages coach notes" ON public.coach_notes
+    FOR ALL USING (auth.jwt() ->> 'email' = 'jeshua@levioperations.com');
+
+  ══════════════════════════════════════════════════════════════════
+  -->
+
+</body>
+</html>
