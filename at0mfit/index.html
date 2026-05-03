@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AT0M FIT — Build Your Aerobic Engine</title>
-  <meta name="description" content="The Levi Cardio Blueprint — Zone 2 to Zone 4. A field guide for tactical athletes, lifters, and hybrid performers who want structure instead of guesswork." />
+  <title>AT0M FIT. Build Your Aerobic Engine.</title>
+  <meta name="description" content="The Levi Cardio Blueprint. Zone 2 to Zone 4. A field guide for tactical athletes, lifters, and hybrid performers who want structure instead of guesswork." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -42,7 +42,7 @@
       overflow-x: hidden;
     }
 
-    /* — NAV — */
+    /* NAV */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -87,7 +87,7 @@
       transform: translateY(-1px);
     }
 
-    /* — GOLD DIVIDER — */
+    /* GOLD DIVIDER */
     .gold-rule {
       width: 100%;
       height: 1px;
@@ -95,7 +95,7 @@
       opacity: 0.5;
     }
 
-    /* — HERO — */
+    /* HERO */
     .hero {
       min-height: 100vh;
       display: flex;
@@ -249,7 +249,7 @@
       white-space: nowrap;
     }
 
-    /* — PROOF BAR — */
+    /* PROOF BAR */
     .proof-bar {
       border-top: 1px solid var(--gold);
       border-bottom: 1px solid var(--gold);
@@ -295,7 +295,7 @@
       background: var(--border);
     }
 
-    /* — SHARED SECTION — */
+    /* SHARED SECTION */
     section {
       padding: 6rem 2rem;
     }
@@ -331,7 +331,7 @@
       margin-bottom: 3rem;
     }
 
-    /* — WHAT YOU GET — */
+    /* WHAT YOU GET */
     .what-you-get {
       background: var(--surface);
     }
@@ -393,7 +393,85 @@
       line-height: 1.7;
     }
 
-    /* — WHO IT'S FOR — */
+    /* render images */
+    .premium-render {
+      width: 100%;
+      max-width: 600px;
+      border-radius: 4px;
+      box-shadow: 0 8px 40px rgba(201, 160, 74, 0.12);
+      display: block;
+    }
+    .render-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    .render-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 60%, #0B0B0B);
+      pointer-events: none;
+    }
+
+    /* athlete sprint banner */
+    .sprint-banner {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto 3rem;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2.5rem;
+      align-items: center;
+    }
+    .sprint-banner .render-wrap {
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .sprint-banner img {
+      width: 100%;
+      display: block;
+      border-radius: 4px;
+      box-shadow: 0 8px 40px rgba(201, 160, 74, 0.12);
+    }
+    .sprint-banner-copy {
+      padding: 1rem 0;
+    }
+    .sprint-banner-caption {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+    }
+    .sprint-banner-copy p {
+      font-size: 1.2rem;
+      color: var(--grey-light);
+      line-height: 1.65;
+      font-style: italic;
+    }
+
+    /* card image insets */
+    .card-image-inset {
+      margin: 1.2rem -1.8rem -2rem;
+      overflow: hidden;
+      border-top: 1px solid var(--border);
+      position: relative;
+    }
+    .card-image-inset img {
+      width: 100%;
+      display: block;
+      opacity: 0.88;
+    }
+    .card-image-inset::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 50%, var(--surface2));
+      pointer-events: none;
+    }
+
+    /* WHO IT'S FOR */
     .who {
       background: var(--bg);
     }
@@ -451,7 +529,28 @@
       font-style: italic;
     }
 
-    /* — QUICKSTART — */
+    /* athlete start panel */
+    .who-athlete-panel {
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+      margin-bottom: 1.5rem;
+    }
+    .who-athlete-panel img {
+      width: 100%;
+      display: block;
+      border-radius: 4px;
+      box-shadow: 0 8px 40px rgba(201, 160, 74, 0.12);
+    }
+    .who-athlete-panel::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 55%, #0B0B0B);
+      pointer-events: none;
+    }
+
+    /* QUICKSTART */
     .quickstart {
       background: var(--surface);
       position: relative;
@@ -555,14 +654,21 @@
       margin-top: 0.75rem;
     }
 
-    /* — BUY SECTION — */
+    /* BUY SECTION */
     .buy-section {
       background: var(--bg);
     }
 
-    .buy-card {
-      max-width: 620px;
+    .buy-layout {
+      max-width: 960px;
       margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .buy-card {
       background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: 4px;
@@ -613,11 +719,23 @@
       color: var(--grey-light);
     }
 
-    .buy-includes li::before {
-      content: '·';
-      color: var(--gold);
-      font-weight: 700;
-      flex-shrink: 0;
+    .buy-athlete-img {
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+    .buy-athlete-img img {
+      width: 100%;
+      display: block;
+      border-radius: 4px;
+      box-shadow: 0 8px 40px rgba(201, 160, 74, 0.12);
+    }
+    .buy-athlete-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 60%, #0B0B0B);
+      pointer-events: none;
     }
 
     .btn-buy {
@@ -647,7 +765,7 @@
       color: var(--text-muted);
     }
 
-    /* — FOOTER — */
+    /* FOOTER */
     footer {
       background: var(--bg);
       border-top: 1px solid var(--border);
@@ -686,7 +804,7 @@
 
     .footer-links a:hover { color: var(--gold); }
 
-    /* — FADE ANIMATION — */
+    /* FADE ANIMATION */
     .fade-up {
       opacity: 0;
       transform: translateY(24px);
@@ -698,7 +816,64 @@
       transform: translateY(0);
     }
 
-    /* — RESPONSIVE — */
+    /* ICON SYSTEM */
+    .icon { width: 20px; height: 20px; display: inline-block; vertical-align: middle; }
+    .icon-gold { color: #C9A04A; }
+    .icon-grey { color: #6E6E6E; }
+
+    /* NAV LINKS */
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    .nav-link {
+      color: var(--grey-light);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: color 0.2s;
+      white-space: nowrap;
+    }
+    .nav-link:hover { color: var(--text); }
+
+    .nav-calc {
+      color: var(--gold);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+    .nav-calc:hover { opacity: 0.7; }
+
+    /* CALC FEATURE SECTION */
+    .calc-feature {
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      padding: 5rem 2rem;
+    }
+    .calc-feature-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .calc-feature-visual img {
+      width: 100%;
+      max-width: 420px;
+      border-radius: 4px;
+      box-shadow: 0 8px 32px rgba(201,160,74,0.18);
+      display: block;
+    }
+
+    /* RESPONSIVE */
     @media (max-width: 768px) {
       nav { padding: 1rem 1.25rem; }
 
@@ -724,16 +899,66 @@
 
       .opt-in-form .form-row { flex-direction: column; }
 
+      .buy-layout { grid-template-columns: 1fr; }
       .buy-card { padding: 2rem 1.5rem; }
+      .sprint-banner { grid-template-columns: 1fr; }
+
+      .calc-feature-inner {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .calc-feature .btn-primary {
+        width: 100%;
+        justify-content: center;
+      }
+      .nav-calc { display: none; }
     }
   </style>
 </head>
 <body>
 
+  <!-- SVG ICON SYSTEM -->
+  <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <symbol id="icon-strength" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M6.5 6.5h11M12 6.5V18M8 18h8"/>
+      </symbol>
+      <symbol id="icon-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 2L4 6v6c0 4.4 3.4 8.5 8 9.5 4.6-1 8-5.1 8-9.5V6l-8-4z"/>
+      </symbol>
+      <symbol id="icon-performance" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+      </symbol>
+      <symbol id="icon-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+      </symbol>
+      <symbol id="icon-watch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="7" y="6" width="10" height="12" rx="2"/>
+        <path d="M9 4h6M9 20h6"/>
+      </symbol>
+      <symbol id="icon-recovery" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 4c-4.4 0-8 3.6-8 8s3.6 8 8 8"/><path d="M12 4l2 2-2 2"/>
+      </symbol>
+      <symbol id="icon-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </symbol>
+      <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"/>
+      </symbol>
+      <symbol id="icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </symbol>
+    </defs>
+  </svg>
+
   <!-- NAV -->
   <nav>
     <a class="nav-logo" href="/">AT<span>0</span>M FIT</a>
-    <a class="nav-cta" href="/blueprint">Get the Blueprint</a>
+    <div class="nav-links">
+      <a class="nav-link" href="/training">Training</a>
+      <a class="nav-calc" href="/calculator">Free Calculator</a>
+      <a class="nav-cta" href="/blueprint">Get the Blueprint $27</a>
+    </div>
   </nav>
 
   <!-- HERO -->
@@ -742,16 +967,16 @@
       <div class="hero-content fade-up">
         <p class="hero-label">The Levi Cardio Blueprint</p>
         <h1>Build Your<br><em>Aerobic</em><br>Engine.</h1>
-        <p class="hero-sub">Zone 2 to Zone 4. A field guide for tactical athletes, lifters, and hybrid performers who want structure instead of guesswork.</p>
+        <p class="hero-sub">Start with the free Zone Calculator. Get your exact training zones in 60 seconds. Then get the Blueprint to build the full system around them.</p>
         <div class="hero-actions">
-          <a class="btn-primary" href="/blueprint">Get the Blueprint — $27</a>
-          <a class="btn-secondary" href="#quickstart">Get the Free Zone 2 Quickstart</a>
+          <a class="btn-primary" href="/blueprint">Get the Blueprint $27</a>
+          <a class="btn-secondary" href="/calculator">Find Your Training Zones Free &#8594;</a>
         </div>
       </div>
       <div class="hero-visual fade-up">
         <div class="cover-wrapper">
-          <img src="./cover.png" alt="Levi Cardio Blueprint — Zone 2 to Zone 4" />
-          <span class="cover-badge">$27 — Instant Download</span>
+          <img src="./cover.png" alt="Levi Cardio Blueprint. Zone 2 to Zone 4" />
+          <span class="cover-badge">$27 Instant Download</span>
         </div>
       </div>
     </div>
@@ -779,29 +1004,71 @@
 
   <div class="gold-rule"></div>
 
+  <!-- FREE ZONE CALCULATOR FEATURE -->
+  <section class="calc-feature">
+    <div class="calc-feature-inner">
+      <div class="fade-up">
+        <p class="section-eyebrow">Free Tool</p>
+        <h2 class="section-title">Find Your Training Zones Free</h2>
+        <p style="color:var(--text-muted);font-size:1rem;line-height:1.75;margin-bottom:2rem;">Enter your stats. Get your exact Zone 1 through Zone 5 ranges. See a 3 month conditioning forecast. No signup required.</p>
+        <a class="btn-primary" href="/calculator">Use the Free Calculator</a>
+      </div>
+      <div class="calc-feature-visual fade-up">
+        <img src="./heart-rate-zones.png" alt="AT0M FIT Heart Rate Training Zones" class="premium-render" style="width:100%;max-width:680px;margin:1.5rem auto;display:block;border-radius:4px;box-shadow:0 8px 40px rgba(201,160,74,0.18);" />
+      </div>
+    </div>
+  </section>
+
+  <div class="gold-rule"></div>
+
   <!-- WHAT YOU GET -->
   <section class="what-you-get">
     <div class="container">
       <div class="what-header fade-up">
         <p class="section-eyebrow">What You Get</p>
         <h2 class="section-title">THE SYSTEM, NOT THE GUESSWORK</h2>
-        <p class="section-sub">57 pages of structure, data, and implementation — built from real training, not theory.</p>
+        <p class="section-sub">57 pages of structure, data, and implementation. Built from real training, not theory.</p>
       </div>
+
+      <!-- Sprint banner -->
+      <div class="sprint-banner fade-up">
+        <div class="render-wrap">
+          <img src="./athlete-sprint-front.png" alt="Athlete in full sprint. This is what consistent Zone 2 training builds." class="premium-render" />
+        </div>
+        <div class="sprint-banner-copy">
+          <p class="sprint-banner-caption">
+            <svg class="icon icon-gold" style="margin-right:6px"><use href="#icon-performance"/></svg>
+            What Zone 2 Builds
+          </p>
+          <p>This is what consistent Zone 2 training builds. The engine underneath the output. Base before intensity. Foundation before speed.</p>
+        </div>
+      </div>
+
       <div class="cards-grid">
         <div class="card fade-up">
-          <span class="card-icon">·</span>
+          <span class="card-icon">
+            <svg class="icon icon-gold" style="width:28px;height:28px"><use href="#icon-chart"/></svg>
+          </span>
           <h3 class="card-title">Zone System</h3>
-          <p class="card-desc">Understand all 5 heart-rate zones — what each one builds, when to use them, and why most people train in the wrong one. Finally, the science explained in plain terms.</p>
+          <p class="card-desc">Understand all 5 heart rate zones. What each one builds, when to use them, and why most people train in the wrong one. Finally, the science explained in plain terms.</p>
+          <img src="./heart-rate-zones.png" alt="AT0M FIT Heart Rate Training Zones" class="premium-render" style="width:100%;max-width:680px;margin:1.5rem auto;display:block;border-radius:4px;box-shadow:0 8px 40px rgba(201,160,74,0.18);" />
         </div>
         <div class="card fade-up">
-          <span class="card-icon">·</span>
+          <span class="card-icon">
+            <svg class="icon icon-gold" style="width:28px;height:28px"><use href="#icon-performance"/></svg>
+          </span>
           <h3 class="card-title">Real Data</h3>
-          <p class="card-desc">Levi's actual training progression numbers — not hypothetical templates. See what base-building looks like over weeks and months of consistent structured training.</p>
+          <p class="card-desc">Levi's actual training progression numbers. Not hypothetical templates. See what base building looks like over weeks and months of consistent structured training.</p>
         </div>
         <div class="card fade-up">
-          <span class="card-icon">›</span>
+          <span class="card-icon">
+            <svg class="icon icon-gold" style="width:28px;height:28px"><use href="#icon-watch"/></svg>
+          </span>
           <h3 class="card-title">Action Steps</h3>
-          <p class="card-desc">Apple Watch setup, zone-based progression framework, and recovery protocols. Every chapter ends with clear implementation so you know exactly what to do next session.</p>
+          <p class="card-desc">Apple Watch setup, zone based progression framework, and recovery protocols. Every chapter ends with clear implementation so you know exactly what to do next session.</p>
+          <div class="card-image-inset">
+            <img src="./watch-premium.png" alt="AT0M FIT Apple Watch Training Metrics" class="premium-render" style="width:100%;max-width:500px;margin:1.5rem auto;display:block;border-radius:4px;box-shadow:0 8px 40px rgba(201,160,74,0.18);" />
+          </div>
         </div>
       </div>
     </div>
@@ -819,16 +1086,19 @@
           <p class="section-sub">You've already got the discipline. You just need the system.</p>
           <ul class="who-list">
             <li>Lifters adding conditioning without losing their strength base</li>
-            <li>Tactical athletes — SWAT, military, law enforcement, first responders</li>
+            <li>Tactical athletes. SWAT, military, law enforcement, first responders.</li>
             <li>Hybrid athletes who want performance with real structure</li>
             <li>Beginners who want to learn cardio correctly from the start</li>
             <li>Anyone tired of guessing with heart rate training and getting nowhere</li>
           </ul>
         </div>
         <div class="fade-up">
+          <div class="who-athlete-panel">
+            <img src="./athlete-start.png" alt="Tactical athlete in start position" class="premium-render" />
+          </div>
           <div class="who-callout">
             <div class="who-callout-title">The AT0M FIT Buyer</div>
-            <p>"They train hard — but haven't trained smart. They own a wearable but don't know how to use it correctly. They're not looking for motivation — they've got that. They want a system: clear, practical, no fluff. They've wasted enough sessions already."</p>
+            <p>"They train hard, but haven't trained smart. They own a wearable but don't know how to use it correctly. They're not looking for motivation. They want a system: clear, practical, no fluff. They've wasted enough sessions already."</p>
           </div>
         </div>
       </div>
@@ -842,9 +1112,9 @@
     <div class="quickstart-inner">
       <div class="fade-up">
         <p class="section-eyebrow" style="text-align:center;">Free Resource</p>
-        <h2>Start here — <em>free.</em></h2>
+        <h2>Start here. <em>Free.</em></h2>
         <p class="quickstart-sub">
-          Most people doing "Zone 2" are doing it wrong — going too hard, guessing the intensity, and wondering why they're not seeing results.<br><br>
+          Most people doing "Zone 2" are going too hard, guessing the intensity, and wondering why they're not seeing results.<br><br>
           The <strong style="color:var(--text)">Zone 2 Quickstart</strong> gives you the 7 things you actually need to know to start training in the right zone today. One page. No fluff. Immediate download.
         </p>
         <form class="opt-in-form" onsubmit="handleQuickstart(event)">
@@ -854,7 +1124,7 @@
           </div>
           <button class="btn-form" type="submit">Send Me the Quickstart</button>
         </form>
-        <p class="form-note">No spam. No subscriptions. Just the guide — free.</p>
+        <p class="form-note">No spam. No subscriptions. Just the guide, free.</p>
       </div>
     </div>
   </section>
@@ -864,21 +1134,26 @@
   <!-- BUY SECTION -->
   <section class="buy-section" id="buy">
     <div class="container">
-      <div class="buy-card fade-up">
-        <div class="buy-price">$27</div>
-        <div class="buy-name">Levi Cardio Blueprint — Zone 2 to Zone 4</div>
-        <ul class="buy-includes">
-          <li>All 5 heart-rate zones explained with the science that makes them stick</li>
-          <li>How to build a real aerobic base — not just "go slow"</li>
-          <li>Threshold and VO2 training — what they are, when to use them</li>
-          <li>Apple Watch setup for accurate zone training</li>
-          <li>Sprint and interval applications built on a real base</li>
-          <li>Recovery guidance so your training compounds, not breaks down</li>
-          <li>Levi's own progression data and real training adjustments</li>
-          <li>57 pages — a full guide, not a PDF cheat sheet</li>
-        </ul>
-        <a class="btn-buy" href="/blueprint">Get the Blueprint — $27</a>
-        <p class="buy-small">Digital PDF. Instant download via Gumroad.</p>
+      <div class="buy-layout fade-up">
+        <div class="buy-athlete-img">
+          <img src="./athlete-run-steady.png" alt="Athlete running at steady Zone 2 pace" class="premium-render" />
+        </div>
+        <div class="buy-card">
+          <div class="buy-price">$27</div>
+          <div class="buy-name">Levi Cardio Blueprint. Zone 2 to Zone 4.</div>
+          <ul class="buy-includes">
+            <li><svg class="icon icon-gold" style="flex-shrink:0"><use href="#icon-check"/></svg> All 5 heart rate zones explained with the science that makes them stick</li>
+            <li><svg class="icon icon-gold" style="flex-shrink:0"><use href="#icon-check"/></svg> How to build a real aerobic base. Not just "go slow".</li>
+            <li><svg class="icon icon-gold" style="flex-shrink:0"><use href="#icon-check"/></svg> Threshold and VO2 training. What they are, when to use them.</li>
+            <li><svg class="icon icon-gold" style="flex-shrink:0"><use href="#icon-check"/></svg> Apple Watch setup for accurate zone training</li>
+            <li><svg class="icon icon-gold" style="flex-shrink:0"><use href="#icon-check"/></svg> Sprint and interval applications built on a real base</li>
+            <li><svg class="icon icon-gold" style="flex-shrink:0"><use href="#icon-check"/></svg> Recovery guidance so your training compounds, not breaks down</li>
+            <li><svg class="icon icon-gold" style="flex-shrink:0"><use href="#icon-check"/></svg> Levi's own progression data and real training adjustments</li>
+            <li><svg class="icon icon-gold" style="flex-shrink:0"><use href="#icon-check"/></svg> 57 pages. A full guide, not a PDF cheat sheet.</li>
+          </ul>
+          <a class="btn-buy" href="https://jeshjones.gumroad.com/l/Cardio-blueprint" target="_blank" rel="noopener">Get the Blueprint $27</a>
+          <p class="buy-small">Digital PDF. Instant download via Gumroad.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -913,7 +1188,7 @@
     function handleQuickstart(e) {
       e.preventDefault();
       const btn = e.target.querySelector('.btn-form');
-      btn.textContent = '· Check your inbox!';
+      btn.textContent = 'Check your inbox!';
       btn.style.background = '#2A2A2A';
       btn.style.color = 'var(--gold)';
       btn.style.border = '1px solid var(--gold)';

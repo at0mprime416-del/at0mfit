@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Levi Cardio Blueprint — Zone 2 to Zone 4 | AT0M FIT</title>
-  <meta name="description" content="Build the aerobic engine most athletes never develop. A 57-page field guide for tactical athletes and hybrid performers. $27 — Instant Download." />
+  <title>Levi Cardio Blueprint. Zone 2 to Zone 4 | AT0M FIT</title>
+  <meta name="description" content="Build the aerobic engine most athletes never develop. A 57 page field guide for tactical athletes and hybrid performers. $27 Instant Download." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -42,7 +42,7 @@
       overflow-x: hidden;
     }
 
-    /* — NAV — */
+    /* NAV */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -87,7 +87,7 @@
       transform: translateY(-1px);
     }
 
-    /* — GOLD RULE — */
+    /* GOLD RULE */
     .gold-rule {
       width: 100%;
       height: 1px;
@@ -95,7 +95,7 @@
       opacity: 0.5;
     }
 
-    /* — SHARED — */
+    /* SHARED */
     section { padding: 6rem 2rem; }
 
     .container {
@@ -162,7 +162,32 @@
       transform: translateY(0);
     }
 
-    /* — HERO — */
+    /* ICON SYSTEM */
+    .icon { width: 20px; height: 20px; display: inline-block; vertical-align: middle; }
+    .icon-gold { color: #C9A04A; }
+    .icon-grey { color: #6E6E6E; }
+
+    /* premium renders */
+    .premium-render {
+      width: 100%;
+      max-width: 600px;
+      border-radius: 4px;
+      box-shadow: 0 8px 40px rgba(201, 160, 74, 0.12);
+      display: block;
+    }
+    .render-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    .render-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 60%, #0B0B0B);
+      pointer-events: none;
+    }
+
+    /* HERO */
     .hero {
       min-height: 100vh;
       display: flex;
@@ -257,7 +282,7 @@
       margin: 0 0.4rem;
     }
 
-    /* — PROBLEM — */
+    /* PROBLEM */
     .problem {
       background: var(--bg);
     }
@@ -305,7 +330,27 @@
 
     .pain-list li strong { color: var(--text); }
 
-    /* — WHAT'S INSIDE — */
+    .problem-visual {
+      margin-top: 3rem;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+    .problem-visual img {
+      width: 100%;
+      display: block;
+      border-radius: 4px;
+      box-shadow: 0 8px 40px rgba(201, 160, 74, 0.12);
+    }
+    .problem-visual::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 65%, #0B0B0B);
+      pointer-events: none;
+    }
+
+    /* WHAT'S INSIDE */
     .whats-inside {
       background: var(--surface);
     }
@@ -359,7 +404,29 @@
       line-height: 1.65;
     }
 
-    /* — WHO IT'S FOR — */
+    /* chapter visual inserts */
+    .chapter-visual {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+    .chapter-visual img {
+      width: 100%;
+      display: block;
+      border-radius: 4px;
+      box-shadow: 0 8px 40px rgba(201, 160, 74, 0.12);
+    }
+    .chapter-visual::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 65%, var(--surface));
+      pointer-events: none;
+    }
+
+    /* WHO IT'S FOR */
     .who {
       background: var(--bg);
     }
@@ -397,7 +464,7 @@
 
     .who-card-text strong { color: var(--text); display: block; margin-bottom: 0.2rem; }
 
-    /* — TRANSFORMATION — */
+    /* TRANSFORMATION */
     .transformation {
       background: var(--surface);
     }
@@ -464,14 +531,27 @@
       color: var(--grey-light);
     }
 
-    .transform-col.to .transform-list li::before {
-      content: '·';
-      color: var(--gold);
-      flex-shrink: 0;
-      font-weight: 700;
+    .transform-to-visual {
+      margin-top: 2rem;
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+    .transform-to-visual img {
+      width: 100%;
+      display: block;
+      border-radius: 4px;
+      opacity: 0.85;
+    }
+    .transform-to-visual::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 55%, #131007);
+      pointer-events: none;
     }
 
-    /* — AUTHOR — */
+    /* AUTHOR */
     .author {
       background: var(--bg);
     }
@@ -543,7 +623,7 @@
       margin-top: 0.2rem;
     }
 
-    /* — FAQ — */
+    /* FAQ */
     .faq {
       background: var(--surface);
     }
@@ -597,13 +677,37 @@
       max-height: 200px;
     }
 
-    /* — FINAL CTA — */
+    /* FINAL CTA */
     .final-cta {
       background: linear-gradient(135deg, #1a1200, #0d0d0d);
       border-top: 1px solid var(--gold);
       border-bottom: 1px solid var(--gold);
       text-align: center;
       padding: 5rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .final-cta-bg {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .final-cta-bg img {
+      height: 100%;
+      width: auto;
+      max-width: 40%;
+      object-fit: cover;
+      opacity: 0.15;
+    }
+
+    .final-cta-inner {
+      position: relative;
+      z-index: 1;
     }
 
     .final-cta h2 {
@@ -654,7 +758,7 @@
       letter-spacing: 0.05em;
     }
 
-    /* — DISCLAIMER — */
+    /* DISCLAIMER */
     .disclaimer {
       background: var(--bg);
       padding: 3rem 2rem;
@@ -670,7 +774,7 @@
       padding-top: 2rem;
     }
 
-    /* — FOOTER — */
+    /* FOOTER */
     footer {
       background: var(--bg);
       border-top: 1px solid var(--border);
@@ -709,7 +813,7 @@
 
     .footer-links a:hover { color: var(--gold); }
 
-    /* — RESPONSIVE — */
+    /* RESPONSIVE */
     @media (max-width: 768px) {
       nav { padding: 1rem 1.25rem; }
 
@@ -731,28 +835,66 @@
 </head>
 <body>
 
+  <!-- SVG ICON SYSTEM -->
+  <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <symbol id="icon-strength" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M6.5 6.5h11M12 6.5V18M8 18h8"/>
+      </symbol>
+      <symbol id="icon-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 2L4 6v6c0 4.4 3.4 8.5 8 9.5 4.6-1 8-5.1 8-9.5V6l-8-4z"/>
+      </symbol>
+      <symbol id="icon-performance" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+      </symbol>
+      <symbol id="icon-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+      </symbol>
+      <symbol id="icon-watch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="7" y="6" width="10" height="12" rx="2"/>
+        <path d="M9 4h6M9 20h6"/>
+      </symbol>
+      <symbol id="icon-recovery" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 4c-4.4 0-8 3.6-8 8s3.6 8 8 8"/><path d="M12 4l2 2-2 2"/>
+      </symbol>
+      <symbol id="icon-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </symbol>
+      <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"/>
+      </symbol>
+      <symbol id="icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </symbol>
+    </defs>
+  </svg>
+
   <!-- NAV -->
   <nav>
     <a class="nav-logo" href="/">AT<span>0</span>M FIT</a>
-    <a class="nav-cta" href="#buy">Get the Blueprint</a>
+    <div style="display:flex;align-items:center;gap:1.2rem;">
+      <a href="/training" style="color:var(--gold);font-size:0.82rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;text-decoration:none;opacity:1;transition:opacity 0.2s;" onmouseover="this.style.opacity=0.7" onmouseout="this.style.opacity=1">Custom Training</a>
+      <a class="nav-cta" href="#buy">Get the Blueprint $27</a>
+    </div>
   </nav>
 
   <!-- HERO -->
   <section class="hero" id="top">
     <div class="hero-content fade-up">
-      <div class="hero-badge">AT0M FIT — Field Guide</div>
-      <h1>Zone 2 to Zone 4 —<br><em>Build the Aerobic Engine</em><br>Most Athletes Never Develop</h1>
+      <div class="hero-badge">AT0M FIT Field Guide</div>
+      <h1>Zone 2 to Zone 4.<br><em>Build the Aerobic Engine</em><br>Most Athletes Never Develop</h1>
       <p class="hero-sub">A field guide for tactical athletes and hybrid performers who want structure, not guesswork.</p>
-      <div class="price-badge">$27 — Instant Download</div>
+      <div class="price-badge">$27 Instant Download</div>
       <div class="hero-cta-group">
-        <a class="btn-primary" href="#buy">Get the Blueprint — $27</a>
+        <a class="btn-primary" href="https://jeshjones.gumroad.com/l/Cardio-blueprint" target="_blank" rel="noopener">Get the Blueprint $27</a>
         <p class="trust-note">
           Immediate PDF download
-          <span>·</span>
+          <span>&#183;</span>
           No subscription
-          <span>·</span>
+          <span>&#183;</span>
           Keep forever
         </p>
+        <p style="margin-top:1rem;font-size:0.9rem;color:var(--text-muted);">Not sure where you are? <a href="/calculator" style="color:var(--gold);text-decoration:none;font-weight:600;">Find your zones free &rarr;</a></p>
       </div>
     </div>
   </section>
@@ -766,15 +908,20 @@
       <h2>Most people doing cardio are training in<br><em>no man's land.</em></h2>
       <p class="problem-body">
         Too hard to be Zone 2. Not hard enough to be a real workout. They're burning energy without building anything real. The aerobic base stays weak. Performance plateaus. And nobody tells them why.<br><br>
-        They're guessing at intensities, misreading their heart rate zones, and wondering why their conditioning isn't improving despite the work they're putting in. The problem isn't discipline — it's the absence of a system.
+        They're guessing at intensities, misreading their heart rate zones, and wondering why their conditioning isn't improving despite the work they're putting in. The problem isn't discipline. It's the absence of a system.
       </p>
       <ul class="pain-list">
-        <li><strong>Your heart rate spikes</strong> the moment you pick up the pace — because you've never built the base underneath.</li>
-        <li><strong>You live in the "moderate effort" zone</strong> — the one that feels productive but actually develops nothing efficiently.</li>
+        <li><strong>Your heart rate spikes</strong> the moment you pick up the pace, because you've never built the base underneath.</li>
+        <li><strong>You live in the "moderate effort" zone,</strong> the one that feels productive but actually develops nothing efficiently.</li>
         <li><strong>Zone 2 feels too slow to be useful.</strong> You think you need to be working harder. That instinct is costing you results.</li>
-        <li><strong>You have no idea when to push and when to hold back</strong> — so you either overtrain or undertrain, never finding the right dial.</li>
-        <li><strong>Your wearable shows you heart rate data</strong> — but nobody ever taught you what to do with it.</li>
+        <li><strong>You have no idea when to push and when to hold back,</strong> so you either overtrain or undertrain, never finding the right dial.</li>
+        <li><strong>Your wearable shows you heart rate data,</strong> but nobody ever taught you what to do with it.</li>
       </ul>
+
+      <!-- aerobic vs anaerobic visual -->
+      <div class="problem-visual">
+        <img src="./aerobic-anaerobic.png" alt="Aerobic vs anaerobic energy systems comparison" class="premium-render" style="max-width:100%" />
+      </div>
     </div>
   </section>
 
@@ -792,20 +939,23 @@
           <div class="chapter-num">01</div>
           <div class="chapter-content">
             <div class="chapter-title">Why Aerobic Base Training Is the Foundation of Everything</div>
-            <p class="chapter-desc">The physiology behind why Zone 2 matters more than any other training zone — and why skipping it means building your conditioning on sand.</p>
+            <p class="chapter-desc">The physiology behind why Zone 2 matters more than any other training zone, and why skipping it means building your conditioning on sand.</p>
           </div>
         </div>
         <div class="chapter">
           <div class="chapter-num">02</div>
           <div class="chapter-content">
             <div class="chapter-title">Understanding All 5 Heart Rate Zones</div>
-            <p class="chapter-desc">A clear breakdown of every zone — what it is, what it builds, when to use it, and the science that makes each one distinct. Not labels. Understanding.</p>
+            <p class="chapter-desc">A clear breakdown of every zone. What it is, what it builds, when to use it, and the science that makes each one distinct. Not labels. Understanding.</p>
+            <div class="chapter-visual">
+              <img src="./heart-rate-zones.png" alt="AT0M FIT Heart Rate Training Zones" class="premium-render" style="width:100%;max-width:680px;margin:1.5rem auto;display:block;border-radius:4px;box-shadow:0 8px 40px rgba(201,160,74,0.18);" />
+            </div>
           </div>
         </div>
         <div class="chapter">
           <div class="chapter-num">03</div>
           <div class="chapter-content">
-            <div class="chapter-title">Zone 2 for Beginners — Start Here</div>
+            <div class="chapter-title">Zone 2 for Beginners. Start Here.</div>
             <p class="chapter-desc">If you've never trained with heart rate zones before, this is your entry point. How to find your Zone 2, set your targets, and start building correctly from day one.</p>
           </div>
         </div>
@@ -813,13 +963,13 @@
           <div class="chapter-num">04</div>
           <div class="chapter-content">
             <div class="chapter-title">Building Your Aerobic Base Progressively</div>
-            <p class="chapter-desc">The actual protocol — frequency, duration, progression, and adaptation. How to build week over week without burning out or stagnating.</p>
+            <p class="chapter-desc">The actual protocol. Frequency, duration, progression, and adaptation. How to build week over week without burning out or stagnating.</p>
           </div>
         </div>
         <div class="chapter">
           <div class="chapter-num">05</div>
           <div class="chapter-content">
-            <div class="chapter-title">Zone 3 & Threshold Training — When and How</div>
+            <div class="chapter-title">Zone 3 and Threshold Training. When and How.</div>
             <p class="chapter-desc">Threshold work explained: what lactate threshold actually means, when it's appropriate to train there, and how it relates to the base you've built.</p>
           </div>
         </div>
@@ -827,28 +977,32 @@
           <div class="chapter-num">06</div>
           <div class="chapter-content">
             <div class="chapter-title">Zone 4 and VO2 Max Development</div>
-            <p class="chapter-desc">High-intensity work done right. What VO2 training actually does, when to program it, and why it only works after you've built the base underneath.</p>
+            <p class="chapter-desc">High intensity work done right. What VO2 training actually does, when to program it, and why it only works after you've built the base underneath.</p>
           </div>
         </div>
         <div class="chapter">
           <div class="chapter-num">07</div>
           <div class="chapter-content">
             <div class="chapter-title">Sprint, Interval, and Sprint Applications</div>
-            <p class="chapter-desc">How to layer in high-intensity work without destroying your base — the sequencing, the ratios, and the protocols that compound your training instead of blowing it up.</p>
+            <p class="chapter-desc">How to layer in high intensity work without destroying your base. The sequencing, the ratios, and the protocols that compound your training instead of blowing it up.</p>
           </div>
         </div>
         <div class="chapter">
           <div class="chapter-num">08</div>
           <div class="chapter-content">
-            <div class="chapter-title">Apple Watch Setup + Wearable Calibration</div>
+            <div class="chapter-title">Apple Watch Setup and Wearable Calibration</div>
             <p class="chapter-desc">How to configure your Apple Watch (or similar HRM) for accurate zone training. The settings, the caveats, and how to stop relying on guessed zones.</p>
+            <div class="chapter-visual">
+              <img src="./watch-premium.png" alt="AT0M FIT Apple Watch Training Metrics" class="premium-render" style="width:100%;max-width:500px;margin:1.5rem auto;display:block;border-radius:4px;box-shadow:0 8px 40px rgba(201,160,74,0.18);" />
+              <img src="./watch-setup.png" alt="Apple Watch heart rate zone training setup" style="width:100%;margin-top:1rem;display:block;border-radius:4px;opacity:0.85;" />
+            </div>
           </div>
         </div>
         <div class="chapter">
           <div class="chapter-num">09</div>
           <div class="chapter-content">
-            <div class="chapter-title">Recovery, Adaptation, and Full-Year Programming</div>
-            <p class="chapter-desc">The part most guides skip. Recovery protocols, how to read your body's signals, and how to structure your training calendar so it compounds over time — not breaks down.</p>
+            <div class="chapter-title">Recovery, Adaptation, and Full Year Programming</div>
+            <p class="chapter-desc">The part most guides skip. Recovery protocols, how to read your body's signals, and how to structure your training calendar so it compounds over time, not breaks down.</p>
           </div>
         </div>
       </div>
@@ -866,45 +1020,57 @@
       </div>
       <div class="who-grid fade-up">
         <div class="who-card">
-          <span class="who-icon">·</span>
+          <span class="who-icon">
+            <svg class="icon icon-gold" style="width:24px;height:24px"><use href="#icon-strength"/></svg>
+          </span>
           <div class="who-card-text">
             <strong>Lifters Adding Conditioning</strong>
             You've built strength. Now you need to build the engine. This is how you do it without sacrificing the gains.
           </div>
         </div>
         <div class="who-card">
-          <span class="who-icon">·</span>
+          <span class="who-icon">
+            <svg class="icon icon-gold" style="width:24px;height:24px"><use href="#icon-shield"/></svg>
+          </span>
           <div class="who-card-text">
             <strong>Tactical Athletes</strong>
-            SWAT, military, law enforcement, and first responders who need real cardio capacity — not just the ability to pass a PT test.
+            SWAT, military, law enforcement, and first responders who need real cardio capacity, not just the ability to pass a PT test.
           </div>
         </div>
         <div class="who-card">
-          <span class="who-icon">›</span>
+          <span class="who-icon">
+            <svg class="icon icon-gold" style="width:24px;height:24px"><use href="#icon-performance"/></svg>
+          </span>
           <div class="who-card-text">
             <strong>Hybrid Athletes</strong>
-            You want strength and conditioning — performance with structure. This is the missing piece most hybrid programs never provide.
+            You want strength and conditioning. Performance with structure. This is the missing piece most hybrid programs never provide.
           </div>
         </div>
         <div class="who-card">
-          <span class="who-icon">·</span>
+          <span class="who-icon">
+            <svg class="icon icon-gold" style="width:24px;height:24px"><use href="#icon-target"/></svg>
+          </span>
           <div class="who-card-text">
             <strong>Beginners Who Want It Done Right</strong>
             Starting correctly is worth more than starting fast. Chapter 3 is specifically designed to get you running on the right system from day one.
           </div>
         </div>
         <div class="who-card">
-          <span class="who-icon">⌚</span>
+          <span class="who-icon">
+            <svg class="icon icon-gold" style="width:24px;height:24px"><use href="#icon-watch"/></svg>
+          </span>
           <div class="who-card-text">
             <strong>Wearable Owners Without a System</strong>
             You've got the Apple Watch. You see the heart rate data. Now you need to know what to actually do with it.
           </div>
         </div>
         <div class="who-card">
-          <span class="who-icon">→</span>
+          <span class="who-icon">
+            <svg class="icon icon-gold" style="width:24px;height:24px"><use href="#icon-arrow"/></svg>
+          </span>
           <div class="who-card-text">
             <strong>Anyone Tired of Guessing</strong>
-            Plateaued. Burned out. Going through the motions. If cardio feels random — this is what makes it make sense.
+            Plateaued. Burned out. Going through the motions. If cardio feels random, this is what makes it make sense.
           </div>
         </div>
       </div>
@@ -922,26 +1088,29 @@
       </div>
       <div class="transform-grid fade-up">
         <div class="transform-col from">
-          <div class="transform-label">Before — The Old Way</div>
+          <div class="transform-label">Before. The Old Way.</div>
           <ul class="transform-list">
             <li>Running random, no structure or intent behind sessions</li>
-            <li>Guessing at heart rate zones — or ignoring them entirely</li>
-            <li>Moderate intensity on everything — stuck in no man's land</li>
+            <li>Guessing at heart rate zones, or ignoring them entirely</li>
+            <li>Moderate intensity on everything, stuck in no man's land</li>
             <li>Burning out on hard sessions, under-recovering, plateauing</li>
             <li>A wearable on your wrist but no idea what the data means</li>
-            <li>No progression — same sessions, same feel, same results</li>
+            <li>No progression. Same sessions, same feel, same results.</li>
           </ul>
         </div>
         <div class="transform-col to">
-          <div class="transform-label">After — The Blueprint Way</div>
+          <div class="transform-label">After. The Blueprint Way.</div>
           <ul class="transform-list">
-            <li>Every session has a zone target and a purpose — nothing random</li>
+            <li>Every session has a zone target and a purpose. Nothing random.</li>
             <li>Clear zones dialed in for your max heart rate and physiology</li>
-            <li>Base-building done right — slow enough to actually adapt</li>
-            <li>Recovery built into the structure — training compounds over time</li>
+            <li>Base building done right. Slow enough to actually adapt.</li>
+            <li>Recovery built into the structure. Training compounds over time.</li>
             <li>Apple Watch configured, accurate, and working for you</li>
-            <li>A framework that progresses week over week — real aerobic development</li>
+            <li>A framework that progresses week over week. Real aerobic development.</li>
           </ul>
+          <div class="transform-to-visual">
+            <img src="./athlete-sprint-front.png" alt="Athlete at full sprint. The result of a built aerobic engine." />
+          </div>
         </div>
       </div>
     </div>
@@ -954,17 +1123,17 @@
     <div class="container">
       <div class="author-inner fade-up">
         <div>
-          <img src="./author.jpg" alt="Levi — Author, AT0M FIT" class="author-photo" />
+          <img src="./author.jpg" alt="Levi. Author, AT0M FIT" class="author-photo" />
         </div>
         <div>
           <p class="section-eyebrow">From the Author</p>
           <div class="author-name">LEVI</div>
-          <div class="author-title">SWAT Operator · Founder, AT0M FIT</div>
+          <div class="author-title">SWAT Operator &middot; Founder, AT0M FIT</div>
           <div class="author-bio">
             <p>I built this guide because I couldn't find it anywhere else.</p>
-            <p>When I started seriously developing my conditioning, I was already putting in the work — running, lifting, training hard. But my cardio felt like it was going nowhere. I'd finish sessions gassed, recover slowly, and still feel like I had no real engine underneath.</p>
-            <p>Turns out I'd never built a real aerobic base. I was living in the "moderate effort" zone — the one that feels productive but develops nothing efficiently. Zone 2 felt too slow. Zone 4 felt like the right level of suffering. I was wrong on both counts.</p>
-            <p>When I actually learned how heart-rate zones work — not just the labels, but the physiology — everything changed. My resting HR dropped to 49 BPM. I built to 15+ miles a week. My recovery improved. My high-intensity work started producing real results because I finally had the foundation underneath it.</p>
+            <p>When I started seriously developing my conditioning, I was already putting in the work. Running, lifting, training hard. But my cardio felt like it was going nowhere. I'd finish sessions gassed, recover slowly, and still feel like I had no real engine underneath.</p>
+            <p>Turns out I'd never built a real aerobic base. I was living in the "moderate effort" zone, the one that feels productive but develops nothing efficiently. Zone 2 felt too slow. Zone 4 felt like the right level of suffering. I was wrong on both counts.</p>
+            <p>When I actually learned how heart rate zones work, not just the labels but the physiology, everything changed. My resting HR dropped to 49 BPM. I built to 15+ miles a week. My recovery improved. My high intensity work started producing real results because I finally had the foundation underneath it.</p>
             <p>That education is what this book is. Not a workout plan. The missing system that makes all your training make sense.</p>
           </div>
           <div class="author-stats">
@@ -1001,14 +1170,14 @@
             What format is this?
             <span class="faq-toggle">+</span>
           </div>
-          <div class="faq-answer">PDF — immediate download via Gumroad. Works on any device. Download once, keep forever. No app required.</div>
+          <div class="faq-answer">PDF. Immediate download via Gumroad. Works on any device. Download once, keep forever. No app required.</div>
         </div>
         <div class="faq-item">
           <div class="faq-question" onclick="toggleFaq(this)">
             Do I need special equipment?
             <span class="faq-toggle">+</span>
           </div>
-          <div class="faq-answer">An Apple Watch or similar heart rate monitor is recommended — the Apple Watch setup chapter is specific to the Watch. But the zone principles, training protocols, and programming frameworks apply to any wearable with HR tracking, or even perceived exertion. You don't need any specific equipment to apply 90% of this guide.</div>
+          <div class="faq-answer">An Apple Watch or similar heart rate monitor is recommended. The Apple Watch setup chapter is specific to the Watch. But the zone principles, training protocols, and programming frameworks apply to any wearable with HR tracking, or even perceived exertion. You don't need any specific equipment to apply 90% of this guide.</div>
         </div>
         <div class="faq-item">
           <div class="faq-question" onclick="toggleFaq(this)">
@@ -1022,14 +1191,14 @@
             How long is it?
             <span class="faq-toggle">+</span>
           </div>
-          <div class="faq-answer">57 pages. This is a full-length field guide — not a PDF cheat sheet. It covers the science, the implementation, and the protocols with enough depth to actually understand what you're doing and why.</div>
+          <div class="faq-answer">57 pages. This is a full length field guide, not a PDF cheat sheet. It covers the science, the implementation, and the protocols with enough depth to actually understand what you're doing and why.</div>
         </div>
         <div class="faq-item">
           <div class="faq-question" onclick="toggleFaq(this)">
             What if I don't like it?
             <span class="faq-toggle">+</span>
           </div>
-          <div class="faq-answer">Digital products are non-refundable after download. That's the nature of instant-access digital goods. But if you have a technical issue with your file — missing pages, corrupted download, anything like that — reach out and we'll fix it immediately.</div>
+          <div class="faq-answer">Digital products are nonrefundable after download. That's the nature of instant access digital goods. But if you have a technical issue with your file, reach out and we'll fix it immediately.</div>
         </div>
       </div>
     </div>
@@ -1037,12 +1206,15 @@
 
   <!-- FINAL CTA -->
   <section class="final-cta" id="buy">
-    <div class="fade-up">
+    <div class="final-cta-bg">
+      <img src="./athlete-run-steady.png" alt="" aria-hidden="true" />
+    </div>
+    <div class="final-cta-inner fade-up">
       <p class="section-eyebrow" style="text-align:center;">Ready to Build</p>
       <h2>Ready to build<br><em>the engine?</em></h2>
-      <p class="final-price-line">$27 · Instant Download · Keep Forever</p>
-      <a class="btn-buy-final" href="#">Get the Blueprint — $27</a>
-      <p class="final-trust">Immediate PDF download via Gumroad · No subscription · Digital product — no returns after download</p>
+      <p class="final-price-line">$27 &#183; Instant Download &#183; Keep Forever</p>
+      <a class="btn-buy-final" href="https://jeshjones.gumroad.com/l/Cardio-blueprint" target="_blank" rel="noopener">Get the Blueprint $27</a>
+      <p class="final-trust">Immediate PDF download via Gumroad &#183; No subscription &#183; Digital product, no returns after download</p>
     </div>
   </section>
 
@@ -1050,7 +1222,7 @@
   <div class="disclaimer">
     <div class="disclaimer-text">
       <strong>DISCLAIMER: NOT MEDICAL OR PROFESSIONAL ADVICE</strong><br><br>
-      The information provided in this guide and all AT0M FIT materials is for educational and informational purposes only. It is not intended as medical advice, diagnosis, or treatment. Before beginning any new exercise program, consult your physician or a qualified healthcare professional — especially if you have a pre-existing medical condition, injury, or health concern. Training methods, heart-rate guidelines, and programming concepts described are general in nature and may not be appropriate for every individual. Results will vary. AT0M FIT and Levi Operations LLC are not liable for any injury, health issue, or adverse outcome resulting from the use or misuse of this material. You train at your own risk. Train smart.
+      The information provided in this guide and all AT0M FIT materials is for educational and informational purposes only. It is not intended as medical advice, diagnosis, or treatment. Before beginning any new exercise program, consult your physician or a qualified healthcare professional, especially if you have a preexisting medical condition, injury, or health concern. Training methods, heart rate guidelines, and programming concepts described are general in nature and may not be appropriate for every individual. Results will vary. AT0M FIT and Levi Operations LLC are not liable for any injury, health issue, or adverse outcome resulting from the use or misuse of this material. You train at your own risk. Train smart.
     </div>
   </div>
 
