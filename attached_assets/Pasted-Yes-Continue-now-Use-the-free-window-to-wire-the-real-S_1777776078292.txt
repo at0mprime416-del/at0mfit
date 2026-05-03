@@ -1,0 +1,134 @@
+Yes. Continue now. Use the free window to wire the real Supabase auth flow.
+
+Priority: /portal and /coach must become functional, not just UI shells.
+
+Do not work on Gmail yet. Gmail confirmation can wait. Auth and portal function matter more.
+
+Rules:
+- Do not move production off Vercel.
+- Do not expose secrets.
+- Do not use the service role key in frontend.
+- Do not disable RLS.
+- Do not redesign the brand.
+- Do not remove working static routes.
+- Make surgical fixes only.
+
+Use these existing frontend env vars:
+- VITE_SUPABASE_URL
+- VITE_SUPABASE_ANON_KEY
+
+TASK 1 — Wire /portal Supabase auth:
+1. Connect the portal login form to Supabase email/password auth.
+2. On successful login, show the client dashboard.
+3. Persist session on refresh.
+4. Add logout.
+5. If no session, show login.
+6. Display clear error messages for bad login.
+7. Query only the logged-in client’s own data through RLS.
+
+Client portal must show:
+- assigned workouts
+- workout log form
+- weekly check-in form
+- messages thread
+- progress area or empty state
+
+TASK 2 — Wire /coach Supabase auth:
+1. Connect coach login form to Supabase email/password auth.
+2. Allow only jeshua@levioperations.com.
+3. If another user logs in, immediately sign out and show “Unauthorized coach account.”
+4. Persist session on refresh.
+5. Add logout.
+6. Do not expose service role key.
+7. Use existing RLS policies for coach access.
+
+Coach dashboard must show:
+- applications queue
+- client roster
+- create program
+- create workout
+- assign workout
+- check-ins
+- workout logs
+- messages
+- today/next actions
+
+TASK 3 — Functional data wiring:
+Use existing Supabase tables:
+- clients
+- programs
+- workouts
+- assigned_workouts
+- workout_logs
+- checkins
+- messages
+- applications
+- progress_metrics
+- subscriptions
+
+Confirm:
+- client login works
+- client sees assigned workouts
+- client can submit workout log
+- client can submit check-in
+- client can send message
+- coach login works
+- coach sees applications
+- coach sees clients
+- coach can create program
+- coach can create workout
+- coach can assign workout
+- coach can view workout logs
+- coach can view check-ins
+- coach can send message
+
+TASK 4 — Create test documentation:
+Update or create:
+- REPLIT_TAKEOVER_STATUS.md
+- REPLIT_NEXT_BUILD_PLAN.md
+- REPLIT_RUNBOOK.md
+- QCMD_REPLIT_GATE.md
+
+TASK 5 — Final report:
+Return this exact format:
+
+STATUS
+- /portal auth wired: yes/no
+- /coach auth wired: yes/no
+- Supabase connected: yes/no
+- service key exposed: no
+- RLS disabled: no
+- Vercel production touched: no
+
+PORTAL TESTS
+- login:
+- session persists:
+- assigned workouts load:
+- workout log submit:
+- check-in submit:
+- messages send:
+- logout:
+
+COACH TESTS
+- coach login:
+- non-coach denied:
+- applications load:
+- clients load:
+- create program:
+- create workout:
+- assign workout:
+- view logs:
+- view check-ins:
+- messages send:
+- logout:
+
+FILES CHANGED
+- list files and why
+
+BLOCKERS
+- owner actions only
+
+QCMD
+- PASS/FAIL for functional portal + coach auth readiness
+
+Do this now. Do not stop at UI-only.

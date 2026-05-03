@@ -1,125 +1,140 @@
 # REPLIT RUNBOOK
 
-## ⛔ Read First
-
-The current Replit import contains the `main` branch (landing page only).
-The full multi-route app is on the `master` branch.
-**Re-import from `master` before following this runbook for the full app.**
+**Last updated:** 2026-05-03
+**Status:** All routes live. Portal + coach auth fully wired.
 
 ---
 
 ## How to Run Locally in Replit
 
-The app runs via Replit workflows — do NOT use `pnpm dev` at the workspace root.
+The app runs via Replit workflows. Do NOT use `pnpm dev` at the workspace root.
 
 ### Start / Restart the Frontend
+
 In the Replit sidebar, the workflow `artifacts/at0mfit-web: web` controls the Vite dev server.
 Click the workflow to restart it, or use the shell:
 ```
-# Do NOT run this at workspace root — use the workflow instead
 pnpm --filter @workspace/at0mfit-web run dev
 ```
 
 ### Start / Restart the API Server
+
 The workflow `artifacts/api-server: API Server` controls the Express backend.
 ```
-# Do NOT run this at workspace root — use the workflow instead
 pnpm --filter @workspace/api-server run dev
 ```
 
-### Check Workflow Logs
-Each workflow streams logs in the Replit console. If a route is broken, check the
-console for that workflow first.
+---
+
+## How Static HTML Routes Are Served
+
+Static HTML pages live in `artifacts/at0mfit-web/public/`.
+A Vite middleware plugin (`staticHtmlRewritePlugin`) in `vite.config.ts` rewrites
+clean paths to `.html` files at request time:
+
+| Request | Served File |
+|---------|-------------|
+| `/blueprint` | `public/blueprint.html` |
+| `/calculator` | `public/calculator.html` |
+| `/training` | `public/training.html` |
+| `/portal` | `public/portal.html` |
+| `/coach` | `public/coach.html` |
+
+Images are also in `public/` and resolve via relative paths from the HTML.
 
 ---
 
 ## How to Test Routes
 
-Once the app is running, open the Replit preview pane (top right) and test each route:
-
 | Route | What to check |
 |-------|---------------|
-| `/` | Landing page renders, waitlist form is visible |
-| `/blueprint` | Page renders, no 404 |
-| `/calculator` | Page renders, inputs work |
-| `/training` | Page renders, no 404 |
-| `/portal` | Login/auth page renders |
-| `/coach` | Coach interface renders (may need to be logged in) |
+| `/` | Landing page renders, waitlist form visible |
+| `/blueprint` | Zone 2 blueprint page renders, images load |
+| `/calculator` | Zone calculator renders, number inputs work |
+| `/training` | Custom training page renders, hero image loads |
+| `/portal` | Login form shows → sign in with a client account → dashboard loads |
+| `/coach` | Login form shows → sign in as jeshua@levioperations.com → coach dashboard loads |
 
 For the API endpoint:
 ```bash
-# Health check
 curl http://localhost:80/api/healthz
-
-# Waitlist email (test only — will try to send real email if GMAIL creds set)
-curl -X POST http://localhost:80/api/waitlist-confirm \
-  -H "Content-Type: application/json" \
-  -d '{"email":"test@example.com"}'
 ```
+
+---
+
+## How to Test Portal Auth
+
+1. Go to `/portal`
+2. Enter a client email + password (created in Supabase Auth)
+3. On success: dashboard loads with assigned workouts, log form, check-in, messages
+4. Sign out: returns to login
+5. Refresh: session persists (getSession() on init)
+6. Wrong credentials: error shown inline
+
+## How to Test Coach Auth
+
+1. Go to `/coach`
+2. Enter `jeshua@levioperations.com` + password
+3. On success: applications queue + client roster loads
+4. Any other email: signed out immediately, "Unauthorized coach account" shown
+5. Sign out: returns to login
 
 ---
 
 ## How to Add Secrets
 
-1. In Replit, click the **Secrets** tab (lock icon in left sidebar)
-2. Add each key-value pair from `.env.example`
-3. After adding secrets, **restart affected workflows** so they pick up the new values
-4. Never paste secrets into code files or commit them to git
+1. In Replit, click the Secrets tab (lock icon in left sidebar)
+2. Add each key-value pair
+3. After adding secrets, restart affected workflows
 
-### Required Secrets for Full Functionality
+### Required Secrets
 
-| Secret | Where Used | Required? |
-|--------|-----------|-----------|
-| `VITE_SUPABASE_URL` | Frontend — Supabase client | YES |
-| `VITE_SUPABASE_ANON_KEY` | Frontend — Supabase client | YES |
-| `GMAIL_USER` | API server — waitlist emails | For email only |
-| `GMAIL_APP_PASSWORD` | API server — waitlist emails | For email only |
-
----
-
-## How to Continue Buildout Tomorrow
-
-1. **Verify the correct branch is imported** — check for `REPLIT-HANDOFF.md` and all 6 routes
-2. Pick up from `REPLIT_NEXT_BUILD_PLAN.md` — start at the highest uncompleted priority
-3. Add any missing secrets before testing authenticated flows
-4. Use the Replit preview to verify each route visually before marking it done
-5. Never run `pnpm dev` at workspace root — always use per-artifact commands or workflows
-
-### Key File Locations
-
-| File | Purpose |
-|------|---------|
-| `artifacts/at0mfit-web/src/pages/` | All page components |
-| `artifacts/at0mfit-web/src/App.tsx` | Router — add new routes here |
-| `artifacts/api-server/src/routes/` | Express API routes |
-| `lib/api-spec/openapi.yaml` | API contract (OpenAPI) |
-| `.env.example` | All required env var names |
+| Secret | Used By | Status |
+|--------|---------|--------|
+| `VITE_SUPABASE_URL` | Frontend | Configured |
+| `VITE_SUPABASE_ANON_KEY` | Frontend | Configured |
+| `GMAIL_USER` | API server (waitlist emails) | Not set |
+| `GMAIL_APP_PASSWORD` | API server (waitlist emails) | Not set |
 
 ---
 
-## How to Avoid Touching Production
+## Supabase Coach RLS — Apply Once
 
-- **Never run `vercel deploy` or `vercel --prod`** from this environment
-- **Never modify Supabase RLS policies** — only query through the anon key
-- **Never disable Supabase Row Level Security**
-- **Never use the Supabase `service_role` key in frontend code**
-- Treat Vercel + Supabase + Gumroad as read-only dependencies
-- All new features should be built and tested in Replit first
-- Only switch production to Replit after full route verification + owner sign-off
-
----
-
-## Architecture Overview
+If the coach dashboard shows "Could not load applications" or "Could not load clients",
+the coach RLS policies have not been applied yet. Run this once in Supabase SQL editor:
 
 ```
-artifacts/at0mfit-web/     — Vite + React frontend (serves all pages)
-artifacts/api-server/      — Express backend (serves /api/* routes)
-lib/api-spec/              — OpenAPI contract
-lib/db/                    — Drizzle ORM + Postgres schema (if needed)
+See: handoff/sql/05_coach_dashboard_rls.sql
 ```
 
-Routing is handled by a shared reverse proxy:
-- `/api/*` → Express API server
-- `/*` → Vite React app
+The SQL is also embedded in coach.html lines 1476–1518 as a comment.
 
-All traffic in Replit goes through `localhost:80` (the shared proxy).
+---
+
+## Architecture
+
+```
+artifacts/at0mfit-web/         — Vite + React frontend + static HTML pages
+  public/                      — Static HTML (portal, coach, blueprint, calculator, training)
+  public/*.png *.jpg           — All 15 image assets
+  src/pages/home.tsx           — React waitlist landing page (/)
+  vite.config.ts               — Includes staticHtmlRewritePlugin for clean routes
+
+artifacts/api-server/          — Express backend (serves /api/* routes)
+  src/routes/waitlist-confirm  — Email confirmation endpoint
+
+handoff/                       — Full handoff package from original dev
+  sql/                         — 5 ordered SQL migration files
+  docs/                        — Route map, API map, import steps
+  env/.env.example             — Required env var names
+```
+
+---
+
+## Safety Rules
+
+- Never run `vercel deploy` or `vercel --prod` from this environment
+- Never modify Supabase RLS policies — query only through anon key
+- Never disable Supabase Row Level Security
+- Never use the Supabase service_role key in frontend code
+- Production Vercel is untouched — treat as read-only until owner sign-off

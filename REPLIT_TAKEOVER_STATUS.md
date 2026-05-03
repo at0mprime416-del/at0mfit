@@ -1,90 +1,87 @@
-# REPLIT TAKEOVER STATUS — COMPLETE
+# REPLIT TAKEOVER STATUS — COMPLETE + FUNCTIONAL
 
-## ✅ All Routes Ported and Verified
+## Summary
 
-The `master` branch static HTML production site has been fully imported into Replit.
-All 6 routes are live and rendering correctly with the original AT0M FIT brand.
+All 6 routes live. Portal and coach auth fully wired to Supabase.
+All data operations wired through RLS. No service key exposed. Brand intact.
 
 ---
 
 ## Route Status
 
-| Route        | Status | Source                              |
-|--------------|--------|-------------------------------------|
-| `/`          | ✅ PASS | React/Vite port of main-branch waitlist landing page |
-| `/blueprint` | ✅ PASS | Static HTML from master branch      |
-| `/calculator`| ✅ PASS | Static HTML from master branch      |
-| `/training`  | ✅ PASS | Static HTML from master branch      |
-| `/portal`    | ✅ PASS | Static HTML from master branch      |
-| `/coach`     | ✅ PASS | Static HTML from master branch      |
+| Route        | Status | Auth | Notes |
+|--------------|--------|------|-------|
+| `/`          | LIVE   | None | React/Vite waitlist landing page |
+| `/blueprint` | LIVE   | None | Static HTML from master branch |
+| `/calculator`| LIVE   | None | Static HTML — client-side zone calculator |
+| `/training`  | LIVE   | None | Static HTML — custom training page |
+| `/portal`    | LIVE   | Supabase email/password | Full dashboard wired |
+| `/coach`     | LIVE   | Supabase email/password + email gate | Full dashboard wired |
 
 ---
 
-## How Static Routes Are Served
+## /portal — Client Dashboard
 
-Static HTML pages live in `artifacts/at0mfit-web/public/` and are served by a
-Vite middleware plugin (`staticHtmlRewritePlugin`) in `vite.config.ts` that rewrites
-clean paths to their `.html` files:
-
-- `/blueprint` → `/blueprint.html`
-- `/calculator` → `/calculator.html`
-- `/training` → `/training.html`
-- `/portal` → `/portal.html`
-- `/coach` → `/coach.html`
-
-All 15 image assets are in `public/` and resolve correctly via relative paths.
-
----
-
-## Handoff Docs
-
-All handoff documentation has been imported from `master`:
-
-| File | Location |
-|------|----------|
-| `REPLIT-HANDOFF.md` | Repo root |
-| `handoff/README.md` | Handoff index |
-| `handoff/BRAND_GUIDE.md` | Brand guide |
-| `handoff/CLIENT_WORKFLOW.md` | Client workflow |
-| `handoff/COACH_WORKFLOW.md` | Coach workflow |
-| `handoff/CURRENT_STATE.md` | App current state |
-| `handoff/DECISIONS_LOG.md` | Decision log |
-| `handoff/KNOWN_BUGS_AND_RISKS.md` | Known issues |
-| `handoff/PRODUCT_OFFER_BRIEF.md` | Product brief |
-| `handoff/REMAINING_BUILDOUT_TASKS.md` | Remaining tasks |
-| `handoff/REPLIT_OPERATING_PACK.md` | Replit ops pack |
-| `handoff/docs/ROUTE_MAP.md` | Route map |
-| `handoff/docs/API_INTEGRATION_MAP.md` | API map |
-| `handoff/docs/FIRST_REPLIT_AGENT_PROMPT.md` | First agent prompt |
-| `handoff/docs/REPLIT_IMPORT_STEPS.md` | Import steps |
-| `handoff/sql/*.sql` | 5 SQL migration files |
-| `handoff/env/.env.example` | Required env vars |
-| `handoff/assets/ASSET_MAP.md` | Asset map |
+| Feature | Status |
+|---------|--------|
+| Login form | WIRED — Supabase signInWithPassword |
+| Error messages | WIRED — invalid credentials shown inline |
+| Session persistence | WIRED — getSession() on init, onAuthStateChange listener |
+| Logout | WIRED — signOut() + returns to login view |
+| Assigned workouts | WIRED — queries assigned_workouts + workouts, shows this week's workout |
+| **Log workout form** | **WIRED (new)** — RPE, duration, notes → workout_logs insert + marks assigned_workout completed |
+| Weekly check-in form | WIRED — 4 ratings (training/sleep/stress/energy) + notes → checkins insert |
+| Messages thread | WIRED — loads from messages, send inserts with sender='client' |
+| Coach notes | WIRED — reads coach_notes WHERE is_visible_to_client=true |
+| Progress metrics | WIRED — weight from progress_metrics, last check-in date, sessions this week |
 
 ---
 
-## Supabase / Secrets
+## /coach — Coach Dashboard
+
+| Feature | Status |
+|---------|--------|
+| Login form | WIRED — Supabase signInWithPassword |
+| Email gate | WIRED — only jeshua@levioperations.com allowed; others sign out immediately and see restricted view |
+| Session persistence | WIRED — getSession() on init |
+| Logout | WIRED — signOut() + returns to login view |
+| Applications queue | WIRED — reads applications WHERE status='pending', "Mark Reviewed" updates status |
+| Client roster | WIRED — reads all clients, click to expand detail panel |
+| Create program | WIRED — inserts into programs with client_id, name, start_date, description |
+| Assign workout | WIRED — inserts into workouts + assigned_workouts (two-step) |
+| View assigned workouts | WIRED — per client in detail panel |
+| View check-ins | WIRED — per client with 1-5 ratings |
+| View workout logs | WIRED — per client with RPE, duration, notes |
+| Coach → client messages | WIRED — inserts into messages with sender='coach', live reload |
+
+---
+
+## Security
+
+| Constraint | Status |
+|------------|--------|
+| Service role key exposed | NO — anon key only, designed for public use |
+| RLS disabled | NO — all tables enforced |
+| Vercel production touched | NO |
+| Brand redesigned | NO |
+| Working routes removed | NO |
+
+---
+
+## Secrets
 
 | Secret | Status |
 |--------|--------|
-| `VITE_SUPABASE_URL` | ✅ Configured |
-| `VITE_SUPABASE_ANON_KEY` | ✅ Configured |
-| `GMAIL_USER` | ⚠️ Not yet set — needed for waitlist confirmation emails |
-| `GMAIL_APP_PASSWORD` | ⚠️ Not yet set — needed for waitlist confirmation emails |
+| `VITE_SUPABASE_URL` | Configured |
+| `VITE_SUPABASE_ANON_KEY` | Configured |
+| `GMAIL_USER` | Not set — email confirmation deferred |
+| `GMAIL_APP_PASSWORD` | Not set — email confirmation deferred |
 
 ---
 
-## Production Vercel
+## Remaining Blockers (Owner Action)
 
-**NOT touched.** Production remains on Vercel, unchanged.
-
----
-
-## What Still Needs Work (per handoff docs)
-
-See `handoff/REMAINING_BUILDOUT_TASKS.md` for the full prioritized list.
-Key items from `handoff/KNOWN_BUGS_AND_RISKS.md`:
-- Portal / coach Supabase auth (sign-in forms are static HTML — need backend wiring)
-- Calculator results are client-side JS only — no persistence
-- Blueprint purchase flow (Stripe or payment link) not yet wired in Replit
-- `GMAIL_USER` / `GMAIL_APP_PASSWORD` secrets still needed for email confirmation
+1. **GMAIL_USER + GMAIL_APP_PASSWORD** — set in Replit Secrets when ready for email confirmation
+2. **Supabase coach RLS policies** — must be applied once in Supabase SQL editor for coach dashboard to read all clients/applications. SQL is in `handoff/sql/05_coach_dashboard_rls.sql` and embedded in coach.html lines 1476–1518.
+3. **Coach password reset** — jeshua@levioperations.com password was set via Supabase Dashboard on Vercel. Same account + password works here (same Supabase project). If login fails, reset via Supabase Dashboard → Authentication → Users.
+4. **Client onboarding** — new clients must be created in Supabase Auth by the coach (signups are disabled per spec). Then add a row to `clients` table manually or via coach "Accept Application" flow (not yet built).

@@ -1,0 +1,361 @@
+AT0M FIT — FINAL FREE-WINDOW BUILDOUT MISSION
+
+We are time-boxed. Replit is free until 00:00. Maximize useful progress.
+
+Current known status:
+- Replit imported the project.
+- All 6 routes are present from the master branch.
+- Routes found:
+  - /
+  - /blueprint
+  - /calculator
+  - /training
+  - /portal
+  - /coach
+- Static production pages are live in Replit.
+- Brand styling is intact.
+- Vercel production has not been touched.
+- Supabase secrets have been added:
+  - VITE_SUPABASE_URL
+  - VITE_SUPABASE_ANON_KEY
+- Gmail secrets are missing:
+  - GMAIL_USER
+  - GMAIL_APP_PASSWORD
+- Gmail can wait.
+- Main current gap:
+  - /portal and /coach are UI-only shells.
+  - Supabase session auth and real data wiring need to be completed.
+
+IMPORTANT PRIORITY:
+Do not spend time on email confirmation tonight.
+Do not spend time on redesign.
+Do not spend time on cosmetic improvements.
+Do not move production from Vercel.
+Do not disable Supabase RLS.
+Do not expose secrets.
+Do not put service role key in frontend.
+Do not use old prototype as source of truth.
+Do not rebuild from scratch.
+
+Tonight’s mission:
+Make AT0M FIT functional in Replit as the new build environment by wiring the portal and coach dashboard to Supabase.
+
+CORE OBJECTIVE:
+By the end of this run, Replit should have:
+1. Public routes working.
+2. Supabase connected.
+3. /portal login functional.
+4. /coach login functional.
+5. Client portal reading/writing client data through RLS.
+6. Coach dashboard reading/writing coach data through RLS.
+7. Documentation created so tomorrow’s build can continue without OpenClaw.
+
+BRAND RULES:
+- Keep AT0M FIT black / charcoal / gold / off-white.
+- Keep premium tactical fitness feel.
+- Keep Bebas Neue for major headings.
+- Keep Inter for body copy.
+- No emojis in production UI.
+- No cyan/green legacy styling unless temporary status badge.
+- No generic AI-fitness look.
+- No redesign unless required to make functionality usable.
+
+ROUTE REQUIREMENTS:
+
+/
+- Homepage must stay live.
+- CTA links should point to:
+  - /blueprint
+  - /calculator
+  - /training
+
+/blueprint
+- Product page for Levi Cardio Blueprint.
+- Must include:
+  - $27 offer
+  - product summary
+  - benefits
+  - CTA to buy
+  - CTA to calculator/training if appropriate
+- If payment link is not wired, leave a clear placeholder and document it.
+
+/calculator
+- Free Zone Calculator.
+- Must calculate zones or preserve current working calculator logic.
+- Must CTA to:
+  - Blueprint
+  - Custom Training
+
+/training
+- Custom Training application page.
+- Must show:
+  - $199/month founding client offer
+  - application-only coaching
+  - what they get
+  - who it is for
+  - application form
+- Application form should insert into Supabase applications.
+- Public users should be able to insert applications.
+- Public users should not be able to read applications.
+
+/portal
+- Client portal.
+- Must be functional, not UI-only.
+- Use Supabase email/password auth.
+- If no session, show login.
+- On login, load client dashboard.
+- Persist session on refresh.
+- Add logout.
+- Show clear error messages.
+- Client must only see their own data through RLS.
+
+Portal sections:
+1. Assigned workouts
+2. Workout log form
+3. Weekly check-in form
+4. Client-to-coach messages
+5. Progress area or empty state
+
+Use Supabase tables:
+- clients
+- assigned_workouts
+- workouts
+- workout_logs
+- checkins
+- messages
+- progress_metrics
+
+Portal tests to complete:
+- client login works
+- session persists
+- logout works
+- assigned workouts load
+- workout log submits
+- check-in submits
+- message sends
+- client only sees own data
+
+/coach
+- Coach dashboard / command center.
+- Must be functional, not UI-only.
+- Use Supabase email/password auth.
+- Only allow:
+  - jeshua@levioperations.com
+- If any other authenticated user attempts access:
+  - sign them out
+  - show “Unauthorized coach account”
+- Persist coach session on refresh.
+- Add logout.
+- Do not expose service role key.
+- Use existing RLS policies.
+
+Coach sections:
+1. Today / next actions
+2. Applications queue
+3. Client roster
+4. Program creation
+5. Workout creation
+6. Assign workout
+7. Workout logs
+8. Check-ins
+9. Messages
+10. Progress overview
+11. Ops/status panel
+
+Use Supabase tables:
+- applications
+- clients
+- programs
+- workouts
+- assigned_workouts
+- workout_logs
+- checkins
+- messages
+- progress_metrics
+- subscriptions
+- coach_notes
+
+Coach tests to complete:
+- coach login works
+- non-coach denied
+- applications load
+- clients load
+- create program works
+- create workout works
+- assign workout works
+- workout logs visible
+- check-ins visible
+- messages send coach to client
+- logout works
+
+SUPABASE RULES:
+- Use only:
+  - VITE_SUPABASE_URL
+  - VITE_SUPABASE_ANON_KEY
+- Do not request service role key unless building backend-only scripts.
+- Do not expose service role key in frontend.
+- RLS stays enabled.
+- Public can insert applications.
+- Public cannot read applications.
+- Clients can only read/write their own rows.
+- Coach can access coach dashboard data through existing policies.
+
+SAFE FIXES ALLOWED:
+- route wiring
+- Supabase auth wiring
+- Supabase query fixes
+- session persistence
+- logout
+- empty states
+- error states
+- asset path fixes
+- environment variable guards
+- local Replit run configuration
+- documentation/runbook files
+
+DO NOT:
+- move production off Vercel
+- disable RLS
+- hardcode secrets
+- hardcode Gmail credentials
+- use service role in frontend
+- delete working routes
+- redesign the site
+- rebuild the app from scratch
+- change the offer/pricing
+- remove handoff docs
+
+GMAIL:
+Gmail confirmation is not tonight’s priority.
+If GMAIL_USER or GMAIL_APP_PASSWORD are missing:
+- do not crash
+- log missing config
+- show graceful fallback
+- document it as owner action
+
+FILES TO CREATE OR UPDATE BEFORE STOPPING:
+
+1. REPLIT_TAKEOVER_STATUS.md
+Include:
+- current branch/source
+- route status
+- Supabase connection status
+- portal auth status
+- coach auth status
+- files changed
+- features working
+- features not working
+- owner actions needed
+
+2. REPLIT_NEXT_BUILD_PLAN.md
+Include:
+- top 15 next tasks in priority order
+- backend automation roadmap
+- payment/checkout roadmap
+- portal improvements
+- coach dashboard improvements
+- sales/lead tracking roadmap
+- what can wait
+- what not to touch
+
+3. REPLIT_RUNBOOK.md
+Include:
+- how to run app in Replit
+- how to test all routes
+- how to add secrets
+- how to verify Supabase
+- how to test portal
+- how to test coach
+- how to continue tomorrow
+- how to avoid touching Vercel production
+
+4. QCMD_REPLIT_GATE.md
+Include pass/fail checklist:
+- correct source branch
+- all routes load
+- Supabase connected
+- portal auth wired
+- coach auth wired
+- non-coach denied
+- application form works
+- client isolation intact
+- service key not exposed
+- RLS not disabled
+- Vercel untouched
+- secrets not exposed
+
+5. .env.example
+Include variable names only:
+- VITE_SUPABASE_URL
+- VITE_SUPABASE_ANON_KEY
+- GMAIL_USER
+- GMAIL_APP_PASSWORD
+- GUMROAD_ACCESS_TOKEN
+- STRIPE_SECRET_KEY
+- STRIPE_WEBHOOK_SECRET
+- DISCORD_WEBHOOK_URL
+- SUPABASE_SERVICE_ROLE_KEY
+
+No secret values.
+
+FINAL REPORT FORMAT:
+Return only this structure:
+
+STATUS
+- correct branch/source:
+- Replit app running:
+- Supabase connected:
+- /portal auth wired:
+- /coach auth wired:
+- production Vercel touched:
+- secrets exposed:
+- service key in frontend:
+- RLS disabled:
+
+ROUTE TESTS
+- /:
+- /blueprint:
+- /calculator:
+- /training:
+- /portal:
+- /coach:
+
+PORTAL TESTS
+- login:
+- session persists:
+- logout:
+- assigned workouts load:
+- workout log submit:
+- check-in submit:
+- message send:
+- client data isolated:
+
+COACH TESTS
+- coach login:
+- non-coach denied:
+- applications load:
+- clients load:
+- create program:
+- create workout:
+- assign workout:
+- logs visible:
+- check-ins visible:
+- messages send:
+- logout:
+
+FILES CHANGED
+- list file and exact reason
+
+FILES CREATED
+- list file and purpose
+
+BLOCKERS
+- only owner actions required
+
+NEXT 15 TASKS
+- numbered priority list
+
+QCMD
+- PASS or FAIL for Replit takeover readiness
+
+Execute now. Maximize the free window. Focus on functional portal + coach auth first.

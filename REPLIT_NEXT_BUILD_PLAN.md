@@ -1,90 +1,68 @@
 # REPLIT NEXT BUILD PLAN
 
-> **Prerequisites before any build work**: Re-import from the correct branch (`master`).
-> Do not build against the current state — the multi-route app is missing.
+**Last updated:** 2026-05-03
+**Current status:** All 6 routes live. Portal + coach auth fully wired.
 
 ---
 
-## Top 10 Next Build Tasks (Priority Order)
+## Completed
 
-### 1. Re-import from `master` branch
-**Priority**: CRITICAL — blocks everything else
-- The current import is the `main` branch (landing page only)
-- Re-import the Vercel project selecting the `master` branch
-- Verify `REPLIT-HANDOFF.md` is present after import
-- Verify all 6 routes exist: `/`, `/blueprint`, `/calculator`, `/training`, `/portal`, `/coach`
-
-### 2. Get all routes running in Replit
-**Priority**: HIGH
-- Port each Next.js page from `master` to Vite + React routes in the existing `artifacts/at0mfit-web/` artifact
-- Set up React Router / wouter routes for: `/blueprint`, `/calculator`, `/training`, `/portal`, `/coach`
-- Verify each page renders without errors in the Replit preview
-
-### 3. Wire all required secrets
-**Priority**: HIGH
-- Set `GMAIL_USER` and `GMAIL_APP_PASSWORD` in Replit Secrets
-- Audit each route for any additional env vars it requires (API keys, service role keys, etc.)
-- Add all missing secrets before testing authenticated flows
-
-### 4. Test Supabase connection across all routes
-**Priority**: HIGH
-- Verify `waitlist` table inserts work end-to-end
-- Test any portal/coach authenticated queries
-- Confirm RLS policies are respected (do NOT disable RLS)
-
-### 5. Set up `/portal` authentication flow
-**Priority**: HIGH
-- Port Supabase Auth login/signup from Next.js to Vite + React
-- Verify session handling works in the Replit environment
-- Test protected route guards
-
-### 6. Port `/coach` AI features
-**Priority**: MEDIUM
-- Identify what API (OpenAI / Anthropic / etc.) powers the coach
-- Add any required API key secrets to Replit
-- Port server-side AI calls to Express API server (`artifacts/api-server/`)
-
-### 7. Port `/calculator` logic
-**Priority**: MEDIUM
-- Port calculator page and any supporting utility functions
-- Verify all calculations are client-side (no backend needed)
-- Test with sample inputs
-
-### 8. Port `/blueprint` and `/training` pages
-**Priority**: MEDIUM
-- These are likely content/UI pages — port markup and styles
-- Verify fonts, colors, and layout match the original exactly
-
-### 9. Set up `/handoff` route and `REPLIT-HANDOFF.md`
-**Priority**: LOW
-- Verify `REPLIT-HANDOFF.md` is present after re-import
-- Add a `/handoff` route that renders the handoff documentation
-
-### 10. Configure deployment and environment for Replit publish
-**Priority**: LOW (do after all routes verified)
-- Verify production build (`pnpm build`) works cleanly
-- Set up production secrets separately
-- Confirm Replit publish config is correct before going live
+- [x] All 6 routes ported from master branch (blueprint, calculator, training, portal, coach)
+- [x] All 15 image assets in public/
+- [x] All handoff docs imported (handoff/ directory)
+- [x] /portal Supabase auth (login, session persistence, logout, error messages)
+- [x] /portal assigned workouts display
+- [x] /portal workout log form — RPE + duration + notes → workout_logs insert
+- [x] /portal weekly check-in form — 4 ratings + notes → checkins insert
+- [x] /portal messages thread + client send
+- [x] /portal coach notes display
+- [x] /portal progress metrics (weight, last check-in, sessions)
+- [x] /coach auth with email gate (jeshua@levioperations.com only)
+- [x] /coach applications queue + mark reviewed
+- [x] /coach client roster with detail panel
+- [x] /coach create program
+- [x] /coach assign workout (creates workout row + assigned_workout row)
+- [x] /coach view assigned workouts per client
+- [x] /coach view check-ins per client
+- [x] /coach view workout logs per client
+- [x] /coach coach → client messages
 
 ---
 
-## What Should Be Built in Replit
+## Priority Queue
 
-- All frontend pages and routes (Vite + React)
-- Email confirmation logic (Express API server)
-- Any AI coach API calls that don't have strict server requirements
-- Calculator and blueprint logic (client-side)
+### P1 — Functional Gaps (Small effort, high value)
 
-## What Should Stay on Vercel / Supabase / Gumroad
+| Item | Effort | Notes |
+|------|--------|-------|
+| Portal check-in history view | Small | Data exists in DB; display card not built in portal sidebar |
+| Portal workout log history | Small | Logs exist; no display card |
+| Coach "Add Note" form | Small | coach_notes table ready, no UI |
+| Password reset flow | Small | Add "Forgot password?" → sb.auth.resetPasswordForEmail() |
 
-- **Vercel**: Keep production live there until Replit is fully verified
-- **Supabase**: Keep as the database — do NOT migrate data or disable RLS
-- **Gumroad**: Any payment/product links — do NOT move
+### P2 — Owner Actions (Blockers needing credentials)
+
+| Item | Notes |
+|------|-------|
+| Set GMAIL_USER + GMAIL_APP_PASSWORD secrets | Enables waitlist email confirmation |
+| Apply 05_coach_dashboard_rls.sql | Run once in Supabase SQL editor — unlocks coach reads of all clients/applications |
+| Coach account password reset | If login fails: Supabase Dashboard → Auth → Users → jeshua@levioperations.com → Reset password |
+| Client onboarding | Create client in Supabase Auth manually, then add row to clients table |
+
+### P3 — Deferred
+
+| Item | Notes |
+|------|-------|
+| Coach "Accept Application" → create client auth user | Needs service role key (server-side only) |
+| Stripe billing | Deferred until 10+ clients |
+| Application form E2E browser test | Not yet tested in live Replit environment |
+| Mobile app integration | Separate artifact |
+
+---
 
 ## What NOT to Touch
 
 - Supabase RLS policies — never disable
-- Production Vercel deployment — do not touch until Replit is fully verified
-- Supabase `service_role` key — do not expose in frontend code
-- Any Gumroad product configuration
-- Existing `waitlist` table data
+- Production Vercel — do not touch until Replit is fully verified and owner signs off
+- Supabase service_role key — never expose in frontend
+- Existing waitlist table data

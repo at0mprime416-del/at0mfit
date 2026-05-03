@@ -687,6 +687,33 @@
               </div>
             </div>
 
+            <!-- LOG WORKOUT -->
+            <div class="card">
+              <div class="card-eyebrow">Session Feedback</div>
+              <div class="card-title">
+                <svg style="width:20px;height:20px"><use href="#icon-checkin"/></svg>
+                Log Completed Workout
+              </div>
+              <form id="logWorkoutForm" onsubmit="submitWorkoutLog(event)">
+                <div class="checkin-grid">
+                  <div class="rating-group">
+                    <label class="form-label">RPE (1–10)</label>
+                    <input class="form-input" type="number" id="logRpe" placeholder="e.g. 7" min="1" max="10" />
+                  </div>
+                  <div class="rating-group">
+                    <label class="form-label">Duration (minutes)</label>
+                    <input class="form-input" type="number" id="logDuration" placeholder="e.g. 45" min="1" max="360" />
+                  </div>
+                </div>
+                <div style="margin-top:0.75rem;">
+                  <label class="form-label">Notes</label>
+                  <textarea class="form-input" id="logNotes" placeholder="How did it feel? PRs, struggles, observations..." style="min-height:80px;resize:vertical;"></textarea>
+                </div>
+                <button class="btn-submit" type="submit" id="logWorkoutBtn" style="margin-top:1rem;">Log Workout</button>
+                <div id="logWorkoutMsg" style="margin-top:0.75rem;font-size:0.85rem;color:var(--gold);display:none;"></div>
+              </form>
+            </div>
+
             <!-- WEEKLY CHECK-IN -->
             <div class="card">
               <div class="card-eyebrow">Weekly Report</div>
@@ -829,6 +856,9 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtnb3pkZGN1dGF6cHFtZmJ6YWZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzOTMxOTYsImV4cCI6MjA4ODk2OTE5Nn0.aTi5ZXQi5zSTGb-xQyotF07Tcur5yizux3J8oNejRfE'
     );
 
+    // Workout log state
+    let currentAssignedWorkoutId = null;
+
     // Rating state
     const ratings = { training: 0, sleep: 0, stress: 0, energy: 0 };
 
@@ -921,6 +951,7 @@
           .limit(1);
 
         if (awData && awData.length > 0 && awData[0].workouts) {
+          currentAssignedWorkoutId = awData[0].id;
           const w = awData[0].workouts;
           document.getElementById('workoutContent').innerHTML = `
             <div class="workout-card-inner">
@@ -1050,6 +1081,49 @@
       } catch (e) {
         input.value = content;
         alert('Could not send message. Please try again.');
+      }
+    }
+
+    // WORKOUT LOG SUBMIT
+    async function submitWorkoutLog(e) {
+      e.preventDefault();
+      const btn = document.getElementById('logWorkoutBtn');
+      btn.disabled = true;
+      btn.textContent = 'Logging...';
+
+      const { data: { user } } = await sb.auth.getUser();
+      if (!user) { btn.disabled = false; btn.textContent = 'Log Workout'; return; }
+
+      const rpe = parseInt(document.getElementById('logRpe').value) || null;
+      const duration = parseInt(document.getElementById('logDuration').value) || null;
+      const notes = document.getElementById('logNotes').value.trim() || null;
+
+      const payload = { client_id: user.id, notes, rpe, duration_actual: duration };
+      if (currentAssignedWorkoutId) payload.assigned_workout_id = currentAssignedWorkoutId;
+
+      try {
+        const { error } = await sb.from('workout_logs').insert([payload]);
+        if (error) throw error;
+
+        // Mark assigned workout completed
+        if (currentAssignedWorkoutId) {
+          await sb.from('assigned_workouts')
+            .update({ completed: true, completed_at: new Date().toISOString() })
+            .eq('id', currentAssignedWorkoutId);
+        }
+
+        const msg = document.getElementById('logWorkoutMsg');
+        msg.textContent = 'Workout logged. Keep going.';
+        msg.style.display = 'block';
+        document.getElementById('logWorkoutForm').reset();
+
+        const sessEl = document.getElementById('metricSessions');
+        if (sessEl) sessEl.textContent = (parseInt(sessEl.textContent) || 0) + 1;
+      } catch (err) {
+        alert('Could not log workout. Please try again.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Log Workout';
       }
     }
 

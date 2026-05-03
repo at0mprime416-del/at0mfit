@@ -1,0 +1,378 @@
+We are time-boxed. Replit is free until 00:00. Maximize output tonight.
+
+You are replacing OpenClaw as the active build environment for AT0M FIT.
+
+Do not treat this as a simple homepage migration. The current AT0M FIT system must include the full business stack:
+
+Required routes:
+- /
+- /blueprint
+- /calculator
+- /training
+- /portal
+- /coach
+
+Required systems:
+- public homepage
+- Levi Cardio Blueprint sales page/linking
+- free Zone Calculator
+- custom training application page
+- client portal
+- coach dashboard
+- Supabase auth/database integration
+- waitlist or lead capture
+- email confirmation support
+- handoff docs
+- clean Replit runbook
+
+Important:
+Do not move production away from Vercel tonight.
+Do not expose secrets.
+Do not disable Supabase RLS.
+Do not delete working routes.
+Do not redesign the brand.
+Do not rebuild from scratch unless a file is missing.
+Do not spend time on cosmetic perfection before core routes work.
+Do not use the old prototype as the source of truth if the current system files exist.
+
+BRAND RULES:
+- dark background
+- black / charcoal / gold / off-white
+- premium tactical fitness feel
+- Bebas Neue for big display headings
+- Inter for body text
+- no emojis in production UI
+- no cyan/green legacy styling unless it is a temporary status badge
+- no generic AI-fitness look
+- AT0M FIT should feel premium, disciplined, sharp, and performance-focused
+
+PHASE 1 — SOURCE VERIFICATION, DO THIS FIRST:
+1. Confirm current branch.
+2. Confirm whether imported code is from master or main.
+3. Use master as the intended source of truth.
+4. main is old prototype and should not be used unless master is unavailable.
+5. Confirm these files/folders exist:
+   - homepage file
+   - blueprint page/file
+   - calculator page/file
+   - training page/file
+   - portal page/file
+   - coach page/file
+   - assets folder
+   - REPLIT-HANDOFF.md
+   - /handoff
+6. If /portal, /coach, or /handoff are missing, stop and report:
+   “WRONG BRANCH OR INCOMPLETE IMPORT.”
+7. Do not continue building the wrong project.
+
+PHASE 2 — ROUTE COMPLETION:
+Make sure the Replit app has working routes for:
+
+1. /
+   Purpose: public AT0M FIT homepage.
+   Must include:
+   - strong hero
+   - AT0M FIT branding
+   - CTA to Blueprint
+   - CTA to Zone Calculator
+   - CTA to Custom Training
+   - clean mobile layout
+
+2. /blueprint
+   Purpose: Levi Cardio Blueprint product page.
+   Must include:
+   - title
+   - product summary
+   - $27 price
+   - Gumroad buy button/link placeholder if URL exists
+   - benefits
+   - who it is for
+   - CTA
+
+3. /calculator
+   Purpose: free Zone Calculator.
+   Must include:
+   - user inputs
+   - resting HR
+   - max HR or age-based calculation
+   - zone outputs
+   - CTA to buy Blueprint
+   - CTA to apply for training
+
+4. /training
+   Purpose: Custom Training sales/application page.
+   Must include:
+   - $199/month founding client offer
+   - application-only positioning
+   - what client gets
+   - who it is for
+   - application form
+   - manual billing note
+   - CTA: Apply for Custom Training
+
+5. /portal
+   Purpose: client portal.
+   Must include:
+   - login
+   - assigned workouts
+   - workout logging
+   - weekly check-in
+   - client messages
+   - progress area
+   - graceful empty states
+
+6. /coach
+   Purpose: coach dashboard / command center.
+   Must include:
+   - login gate for coach
+   - applications queue
+   - client roster
+   - program creation
+   - workout assignment
+   - workout logs
+   - check-ins
+   - messaging
+   - progress overview
+   - today/next actions section
+
+PHASE 3 — SUPABASE INTEGRATION:
+Use existing env vars:
+- VITE_SUPABASE_URL
+- VITE_SUPABASE_ANON_KEY
+
+Rules:
+- Use anon key only in frontend.
+- Do not request or expose service role key unless you are building backend-only scripts.
+- Do not put service role key in frontend.
+- RLS must remain enabled.
+- Public application form can insert only.
+- Public users cannot read applications table.
+- Clients can only see their own data.
+- Coach can see coach dashboard data through existing RLS policies.
+
+Confirm Supabase tables expected:
+- clients
+- programs
+- workouts
+- assigned_workouts
+- workout_logs
+- checkins
+- coach_notes
+- messages
+- progress_metrics
+- subscriptions
+- applications
+
+PHASE 4 — BACKEND / API SUPPORT:
+The previous migration included:
+- waitlist confirmation route
+- nodemailer
+- Gmail env vars:
+  - GMAIL_USER
+  - GMAIL_APP_PASSWORD
+
+Do not block the app if Gmail secrets are missing.
+Email confirmations should fail gracefully and log clearly.
+
+If backend routes are needed, wire them through the Replit Express API server.
+Do not hardcode Gmail credentials.
+
+PHASE 5 — COMMAND CENTER BUILD:
+The /coach page should become the daily command center.
+
+Add or confirm these sections:
+
+TODAY:
+- new applications
+- unread messages
+- check-ins due
+- workouts needing assignment
+- failed system alerts
+- next actions
+
+CLIENTS:
+- roster
+- client detail
+- program status
+- progress summary
+- subscription/payment status placeholder
+
+PROGRAMMING:
+- create program
+- create workout
+- assign workout
+- view assigned workouts
+- workout templates placeholder
+
+MESSAGES:
+- client threads
+- coach replies
+- unread indicators if possible
+
+SALES:
+- ebook sales placeholder
+- training applications
+- calculator leads
+- Gumroad integration placeholder
+
+OPS:
+- Supabase connected yes/no
+- last app test
+- missing env vars
+- route status
+- deployment notes
+- warnings
+
+PHASE 6 — TONIGHT’S SAFE FIXES:
+Make safe fixes only:
+- route wiring
+- import errors
+- env var handling
+- broken asset paths
+- Vite/React conversion issues
+- Supabase null guards
+- mobile layout issues
+- missing route shells
+- static page migration
+- empty states
+- docs/runbook creation
+
+Do not:
+- rewrite the whole architecture
+- replace Supabase
+- replace Gumroad
+- delete Vercel config
+- disable RLS
+- expose secrets
+- remove existing production copy
+- make major database schema changes unless absolutely necessary
+
+PHASE 7 — REQUIRED FILES TO CREATE BEFORE STOPPING:
+Create or update these files:
+
+1. REPLIT_TAKEOVER_STATUS.md
+Include:
+- branch/source confirmed
+- imported project status
+- routes found
+- routes working
+- Supabase status
+- missing env vars
+- files changed
+- what works
+- what fails
+- what still needs owner action
+
+2. REPLIT_NEXT_BUILD_PLAN.md
+Include:
+- top 15 next build tasks
+- priority order
+- what to build next
+- what can wait
+- what not to touch
+- backend automation roadmap
+- monetization roadmap
+
+3. .env.example
+Include names only:
+- VITE_SUPABASE_URL
+- VITE_SUPABASE_ANON_KEY
+- GMAIL_USER
+- GMAIL_APP_PASSWORD
+- GUMROAD_ACCESS_TOKEN
+- STRIPE_SECRET_KEY
+- STRIPE_WEBHOOK_SECRET
+- DISCORD_WEBHOOK_URL
+- SUPABASE_SERVICE_ROLE_KEY
+No values.
+
+4. REPLIT_RUNBOOK.md
+Include:
+- how to run the app
+- how to test all routes
+- how to add secrets
+- how to verify Supabase connection
+- how to continue buildout tomorrow
+- how to avoid touching production Vercel
+- how to deploy later only after approval
+
+5. QCMD_REPLIT_GATE.md
+Include a pass/fail checklist:
+- correct branch
+- routes work
+- Supabase connected
+- no service key in frontend
+- RLS not disabled
+- secrets not exposed
+- portal works
+- coach works
+- application form works
+- calculator works
+- blueprint CTA works
+- training application works
+- mobile layout acceptable
+
+PHASE 8 — TEST EVERYTHING:
+Run route checks for:
+- /
+- /blueprint
+- /calculator
+- /training
+- /portal
+- /coach
+
+For each route, report:
+- exists
+- loads
+- mobile usable
+- Supabase dependency yes/no
+- errors
+- next fix
+
+PHASE 9 — FINAL REPORT FORMAT:
+Return only this structure at the end:
+
+STATUS
+- correct branch/source: yes/no
+- Replit app running: yes/no
+- Supabase connected: yes/no
+- production Vercel touched: no
+- secrets exposed: no
+- service key in frontend: no
+- RLS disabled: no
+
+ROUTE TESTS
+- /: pass/fail
+- /blueprint: pass/fail
+- /calculator: pass/fail
+- /training: pass/fail
+- /portal: pass/fail
+- /coach: pass/fail
+
+FILES CREATED
+- list files
+
+FILES CHANGED
+- list files and exact reason
+
+CORE FEATURES VERIFIED
+- homepage
+- blueprint
+- calculator
+- training application
+- portal login/client flow
+- coach dashboard
+- Supabase connection
+- email route graceful fallback
+
+BLOCKERS
+- list only blockers requiring owner action
+
+NEXT 15 BUILD TASKS
+- numbered list in priority order
+
+QCMD
+- PASS or FAIL for Replit takeover readiness
+
+FINAL RULE:
+Maximize tonight’s free Replit window by getting the full AT0M FIT system operational in Replit as a build workspace. Do not waste time redesigning. Do not treat the homepage/waitlist as the whole product. The goal is full takeover readiness.
