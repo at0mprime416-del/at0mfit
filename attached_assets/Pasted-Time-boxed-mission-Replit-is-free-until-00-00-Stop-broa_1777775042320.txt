@@ -1,0 +1,109 @@
+Time-boxed mission. Replit is free until 00:00. Stop broad exploration and execute only high-value takeover work.
+
+First priority: confirm we imported the correct project state.
+
+VERIFY BRANCH / SOURCE
+1. Confirm current Git branch.
+2. Confirm this is the master branch, not main.
+3. Confirm these files/routes exist:
+   - /
+   - /blueprint
+   - /calculator
+   - /training
+   - /portal
+   - /coach
+   - REPLIT-HANDOFF.md
+   - /handoff
+4. If /coach, /portal, or /handoff are missing, stop immediately and report: WRONG BRANCH OR INCOMPLETE IMPORT.
+
+Important:
+Do NOT migrate production off Vercel tonight.
+Do NOT rebuild from scratch.
+Do NOT change the brand.
+Do NOT disable RLS.
+Do NOT expose secrets.
+Do NOT remove working routes.
+
+MISSION BEFORE 00:00
+If the correct files are present:
+
+1. Get the project running in Replit.
+2. Verify Supabase connection using:
+   - VITE_SUPABASE_URL
+   - VITE_SUPABASE_ANON_KEY
+3. Test all routes:
+   - /
+   - /blueprint
+   - /calculator
+   - /training
+   - /portal
+   - /coach
+4. Fix only safe Replit-environment issues:
+   - missing env handling
+   - run command issues
+   - asset path issues
+   - static route issues
+   - broken local preview issues
+5. Do not make cosmetic redesigns.
+6. Do not replace the current site with an older prototype.
+7. Do not touch production Vercel.
+
+CREATE THESE FILES BEFORE FINISHING:
+1. REPLIT_TAKEOVER_STATUS.md
+   Include:
+   - branch confirmed
+   - routes tested
+   - Supabase status
+   - missing secrets
+   - files changed
+   - what works
+   - what fails
+   - what must be done next
+
+2. REPLIT_NEXT_BUILD_PLAN.md
+   Include:
+   - top 10 next build tasks
+   - priority order
+   - what should be built in Replit next
+   - what should stay on Vercel/Supabase/Gumroad
+   - what not to touch
+
+3. .env.example
+   Include variable names only, no values.
+
+4. REPLIT_RUNBOOK.md
+   Include:
+   - how to run locally in Replit
+   - how to test routes
+   - how to add secrets
+   - how to continue buildout tomorrow
+   - how to avoid touching production
+
+RETURN IN THIS FORMAT:
+STATUS
+- correct branch: yes/no
+- handoff docs found: yes/no
+- app running in Replit: yes/no
+- Supabase connected: yes/no
+- production Vercel touched: no
+
+ROUTE TESTS
+- /: pass/fail
+- /blueprint: pass/fail
+- /calculator: pass/fail
+- /training: pass/fail
+- /portal: pass/fail
+- /coach: pass/fail
+
+SAFE FIXES MADE
+- file changed
+- reason
+
+BLOCKERS
+- owner action required
+
+NEXT 10 TASKS
+- numbered list
+
+QCMD
+- PASS/FAIL for Replit takeover readiness
